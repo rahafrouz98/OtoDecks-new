@@ -17,16 +17,18 @@ LoopSampler::LoopSampler(DJAudioPlayer* _player, DJAudioPlayer& _leftPlayer,
     AudioThumbnailCache& _cacheToUse): leftPlayer(_leftPlayer), rightPlayer(_rightPlayer),microphone(_microphone),
     player(_player), waveformDisplay(_formatManagerToUse, _cacheToUse)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+    ////////////////////////////////////////////// Loas sample data //////////////////////////////////////////////////
+    loadLoopSamplesData();
+
 
     /////////////////////////////////////////////// loop sample buttons ///////////////////////////////////////////////
     for (int i = 0; i < sampleButtons.size(); ++i)
     {
         addAndMakeVisible(sampleButtons[i]);
         sampleButtons[i].addListener(this);
-        sampleButtons[i].setTextChangeCallBack([this](juce::String text) {(text.toUpperCase());});
+        sampleButtons[i].setTextChangeCallBack([this, i](juce::String text) { samplesRecord[i].name = text;});
         sampleButtons[i].setID(i);
+        sampleButtons[i].setSample(samplesRecord[i].url, samplesRecord[i].name);
     }
 
     ///////////////////////////////////////////// left deck button //////////////////////////////////////////////
@@ -203,15 +205,15 @@ juce::File LoopSampler::selectSampleAudioFile()
     {
         sampleDir.createDirectory();
     }
-   
-    juce::File sampledFile = sampleDir.getChildFile(juce::String(fileNumberHolder)).withFileExtension("wav");
+    juce::String uniqueName = juce::Uuid().toString();
+    juce::File sampledFile = sampleDir.getChildFile(uniqueName).withFileExtension("wav");
 
     if (sampledFile.existsAsFile())
     {
         sampledFile.deleteFile();
     }
     sampledURL = juce::URL{ sampledFile };
-    fileNumberHolder++;
+
     return sampledFile;
 }
 
@@ -248,23 +250,25 @@ void LoopSampler::buttonClicked(Button* button)
     if (static_cast<const juce::Button*>(button) == deleteImageButton.getButtonPointer())
     {
         removeSampleFromRecordingSection();
-        startStopRecordImageButton, setEnabled(true);
+        deleteLocalFile(sampledURL);
+        sampledURL = juce::URL{};
+        startStopRecordImageButton.setEnabled(true);
     }
 
     else if (static_cast<const juce::Button*>(button) == startStopRecordImageButton.getButtonPointer())
     {
+        //start recording
         if (startStopRecordImageButton.getStatus())
         {
-            //start recording
             waveformDisplay.unloadURL();
             startRecording();
             deleteImageButton.setButtonEnabled(false);
             disableAddRemoveForEmptysampleButtons();
 
         }
+        //stop recording
         else
         {
-            //stop recording
             writer.reset();
             if (sampledURL != juce::URL{})
             {
@@ -277,6 +281,7 @@ void LoopSampler::buttonClicked(Button* button)
             }
         }
     }
+    //play the new sampled audio (not added to buttons yet)
     else if (static_cast<const juce::Button*>(button) == playSampleImageButton.getButtonPointer())
     {
         if (player->isPlaying())
@@ -326,9 +331,6 @@ void LoopSampler::buttonClicked(Button* button)
                     samplesRecord[sampleButton.getID()].url = sampledURL;
                     samplesRecord[sampleButton.getID()].name = loopName;
                     int index = sampleButton.getID();
-                    DBG("loopName: " << loopName);
-                    DBG("ID: " << index);
-                    DBG("samplesRecord name: " << samplesRecord[index].name);
                     startStopRecordImageButton.setEnabled(true);
 
                 }
@@ -339,9 +341,10 @@ void LoopSampler::buttonClicked(Button* button)
                     samplesRecord[sampleButton.getID()].name = "";
                     samplesRecord[sampleButton.getID()].url = juce::URL{};
                     sampleButton.resetButtonData();
+                    //if there is no new sampled audio
                     if (sampledURL == juce::URL{})
                     {
-                        sampleButton.setAddButtonEnabled(false);
+                        sampleButton.setAddRemoveButtonEnabled(false);
                     }
                 }
             }
@@ -355,7 +358,7 @@ void LoopSampler::enableAddRemoveForEmptysampleButtons()
     {
         if (sampleButton.getURL() == juce::URL{})
         {
-            sampleButton.setAddButtonEnabled(true);
+            sampleButton.setAddRemoveButtonEnabled(true);
         }
     }
 }
@@ -366,7 +369,7 @@ void LoopSampler::disableAddRemoveForEmptysampleButtons()
     {
         if (sampleButton.getURL() == juce::URL{})
         {
-            sampleButton.setAddButtonEnabled(false);
+            sampleButton.setAddRemoveButtonEnabled(false);
         }
     }
 }
@@ -413,8 +416,17 @@ void LoopSampler::loadLoopSamplesData()
 {
     juce::var varData = Utilities::loadJsonData("samples", "sampleData");
 
-    juce::Array arrayData{ varData };
+    if (varData.isArray())
+    {
 
+        juce::Array<juce::var>* varArray = varData.getArray();
 
-
+        for (int i = 0; i < samplesRecord.size() && i < varArray->size(); ++i)
+        {
+            juce::DynamicObject* sampleObject = new juce::DynamicObject();
+            sampleObject = (*varArray)[i].getDynamicObject();
+            samplesRecord[i].name = sampleObject->getProperty("name");
+            samplesRecord[i].url = juce::URL{ sampleObject->getProperty("url") };
+        }
+    }
 }

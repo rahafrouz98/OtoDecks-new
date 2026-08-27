@@ -46,16 +46,14 @@ public:
     void setNumberOfChannels(int numChannels);
 
 
+
 private:
 
     std::array<SampleLoopButton, 8> sampleButtons;
     //first item is representing url and second item is the displayed name.
     std::array<SampleStruct, 8> samplesRecord;
 
-    //is used for naming the samplefiles 
-    int fileNumberHolder = 1;
     juce::URL sampledURL = juce::URL{};
-
 
     OnOffButton leftDeckImageButton{ BinaryData::left_png, BinaryData::left_pngSize,BinaryData::disabledleft_png, BinaryData::disabledleft_pngSize};
     OnOffButton startStopRecordImageButton{ BinaryData::startrecord_png, BinaryData::startrecord_pngSize, BinaryData::stoprecording_png, BinaryData::stoprecording_pngSize};

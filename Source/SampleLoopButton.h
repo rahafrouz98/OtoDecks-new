@@ -34,8 +34,10 @@ public:
     /**loads sample data to the button*/
     void setSample(juce::URL _url, String _name);
 
-    /**remove data from the button*/
+    /**remove data from the button and disable play button*/
     void resetButtonData();
+
+    
 
     /**adds Listener to the button*/
     void addListener(juce::Button::Listener* listener);
@@ -44,7 +46,7 @@ public:
     void SampleLoopButton::setTextChangeCallBack(std::function<void(juce::String)> callback);
 
     /**set addButton enable status*/
-    void setAddButtonEnabled(bool status);
+    void setAddRemoveButtonEnabled(bool status);
 
     /**get playStopStatus */
     bool getPlayStopButtonStatus()const;

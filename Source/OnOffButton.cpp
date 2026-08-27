@@ -89,6 +89,7 @@ void OnOffButton::setFirstMode(bool statusTarget)
 
 void OnOffButton::updateImages()
 {
+    //this condition is for the case that instance is using just one image for the first mode
     if (!offImage.isValid())
     {
         return;

@@ -39,7 +39,6 @@
       <FILE id="owfgzF" name="MusicAnalyzer.cpp" compile="1" resource="0"
             file="Source/MusicAnalyzer.cpp"/>
       <FILE id="FWro0j" name="MusicAnalyzer.h" compile="0" resource="0" file="Source/MusicAnalyzer.h"/>
-      <FILE id="AmosI5" name="utilities.h" compile="0" resource="0" file="Source/utilities.h"/>
       <FILE id="ReICKI" name="playlistComponent.cpp" compile="1" resource="0"
             file="Source/playlistComponent.cpp"/>
       <FILE id="rudmoM" name="playlistComponent.h" compile="0" resource="0"
@@ -68,6 +67,7 @@
       <FILE id="Z0wRet" name="Utilities.cpp" compile="1" resource="0" file="Source/Utilities.cpp"/>
       <FILE id="CoVVKI" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="eoflSd" name="delete.png" compile="0" resource="1" file="Source/delete.png"/>
+      <FILE id="aKECHF" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
       <FILE id="XI8Nui" name="remove.png" compile="0" resource="1" file="Source/remove.png"/>
     </GROUP>
   </MAINGROUP>

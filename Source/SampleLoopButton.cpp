@@ -75,6 +75,7 @@ void SampleLoopButton::buttonClicked(Button* button)
 
 void SampleLoopButton::resetButtonData()
 {
+    DBG("g");
     url = juce::URL{};
     textEditor.setText("");
     playStopButton.setButtonEnabled(false);
@@ -85,7 +86,14 @@ void SampleLoopButton::setSample(juce::URL _url, String _name)
 {
     url = _url;
     textEditor.setText(_name);
-    playStopButton.setButtonEnabled(true);
+
+    if (_url != juce::URL{})
+    {
+        playStopButton.setButtonEnabled(true);
+       
+        addRemoveButton.setButtonEnabled(true);
+        addRemoveButton.setFirstMode(false);
+    }
 }
 
 void SampleLoopButton::addListener(juce::Button::Listener* listener)
@@ -109,7 +117,7 @@ void SampleLoopButton::setTextChangeCallBack(std::function<void(juce::String)> c
     textChangeCallback = callback;
 }
 
-void SampleLoopButton::setAddButtonEnabled(bool status)
+void SampleLoopButton::setAddRemoveButtonEnabled(bool status)
 {
     addRemoveButton.setButtonEnabled(status);
 }

@@ -9,12 +9,15 @@ juce::var Utilities::loadJsonData(juce::String sourceChildDirectory, juce::Strin
     juce::File sampleDir = mainDirectory.getChildFile(sourceChildDirectory);
  
     juce::File file = sampleDir.getChildFile( fileName + ".json" );
-
-    if (file.existsAsFile())
+    DBG("File Path: " << file.getFullPathName());
+    juce::FileInputStream stream{ file };
+    if (stream.openedOk())
     {
-        juce::String content  = file.loadFileAsString();
-        juce::var parsedJSON = juce::JSON::parse(content);
-        return parsedJSON;
+        stream.setPosition(0);
+
+        juce::var parsedJson = juce::JSON::parse(stream);
+
+        return parsedJson;
     }
 
     return juce::var();
@@ -32,11 +35,13 @@ void Utilities::writeJsonData(juce::String desChildDirectory, juce::String fileN
 
     juce::File file = sampleDir.getChildFile(fileName + ".json");
 
-    FileOutputStream stream{ file };
-
-    stream.setPosition(0);
-    stream.truncate();
-    juce::JSON::writeToStream(stream, dataVar, juce::JSON::FormatOptions().withIndentLevel(2));
-
+    juce::FileOutputStream stream{ file };
+    
+    if (stream.openedOk())
+    {
+        stream.setPosition(0);
+        stream.truncate();
+        juce::JSON::writeToStream(stream, dataVar, juce::JSON::FormatOptions().withIndentLevel(2));
+    }
     stream.flush();
 }

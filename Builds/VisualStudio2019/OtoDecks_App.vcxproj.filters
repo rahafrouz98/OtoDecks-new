@@ -4269,9 +4269,6 @@
     <ClInclude Include="..\..\Source\MusicAnalyzer.h">
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\utilities.h">
-      <Filter>OtoDecks\Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\playlistComponent.h">
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
@@ -4294,6 +4291,9 @@
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\KnobLookAndFeel.h">
+      <Filter>OtoDecks\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Utilities.h">
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">

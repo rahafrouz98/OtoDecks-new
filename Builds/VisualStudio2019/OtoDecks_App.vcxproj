@@ -3278,7 +3278,6 @@
     <ClInclude Include="..\..\Source\CueEditForm.h"/>
     <ClInclude Include="..\..\Source\CueButton.h"/>
     <ClInclude Include="..\..\Source\MusicAnalyzer.h"/>
-    <ClInclude Include="..\..\Source\utilities.h"/>
     <ClInclude Include="..\..\Source\playlistComponent.h"/>
     <ClInclude Include="..\..\Source\WaveformDisplay.h"/>
     <ClInclude Include="..\..\Source\DeckGUI.h"/>
@@ -3287,6 +3286,7 @@
     <ClInclude Include="..\..\Source\KnobButton.h"/>
     <ClInclude Include="..\..\Source\OnOffButton.h"/>
     <ClInclude Include="..\..\Source\KnobLookAndFeel.h"/>
+    <ClInclude Include="..\..\Source\Utilities.h"/>
     <ClInclude Include="..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h"/>
     <ClInclude Include="..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
     <ClInclude Include="..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>
