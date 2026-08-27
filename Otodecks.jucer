@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="sQfdmN" name="OtoDecks" projectType="guiapp" displaySplashScreen="1"
+              jucerFormatVersion="1" defines="JUCE_MODAL_LOOPS_PERMITTED=1">
+  <MAINGROUP id="mcJZqF" name="OtoDecks">
+    <GROUP id="{356C603F-01E1-55B2-02A0-F2D89D9A59E6}" name="Source">
+      <FILE id="ick1il" name="SampleLoopButton.cpp" compile="1" resource="0"
+            file="Source/SampleLoopButton.cpp"/>
+      <FILE id="ZdIp4l" name="SampleLoopButton.h" compile="0" resource="0"
+            file="Source/SampleLoopButton.h"/>
+      <FILE id="fQHbaj" name="disabledleft.png" compile="0" resource="1"
+            file="Source/disabledleft.png"/>
+      <FILE id="geYNmv" name="disabledright.png" compile="0" resource="1"
+            file="Source/disabledright.png"/>
+      <FILE id="i9seAm" name="left.png" compile="0" resource="1" file="Source/left.png"/>
+      <FILE id="GWHsG5" name="right.png" compile="0" resource="1" file="Source/right.png"/>
+      <FILE id="RPLZ3E" name="disabledmic.png" compile="0" resource="1" file="Source/disabledmic.png"/>
+      <FILE id="oBVFfl" name="mic.png" compile="0" resource="1" file="Source/mic.png"/>
+      <FILE id="jqnmHE" name="Microphone.cpp" compile="1" resource="0" file="Source/Microphone.cpp"/>
+      <FILE id="Wvwp5u" name="Microphone.h" compile="0" resource="0" file="Source/Microphone.h"/>
+      <FILE id="DrTvwZ" name="stoprecording.png" compile="0" resource="1"
+            file="Source/stoprecording.png"/>
+      <FILE id="RoCjzn" name="startrecord.png" compile="0" resource="1" file="Source/startrecord.png"/>
+      <FILE id="RXttom" name="LoopSampler.cpp" compile="1" resource="0" file="Source/LoopSampler.cpp"/>
+      <FILE id="UrcSLS" name="LoopSampler.h" compile="0" resource="0" file="Source/LoopSampler.h"/>
+      <FILE id="HFa31e" name="ColourButtonLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/ColourButtonLookAndFeel.cpp"/>
+      <FILE id="uB4JPc" name="ColourButtonLookAndFeel.h" compile="0" resource="0"
+            file="Source/ColourButtonLookAndFeel.h"/>
+      <FILE id="ojFPkc" name="CueEditForm.cpp" compile="1" resource="0" file="Source/CueEditForm.cpp"/>
+      <FILE id="xS8StD" name="CueEditForm.h" compile="0" resource="0" file="Source/CueEditForm.h"/>
+      <FILE id="KwjRM2" name="pen.png" compile="0" resource="1" file="Source/pen.png"/>
+      <FILE id="kzCYCg" name="CueButton.cpp" compile="1" resource="0" file="Source/CueButton.cpp"/>
+      <FILE id="bP8oo7" name="CueButton.h" compile="0" resource="0" file="Source/CueButton.h"/>
+      <FILE id="khB76w" name="loop.png" compile="0" resource="1" file="Source/loop.png"/>
+      <FILE id="C4e5Rz" name="no-loop.png" compile="0" resource="1" file="Source/no-loop.png"/>
+      <FILE id="KiToma" name="pause.png" compile="0" resource="1" file="Source/pause.png"/>
+      <FILE id="GDWcqc" name="play.png" compile="0" resource="1" file="Source/play.png"/>
+      <FILE id="owfgzF" name="MusicAnalyzer.cpp" compile="1" resource="0"
+            file="Source/MusicAnalyzer.cpp"/>
+      <FILE id="FWro0j" name="MusicAnalyzer.h" compile="0" resource="0" file="Source/MusicAnalyzer.h"/>
+      <FILE id="AmosI5" name="utilities.h" compile="0" resource="0" file="Source/utilities.h"/>
+      <FILE id="ReICKI" name="playlistComponent.cpp" compile="1" resource="0"
+            file="Source/playlistComponent.cpp"/>
+      <FILE id="rudmoM" name="playlistComponent.h" compile="0" resource="0"
+            file="Source/playlistComponent.h"/>
+      <FILE id="ZwBVoH" name="WaveformDisplay.cpp" compile="1" resource="0"
+            file="Source/WaveformDisplay.cpp"/>
+      <FILE id="NleScp" name="WaveformDisplay.h" compile="0" resource="0"
+            file="Source/WaveformDisplay.h"/>
+      <FILE id="JxVDDB" name="DeckGUI.cpp" compile="1" resource="0" file="Source/DeckGUI.cpp"/>
+      <FILE id="wNAxHp" name="DeckGUI.h" compile="0" resource="0" file="Source/DeckGUI.h"/>
+      <FILE id="nBjnc1" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="gbrkdm" name="DJAudioPlayer.cpp" compile="1" resource="0"
+            file="Source/DJAudioPlayer.cpp"/>
+      <FILE id="Ez1VFG" name="DJAudioPlayer.h" compile="0" resource="0" file="Source/DJAudioPlayer.h"/>
+      <FILE id="OJ0Xrs" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="OaecRF" name="KnobButton.h" compile="0" resource="0" file="Source/KnobButton.h"/>
+      <FILE id="GxzVND" name="KnobLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/KnobLookAndFeel.cpp"/>
+      <FILE id="QDHMuX" name="OnOffButton.h" compile="0" resource="0" file="Source/OnOffButton.h"/>
+      <FILE id="qzyti9" name="KnobButton.cpp" compile="1" resource="0" file="Source/KnobButton.cpp"/>
+      <FILE id="RyGRGv" name="OnOffButton.cpp" compile="1" resource="0" file="Source/OnOffButton.cpp"/>
+      <FILE id="VOBr5l" name="KnobLookAndFeel.h" compile="0" resource="0"
+            file="Source/KnobLookAndFeel.h"/>
+      <FILE id="pRACKp" name="add.png" compile="0" resource="1" file="Source/add.png"/>
+      <FILE id="Z0wRet" name="Utilities.cpp" compile="1" resource="0" file="Source/Utilities.cpp"/>
+      <FILE id="CoVVKI" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="eoflSd" name="delete.png" compile="0" resource="1" file="Source/delete.png"/>
+      <FILE id="XI8Nui" name="remove.png" compile="0" resource="1" file="Source/remove.png"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_opengl" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="C:/JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_opengl" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce-5.4.3-linux/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="C:/JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2019>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_opengl" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_dsp" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+        <MODULEPATH id="juce_audio_utils" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="C:/JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors_headless" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <LINUX buildEnabled="1"/>
+    <OSX/>
+  </LIVE_SETTINGS>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_USE_MP3AUDIOFORMAT="1"/>
+</JUCERPROJECT>
