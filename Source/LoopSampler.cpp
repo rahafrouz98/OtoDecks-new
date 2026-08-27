@@ -20,10 +20,6 @@ LoopSampler::LoopSampler(DJAudioPlayer* _player, DJAudioPlayer& _leftPlayer,
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
 
-    //////////////////////////////////////////// sampleRecords array ///////////////////////////////////////////////
-    //initialized to 8 elements so each loopSample button gets the respective data
-    samplesRecord.resize(8);
-
     /////////////////////////////////////////////// loop sample buttons ///////////////////////////////////////////////
     for (int i = 0; i < sampleButtons.size(); ++i)
     {
@@ -329,8 +325,12 @@ void LoopSampler::buttonClicked(Button* button)
                     disableAddRemoveForEmptysampleButtons();
                     samplesRecord[sampleButton.getID()].url = sampledURL;
                     samplesRecord[sampleButton.getID()].name = loopName;
-                    (samplesRecord[sampleButton.getID()].name);
+                    int index = sampleButton.getID();
+                    DBG("loopName: " << loopName);
+                    DBG("ID: " << index);
+                    DBG("samplesRecord name: " << samplesRecord[index].name);
                     startStopRecordImageButton.setEnabled(true);
+
                 }
                 //remove sample
                 else

@@ -50,7 +50,7 @@ private:
 
     std::array<SampleLoopButton, 8> sampleButtons;
     //first item is representing url and second item is the displayed name.
-    juce::Array<SampleStruct> samplesRecord;
+    std::array<SampleStruct, 8> samplesRecord;
 
     //is used for naming the samplefiles 
     int fileNumberHolder = 1;
