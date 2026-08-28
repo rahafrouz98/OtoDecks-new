@@ -51,6 +51,7 @@ bool DJAudioPlayer::loadURL(URL audioURL)
         transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
         readerSource.reset(newSource.release());
 		readerSource->setLooping(isLooping);
+
         return true;
     }
     return false;

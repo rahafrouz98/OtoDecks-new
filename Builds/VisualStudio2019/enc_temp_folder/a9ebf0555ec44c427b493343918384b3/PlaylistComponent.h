@@ -18,10 +18,9 @@
 /*
 */
 class PlaylistComponent  : public juce::Component, 
-                           public juce::TableListBoxModel, 
+                           public TableListBoxModel, 
                            public juce::Button::Listener,
-                           public juce::FileDragAndDropTarget,
-                           public juce::TextEditor::Listener
+                           public FileDragAndDropTarget
 {
 public:
     PlaylistComponent();
@@ -39,9 +38,6 @@ public:
     /**implement FileDragAndDropTarget*/
     void filesDropped(const StringArray& files, int x, int y) override;
     bool isInterestedInFileDrag(const StringArray& files) override;
-
-    /**implement TExtEditor Listener*/
-    void textEditorTextChanged(juce::TextEditor& editor) override;
 
     /**add audio file to the tracks and table by taking the FileStruct as the argument*/
     void addTrackToLibrary(Utilities::FileStruct loadedFile);

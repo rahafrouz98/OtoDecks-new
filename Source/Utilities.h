@@ -25,6 +25,7 @@ class Utilities
             juce::String name ="File not loaded";
             double duration = 0.0;
             juce::URL url = juce::URL{};
+            juce::String comment = "";
             std::array<CueStruct, 8> cueStructs;
         };
         /**this is the Struct used to hold the data of each loop sample(URL, name)*/

@@ -275,12 +275,6 @@ void PlaylistComponent::buttonClicked(juce::Button* button)
         deleteCallback();
     }
 }
-
-void PlaylistComponent::textEditorTextChanged(juce::TextEditor& editor)
-{
-
-}
-
 void PlaylistComponent::filesDropped(const StringArray& files, int x, int y)
 {
     if (files.size() == 1)
