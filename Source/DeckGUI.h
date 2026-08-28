@@ -25,10 +25,10 @@
 /*
 */
 class DeckGUI  : public juce::Component, 
-                 public Button::Listener, 
-                 public Slider::Listener, 
-                 public FileDragAndDropTarget,
-                 public Timer
+                 public juce::Button::Listener, 
+                 public juce::Slider::Listener, 
+                 public juce::FileDragAndDropTarget,
+                 public juce::Timer
 	            
 {
 public:

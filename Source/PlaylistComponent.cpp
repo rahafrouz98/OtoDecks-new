@@ -16,8 +16,10 @@ PlaylistComponent::PlaylistComponent()
 {
 
     /**reads the data from the playlist file and load on the tracks vector*/
+    //read the json file and load data on the tracks vector
     loadPlayListData();
   
+    ///////////////////////////////////////////////////////// Table component/////////////////////////////////////
     tableComponent.getHeader().addColumn("X", 1, 100 );
     tableComponent.getHeader().addColumn("Track Title", 2, 400);
     tableComponent.getHeader().addColumn("Duration", 3, 400);
@@ -28,6 +30,9 @@ PlaylistComponent::PlaylistComponent()
 
     addAndMakeVisible(tableComponent);
     tableComponent.updateContent();
+
+    ///////////////////////////////////////////////////////// FormatMAnager //////////////////////////////////////
+    formatManager.registerBasicFormats();
 }
 
 PlaylistComponent::~PlaylistComponent()
@@ -127,33 +132,37 @@ Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnI
     return existingComponentToUpdate;
 }
 
-void PlaylistComponent::buttonClicked(juce::Button* button)
-{
-    String id = button->getComponentID();
-    StringArray tokens;
-    tokens.addTokens(id, "_", "");
-    int index = tokens[1].getIntValue();
-    URL url{ tracks[index].url };
-    if (tokens[0] == "deck1")
-    {
-        loadDeck1(url, tracks[index]);
-    }
-    else if (tokens[0] == "deck2")
-    {
-        loadDeck2(url, tracks[index]);
-    }
-    else if (tokens[0] == "delete")
-    {
-        tracks.erase(tracks.begin() + index);
-        tableComponent.updateContent();
-        deleteCallback();
-    }
-}
-
 void PlaylistComponent::addTrackToLibrary(Utilities::FileStruct loadedFile)
 {
     tracks.push_back(loadedFile);
     tableComponent.updateContent();
+}
+
+void PlaylistComponent::addTrackToLibrary(juce::File file)
+{
+    Utilities::FileStruct loadedFile;
+    loadedFile.url = URL{ file };
+    loadedFile.duration = getAudioDuration(loadedFile.url);
+    loadedFile.name = file.getFileName();
+    
+    tracks.push_back(loadedFile);
+    tableComponent.updateContent();
+
+}
+
+double PlaylistComponent::getAudioDuration(juce::URL url)
+{
+    std::unique_ptr<AudioFormatReader> reader;
+    auto* rawReader = formatManager.createReaderFor(url.createInputStream(false));
+    reader.reset(rawReader);
+    if (reader != nullptr)
+    {
+        if (reader->sampleRate != 0)
+        {
+             return reader->lengthInSamples / reader->sampleRate;
+        }
+    }
+    return 0;
 }
 
 bool PlaylistComponent::isURLUnique(juce::URL url)
@@ -167,20 +176,6 @@ bool PlaylistComponent::isURLUnique(juce::URL url)
     {
         return false;
     }
-}
-
-void PlaylistComponent::setLoadDeck1Callback(std::function<void(URL, Utilities::FileStruct)> callback)
-{
-    loadDeck1 = callback;
-}
-
-void PlaylistComponent::setLoadDeck2Callback(std::function<void(URL, Utilities::FileStruct)> callback)
-{
-    loadDeck2 = callback;
-}
-void PlaylistComponent::setDeleteCallback(std::function<void()> callback)
-{
-    deleteCallback = callback;
 }
 
 void PlaylistComponent::writePlayListData()
@@ -255,4 +250,54 @@ void PlaylistComponent::loadPlayListData()
             tracks.push_back(tempFileStruct);
         }
     }
+}
+
+////////////////////////////////////////////////// Call backs ///////////////////////////////////////////////////////////////////
+void PlaylistComponent::buttonClicked(juce::Button* button)
+{
+    String id = button->getComponentID();
+    StringArray tokens;
+    tokens.addTokens(id, "_", "");
+    int index = tokens[1].getIntValue();
+    URL url{ tracks[index].url };
+    if (tokens[0] == "deckLeft")
+    {
+        loadDeckLeft(url, tracks[index]);
+    }
+    else if (tokens[0] == "deckRight")
+    {
+        loadDeckRight(url, tracks[index]);
+    }
+    else if (tokens[0] == "delete")
+    {
+        tracks.erase(tracks.begin() + index);
+        tableComponent.updateContent();
+        deleteCallback();
+    }
+}
+void PlaylistComponent::filesDropped(const StringArray& files, int x, int y)
+{
+    if (files.size() == 1)
+    {
+        auto chosenFile = File{ files[0] };
+        addTrackToLibrary(chosenFile);
+    }
+}
+bool PlaylistComponent::isInterestedInFileDrag(const StringArray& files)
+{
+    return true;
+}
+
+void PlaylistComponent::setLoadDeckLeftCallback(std::function<void(URL, Utilities::FileStruct)> callback)
+{
+    loadDeckLeft = callback;
+}
+
+void PlaylistComponent::setLoadDeckRightCallback(std::function<void(URL, Utilities::FileStruct)> callback)
+{
+    loadDeckRight = callback;
+}
+void PlaylistComponent::setDeleteCallback(std::function<void()> callback)
+{
+    deleteCallback = callback;
 }

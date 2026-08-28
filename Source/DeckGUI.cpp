@@ -260,118 +260,12 @@ void DeckGUI::resized()
     
 
     ///////////////////////////////////// load button ////////////////////////////////////
-    loadButton.setBounds(loadAndLibButtonArea.removeFromLeft(static_cast<int>(loadAndLibButtonArea.getWidth() / 2.0f)));
+    loadButton.setBounds(loadAndLibButtonArea.removeFromLeft(static_cast<int>(loadAndLibButtonArea.getWidth() / 2.0f)).
+                                              reduced(2));
 
     ///////////////////////////////////// AddToLibrary button ////////////////////////////
-    addToLibraryButton.setBounds(loadAndLibButtonArea);
+    addToLibraryButton.setBounds(loadAndLibButtonArea.reduced(2));
 
-}
-
-/** implement Button::Listener */
-void DeckGUI::buttonClicked(Button* button)
-{
-    if (static_cast<const juce::Button*>(button) == playStopButton.getButtonPointer())
-    {
-        if (player->isPlaying())
-        {
-            player->stop();
-
-        }
-        else
-        {
-            player->start();
-        }
-    }
-    else if (static_cast<const juce::Button*>(button) == loopNoLoopButton.getButtonPointer())
-    {
-        player->toggleLooping();
-    }
-    else if (button == &loadButton)
-    {
-
-        selectFile();
-    
-    }
-    else if (button == &addToLibraryButton)
-    {
-        if (loadedFile.duration != 0.0)
-        {
-            playlistComponent->addTrackToLibrary(loadedFile);
-            addToLibraryButton.setEnabled(false);
-        }
-    }
-    else if (button == &clearCueButtons)
-    {
-        resetCueButtons();
-    }
-    //check cuebuttons
-    else
-    {
-        for (auto& cueButton : cueButtons)
-        {
-            if (static_cast<const juce::Button*>(button) == cueButton.getButtonPointer())
-            {
-                player->setPosition(cueButton.getMarkedTime());
-            }
-        }
-    }
-}
-
-/** implement Slider::Listener */
-void DeckGUI::sliderValueChanged(Slider* slider)
-{
-    //volume slider
-    if (static_cast<juce::Slider*>(slider) == volumeKnob.getSliderPointer())
-    {
-       player->setGain(slider->getValue());
-    }
-    //tempo slider
-    else if (static_cast<juce::Slider*>(slider) == tempoKnob.getSliderPointer())
-    {
-       double tempoRelativeRate = slider->getValue();
-       player->setSpeed(tempoRelativeRate);
-       BPMRelativeRate = tempoRelativeRate;
-    }
-    //position slider
-    else if (static_cast<juce::Slider*>(slider) == positionKnob.getSliderPointer())
-    {
-        player->setPosition(slider->getValue());
-    }
-}
-
-void DeckGUI::filesDropped(const StringArray& files, int , int )
-{ 
-    if (files.size() == 1)
-    {
-        auto chosenFile = File{ files[0] };
-        loadAudioFile(chosenFile);
-    }
-}
-bool DeckGUI::isInterestedInFileDrag(const StringArray&)
-{
-    return true;
-}
-
-void DeckGUI::timerCallback()
-{
-    if (player != nullptr)
-    {
-        currentTime = player->getCurrentPosition();
-        if (player->getPostionRelative() >= .999 && !(player->isPlaying()))
-        {
-            player->setPosition(0);
-            playStopButton.setFirstMode(true);
-            player->stop();
-        }
-
-        waveformDisplay.setPlayHeadPosition(player->getPostionRelative());
-
-    }
-    // if the looping is off set the play head to the start position and update the playStop button
-    musicAnalyzer.setLiveTime(static_cast<float>(currentTime));
-
-    timerLabel.setText(currentTime2String(), dontSendNotification);
-    setBPMLabel();
 }
 
 void DeckGUI::resetComponentsBeforeLoadingFile()
@@ -541,4 +435,116 @@ void DeckGUI::updateCueButtonsStatus()
         cueButtons[i].setMarkedTime(loadedFile.cueStructs[i].time);
         cueButtons[i].setEnableButtons(true);
     }
+}
+
+
+////////////////////////////////////////////////////////// call backs ///////////////////////////////////////////////
+/** implement Button::Listener */
+void DeckGUI::buttonClicked(Button* button)
+{
+    //play and stop button
+    if (static_cast<const juce::Button*>(button) == playStopButton.getButtonPointer())
+    {
+        if (player->isPlaying())
+        {
+            player->stop();
+
+        }
+        else
+        {
+            player->start();
+        }
+    }
+    //loop and no loop
+    else if (static_cast<const juce::Button*>(button) == loopNoLoopButton.getButtonPointer())
+    {
+        player->toggleLooping();
+    }
+    else if (button == &loadButton)
+    {
+
+        selectFile();
+
+    }
+    //addToLibraryButton button
+    else if (button == &addToLibraryButton)
+    {
+        if (loadedFile.duration != 0.0)
+        {
+            playlistComponent->addTrackToLibrary(loadedFile);
+            addToLibraryButton.setEnabled(false);
+        }
+    }
+    else if (button == &clearCueButtons)
+    {
+        resetCueButtons();
+    }
+    //check cuebuttons
+    else
+    {
+        for (auto& cueButton : cueButtons)
+        {
+            if (static_cast<const juce::Button*>(button) == cueButton.getButtonPointer())
+            {
+                player->setPosition(cueButton.getMarkedTime());
+            }
+        }
+    }
+}
+
+/** implement Slider::Listener */
+void DeckGUI::sliderValueChanged(Slider* slider)
+{
+    //volume slider
+    if (static_cast<juce::Slider*>(slider) == volumeKnob.getSliderPointer())
+    {
+        player->setGain(slider->getValue());
+    }
+    //tempo slider
+    else if (static_cast<juce::Slider*>(slider) == tempoKnob.getSliderPointer())
+    {
+        double tempoRelativeRate = slider->getValue();
+        player->setSpeed(tempoRelativeRate);
+        BPMRelativeRate = tempoRelativeRate;
+    }
+    //position slider
+    else if (static_cast<juce::Slider*>(slider) == positionKnob.getSliderPointer())
+    {
+        player->setPosition(slider->getValue());
+    }
+}
+
+void DeckGUI::filesDropped(const StringArray& files, int, int)
+{
+    if (files.size() == 1)
+    {
+        auto chosenFile = File{ files[0] };
+        loadAudioFile(chosenFile);
+    }
+}
+bool DeckGUI::isInterestedInFileDrag(const StringArray&)
+{
+    return true;
+}
+
+void DeckGUI::timerCallback()
+{
+    if (player != nullptr)
+    {
+        currentTime = player->getCurrentPosition();
+        if (player->getPostionRelative() >= .999 && !(player->isPlaying()))
+        {
+            player->setPosition(0);
+            playStopButton.setFirstMode(true);
+            player->stop();
+        }
+
+        waveformDisplay.setPlayHeadPosition(player->getPostionRelative());
+
+    }
+    // if the looping is off set the play head to the start position and update the playStop button
+    musicAnalyzer.setLiveTime(static_cast<float>(currentTime));
+
+    timerLabel.setText(currentTime2String(), dontSendNotification);
+    setBPMLabel();
 }
