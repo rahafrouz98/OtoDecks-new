@@ -13,7 +13,7 @@
 
 //==============================================================================
 DeckGUI::DeckGUI(DJAudioPlayer* _player, AudioFormatManager& formatManagerToUse, AudioThumbnailCache& cacheToUse, PlaylistComponent* _playlistComponent, bool _left):
-    player(_player), waveformDisplay(formatManagerToUse, cacheToUse), playlistComponent(_playlistComponent), currentTime(0.0), left(_left)
+    player(_player), waveformDisplay(formatManagerToUse, cacheToUse), playlistComponent(_playlistComponent), currentTime(0.0), isleft(_left)
 {
     addAndMakeVisible(waveformDisplay);
     waveformDisplay.setMouseClickCallback([this]() {
@@ -47,20 +47,20 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player, AudioFormatManager& formatManagerToUse,
 
         cueButtons[i].setEnableButtons(false);
 
-        //set callback to receive data from CueEditForm(grandchild) when its save button is clicked
-        cueButtons[i].setCueButtonEditedCallback([this, i](std::string colour, std::string name) {
+        //set callback to receive data from CueEditForm when its save button is clicked
+        cueButtons[i].setCueButtonEditedCallback([this, i](juce::Colour colour, juce::String name) {
             setCueButtonNameData(i, name);
             setCueButtonColourData(i, colour);
             });
 
-        //set callback to receive add button clicked event, add colour, mark time and add them to the data
+        /**set callback to receive add button clicked event and add colour to button, mark time and update cue data
+         int the loadedFile Struct*/
         cueButtons[i].setCueButtonAddCallback([this,i]() {
                 cueButtons[i].setMarkedTime(currentTime);
-                CueEditForm::CueColour colour = static_cast<CueEditForm::CueColour>(i);
-                std::string stingifiedColour = CueEditForm::convertCueColourToString(colour);
-                cueButtons[i].setCueButtonColour(juce::Colour::fromString("#" + stingifiedColour));
-                setCueButtonColourData(i, stingifiedColour);
-                setCueButtonTime(i, currentTime);
+                juce::Colour colour = CueEditForm::convertCueColourToJuceColour( static_cast<CueEditForm::CueColour>(i));
+                cueButtons[i].setCueButtonColour(colour);
+                setCueButtonColourData(i, colour);
+                setCueButtonTimeData(i, currentTime);
              
             });
 
@@ -72,8 +72,8 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player, AudioFormatManager& formatManagerToUse,
                 cueButtons[i].setCueButtonName("");
                 //remove data from FileStruct
                 setCueButtonNameData(i, "");
-                setCueButtonColourData(i, "00000000");
-                setCueButtonTime(i, -1.0);
+                setCueButtonColourData(i, juce::Colours::transparentBlack);
+                setCueButtonTimeData(i, -1.0);
             });
 
         //Register DechGUI to the mainButton of cueButton Component
@@ -128,12 +128,6 @@ DeckGUI::~DeckGUI()
 
 void DeckGUI::paint(juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
 
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));   // clear the background
 
@@ -174,7 +168,7 @@ void DeckGUI::resized()
     juce::Rectangle<int> loadAndLibButtonArea;
     juce::Rectangle<int> cueArea;
 
-    if (left)
+    if (isleft)
     {
         nameLabelArea = labelArea.removeFromLeft(static_cast<int>(width / 3.0f));
         timerlabelArea = labelArea.removeFromLeft (static_cast<int>(width / 3.0f));
@@ -326,16 +320,19 @@ void DeckGUI::buttonClicked(Button* button)
 /** implement Slider::Listener */
 void DeckGUI::sliderValueChanged(Slider* slider)
 {
+    //volume slider
     if (static_cast<juce::Slider*>(slider) == volumeKnob.getSliderPointer())
     {
        player->setGain(slider->getValue());
     }
+    //tempo slider
     else if (static_cast<juce::Slider*>(slider) == tempoKnob.getSliderPointer())
     {
        double tempoRelativeRate = slider->getValue();
        player->setSpeed(tempoRelativeRate);
        BPMRelativeRate = tempoRelativeRate;
     }
+    //position slider
     else if (static_cast<juce::Slider*>(slider) == positionKnob.getSliderPointer())
     {
         player->setPosition(slider->getValue());
@@ -379,7 +376,7 @@ void DeckGUI::timerCallback()
 
 void DeckGUI::resetComponentsBeforeLoadingFile()
 {
-    loadedFile = FileStruct{};
+    loadedFile = Utilities::FileStruct{};
     resetCueButtons();
     disableCueButtons();
 
@@ -387,18 +384,18 @@ void DeckGUI::resetComponentsBeforeLoadingFile()
     playStopButton.setButtonEnabled(false);
 }
 
-void DeckGUI::loadAudioFile(const URL& fileURL, FileStruct filedata)
+void DeckGUI::loadAudioFile(Utilities::FileStruct filedata)
 {
     resetComponentsBeforeLoadingFile();
 
-    bool isFileLoaded = player->loadURL(fileURL);
+    bool isFileLoaded = player->loadURL(filedata.url);
     if (isFileLoaded)
     {
-        File chosenFile = fileURL.getLocalFile();
+        File chosenFile = filedata.url.getLocalFile();
 
         loadedFile = filedata;
 
-        stageNewLoadedFile(chosenFile, fileURL);
+        stageNewLoadedFile(chosenFile);
         updateCueButtonsStatus();
     }
 
@@ -414,22 +411,22 @@ void DeckGUI::loadAudioFile(File chosenFile)
     {
 
         //update the loadedFile metadata
-        loadedFile.url = fileURL.toString(false).toStdString();
-        loadedFile.name = chosenFile.getFileName().toStdString();
+        loadedFile.url = fileURL;
+        loadedFile.name = chosenFile.getFileName();
         loadedFile.duration = player->calculateAudioLength();
 
-        stageNewLoadedFile(chosenFile, fileURL);
+        stageNewLoadedFile(chosenFile);
     }
 
 }
 
-void DeckGUI::stageNewLoadedFile(juce::File chosenFile, juce::URL fileURL)
+void DeckGUI::stageNewLoadedFile(juce::File chosenFile)
 {
     //set the looping condition of transportSource
     player->setLoopingStatus(loopNoLoopButton.getStatus());
 
     //setup file on waveformDisplay
-    waveformDisplay.loadURL(fileURL);
+    waveformDisplay.loadURL(loadedFile.url);
 
     //setup file on musicAnalyzer
     musicAnalyzer.loadAudioData(chosenFile);
@@ -461,7 +458,7 @@ void DeckGUI::stageNewLoadedFile(juce::File chosenFile, juce::URL fileURL)
 
 void DeckGUI::updateAddToLibraryButton()
 {
-    if (loadedFile.url != "" && playlistComponent->isURLUnique(loadedFile.url))
+    if (loadedFile.url != juce::URL{} && playlistComponent->isURLUnique(loadedFile.url))
     {
 		addToLibraryButton.setEnabled(true);
 	}
@@ -500,23 +497,22 @@ void DeckGUI::selectFile()
         });
 }
 
-void DeckGUI::setCueButtonColourData(int cueIndex, std::string colour)
+void DeckGUI::setCueButtonColourData(int cueIndex, juce::Colour colour)
 {
     loadedFile.cueStructs[cueIndex].colour = colour;
 }
 
-void DeckGUI::setCueButtonNameData(int cueIndex, std::string name)
+void DeckGUI::setCueButtonNameData(int cueIndex, juce::String name)
 {
     loadedFile.cueStructs[cueIndex].name = name;
 }
-void DeckGUI::setCueButtonTime( int cueIndex, double time)
+void DeckGUI::setCueButtonTimeData( int cueIndex, double time)
 {
     loadedFile.cueStructs[cueIndex].time = time;
 }
 
 void DeckGUI::resetCueButtons()
 {
-    ("is called");
     for (int i = 0; i <  cueButtons.size() ; ++i)
     {
         cueButtons[i].setCueButtonColour(juce::Colours::transparentBlack);
@@ -524,7 +520,7 @@ void DeckGUI::resetCueButtons()
         cueButtons[i].setMarkedTime(-1.0);
         loadedFile.cueStructs[i].time = -1;
         loadedFile.cueStructs[i].name = "";
-        loadedFile.cueStructs[i].colour = "00000000";
+        loadedFile.cueStructs[i].colour = juce::Colours::transparentBlack;
         cueButtons[i].toggleEnablingStatusOfChildButtons(false);
     }
 }
@@ -540,7 +536,7 @@ void DeckGUI::updateCueButtonsStatus()
 {
     for (int i = 0; i < cueButtons.size(); ++i)
     {
-        cueButtons[i].setCueButtonColour(juce::Colour::fromString(loadedFile.cueStructs[i].colour));
+        cueButtons[i].setCueButtonColour(loadedFile.cueStructs[i].colour);
         cueButtons[i].setCueButtonName(loadedFile.cueStructs[i].name);
         cueButtons[i].setMarkedTime(loadedFile.cueStructs[i].time);
         cueButtons[i].setEnableButtons(true);

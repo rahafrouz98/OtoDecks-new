@@ -41,7 +41,7 @@ public:
     /**returns true if it is on first mode */
     bool getStatus() const;
 
-    /**true sets the button on first mode*/
+    /**true sets the button on first mode and update picture*/
     void setFirstMode(bool status);
 private:
 
@@ -51,9 +51,13 @@ private:
 
     /**true displays on image  and false displays off image*/
     bool status;
+    /**this is used in onClick Call back to check if the loaded image and status are match*/
+    bool isOnImageLoaded;
 
-    /**updates images of the button*/
-    void updateImages();
+    /**update images of the button based on the status value and updates isOnImageLoaded respectively*/
+    void updateImages( );
+
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OnOffButton)
 };

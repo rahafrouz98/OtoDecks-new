@@ -105,8 +105,16 @@ void WaveformDisplay::paint (juce::Graphics& g)
     else
     {
         g.setFont(juce::FontOptions(20.0f));
-        g.drawText ("No Audio ...", getLocalBounds(),
-                    juce::Justification::centred, true);   // draw some placeholder text
+        if (isRecording)
+        {
+            g.drawText("IT IS RECORDING ...", getLocalBounds(),
+                juce::Justification::centred, true);
+        }
+        else
+        {
+            g.drawText ("NO AUDIO ...", getLocalBounds(),
+                        juce::Justification::centred, true);  
+        }
     }
 
 
@@ -175,4 +183,9 @@ String WaveformDisplay::getMouseX2TimeInString() const
     double mouseX2Time = audioThumb.getTotalLength()*mouseX/getWidth();
     String time = String(mouseX2Time);
     return time;
+}
+
+void WaveformDisplay::setIsRecording(bool status)
+{
+    isRecording = status;
 }

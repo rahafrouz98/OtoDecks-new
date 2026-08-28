@@ -31,8 +31,9 @@ public:
     /**set id */
     void setID(int id);
 
-    /**loads sample data to the button*/
-    void setSample(juce::URL _url, String _name);
+    /**loads sample data and updates the status of buttons. updateAddRemoveMode=true is used when we need 
+    to change the mode without onClickcallback. If it is false the mode will be toggled by callback */
+    void setSampleDataAndButtonsStatus(juce::URL _url, String _name, bool updateAddRemoveMode = false);
 
     /**remove data from the button and disable play button*/
     void resetButtonData();

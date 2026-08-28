@@ -29,7 +29,7 @@ CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelecte
     ////////////////////////////////////////////// Colour buttons //////////////////////////////////
     for (int i = 0; i < colourButtons.size(); ++i)
     {
-        juce::Colour colour = juce::Colour::fromString( "#"+CueEditForm::convertCueColourToString(static_cast<CueEditForm::CueColour>(i)));
+        juce::Colour colour = convertCueColourToJuceColour(static_cast<CueColour>(i));
         colourButtons[i].setColour(juce::TextButton::buttonColourId, colour);
         addAndMakeVisible(colourButtons[i]);
         if (colour == preSelectedColour)
@@ -39,21 +39,24 @@ CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelecte
             colourSelectedIndex = i;
         }
    
-
+        /**changes the data for selected colour*/
         colourButtons[i].onClick = [this,colour, i]() {
                 selectedColour = colour; 
+               
                 if (colourSelectedIndex >= 0)
                 {
                     colourButtons[colourSelectedIndex].getProperties().set("isSelected", "false");
                 }
+                /** isSelected is to mark the button so when it is true a white boarder is drawn around it*/
                 colourButtons[i].getProperties().set("isSelected", "true");
                 colourSelectedIndex = i;
             };
 
+        /* it draws the button with  a white boarder around the button when its property called "isSelected" is true*/
         colourButtons[i].setLookAndFeel(&colourButtonLookAndFeel);
 
+        /**updates the selectedCueName as the user is typing inside the text editor*/
         textEditor.onTextChange = [this]() { selectedCueName = textEditor.getText(); };
-
     }
 
     ///////////////////////////////////////////// Save   ////////////////////////////////////
@@ -61,11 +64,17 @@ CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelecte
 
     ////////////////////////////////////////////  Cancel ////////////////////////////////////////
     addAndMakeVisible(cancelButton);
+    /**it moves the focus from tect editor to cancel button so the text editor display a message
+    when it is empty (if focus is on the text editor the message does not display)*/
     cancelButton.setWantsKeyboardFocus(true);
+
+    /**closed the box when the cancel is clicked*/
     cancelButton.onClick = [this]() {
+            /**finds the parent that component */
             juce::CallOutBox* parentCalloutBox = this->findParentComponentOfClass<juce::CallOutBox>();
             if (parentCalloutBox != nullptr)
             {
+                /** Sends a message to the parent of this component to close this component asynchronously */
                 parentCalloutBox->dismiss();
             }
         };
@@ -80,20 +89,13 @@ CueEditForm::~CueEditForm()
 
 void CueEditForm::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
 
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 }
 
 void CueEditForm::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
+
     auto area = getLocalBounds();
 
     ///////////////////////////////////////////////////////////////text editor //////////////////////////////////////
@@ -139,49 +141,49 @@ void CueEditForm::resized()
                                                       static_cast<int>(area.getHeight() * 0.9f)));  
 }
 
-std::string CueEditForm::convertCueColourToString(CueEditForm::CueColour colour)
+juce::Colour CueEditForm::convertCueColourToJuceColour(CueEditForm::CueColour colour)
 {
     switch (colour)
     {
-    case ffff0000: // red
-        return "ffffa500";
-    case ff008000: // green
-        return "ff008000";
-    case ff0000ff: //blue
-        return "ff0000ff";
-    case ffffff00: // yellow
-        return "ffffff00";
-    case ffffc0cb: // pink
-        return "ffffc0cb";
-    case ffffa500: // orange
-        return "ffffa500";
-    case ff800080: // purple
-        return "ff800080";
-    case ffadd8e6: // lightblue
-        return "ffadd8e6";
+    case Red: 
+        return juce::Colours::red;
+    case Green: 
+        return juce::Colours::green;
+    case Blue:
+        return juce::Colours::blue;
+    case Yellow: 
+        return juce::Colours::yellow;
+    case Pink: 
+        return juce::Colours::pink;
+    case Orange: 
+        return juce::Colours::orange;
+    case Purple: 
+        return juce::Colours::purple;
+    case Lightblue: 
+        return juce::Colours::lightblue;
     default:
-        return "black";
+        return juce::Colours::transparentBlack;
     }
 }
 
-CueEditForm::CueColour CueEditForm::convertStringToCueColour(std::string colour)
+CueEditForm::CueColour CueEditForm::convertJuceColourToCueColour(juce::Colour colour)
 {
-    if (colour == "ffff0000") //red
-        return ffff0000;
-    if (colour == "ff008000") //green
-        return ff008000;
-    if (colour == "ff0000ff") //blue
-        return ff0000ff;
-    if (colour == "ffffff00") //yellow
-        return ffffff00;
-    if (colour == "ffffc0cb") //pink
-        return ffffc0cb;
-    if (colour == "ffffa500") //orange
-        return ffffa500;
-    if (colour == "ff800080") //purple
-        return ff800080;
-    if (colour == "ffadd8e6") //lightblue
-        return ffadd8e6;
+    if (colour == juce::Colours::red) 
+        return Red;
+    if (colour == juce::Colours::red)
+        return Green;
+    if (colour == juce::Colours::blue) 
+        return Blue;
+    if (colour == juce::Colours::yellow) 
+        return Yellow;
+    if (colour == juce::Colours::pink)
+        return Pink;
+    if (colour == juce::Colours::orange) 
+        return Orange;
+    if (colour == juce::Colours::purple)
+        return Purple;
+    if (colour == juce::Colours::lightblue) 
+        return Lightblue;
     else
         return Undefined;
 }
@@ -189,6 +191,8 @@ CueEditForm::CueColour CueEditForm::convertStringToCueColour(std::string colour)
 void CueEditForm::timerCallback()
 {
     //set foucus on cancel button
+    /**timer is used to check in inervals and make sure the cancelButton is available
+      whith out time app would run into running time error*/
     if (cancelButton.isShowing())
     {
         cancelButton.grabKeyboardFocus();

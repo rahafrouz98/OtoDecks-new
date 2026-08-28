@@ -26,9 +26,10 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    /**it is a call back to receive data from CueEditCutton (grandchild) when its save button is clicked  update the mainButton 
-    and send data to DeckGui (grandparent). First Argument is colour and second represents name*/
-    void setCueButtonEditedCallback(std::function<void(std::string, std::string)> callback);
+    /**it is a call back to receive data from CueEditButton when its save button is clicked.
+    it updates the mainButton and send data to DeckGui . It takes a calback function as the argument and
+    the callback takes two arguments.First Argument is colour and second represents name*/
+    void setCueButtonEditedCallback(std::function<void(juce::Colour, juce::String)> callback);
 
     /**It is a call back to send notification to the DeckGUI when its addButton is clicked. */
     void setCueButtonAddCallback(std::function<void()> callback);
@@ -47,18 +48,19 @@ public:
 
     /**manage the enable status of buttons. 
     -false disables all buttons.
-    -true disables add and enables edit and remove button if component has markedTime not equal to -1
-     and viceversa if markedTime is equal to 1*/
+    -true disables add and enables edit and remove button if component has markedTime greater than -1
+     and viceversa if markedTime is equal to -1*/
     void setEnableButtons(bool statusTarget);
 
     /**returns a const pointer to the button*/
     const juce::Button* getButtonPointer()const;
 
-    /**adds Listener to the button*/
+    /**It is an adds Listener to transfer the listener to the  mainButton */
     void addListener(juce::Button::Listener* listener);
 
-    /** this function toggles between enabled status of removeButton and editButton against addButton
-        true makes addButton be disabled and editButton and addButton enabled and vice versa
+    /** this function toggles between enabled status of removeButton and editButton against addButton.
+        -True makes addButton disabled and editButton and addButton enabled 
+        -False makes addButton enabled and editButton and addButton disabled 
     */
     void toggleEnablingStatusOfChildButtons(bool targetStatus);
 
@@ -83,7 +85,7 @@ private:
 
 
     /**this function is executed when save button in an CueEditForm is clicked*/
-    std::function<void( std::string, std::string)> cueButtonEditedCallback;
+    std::function<void( juce::Colour, juce::String)> cueButtonEditedCallback;
 
     /**this function is executed when add button is clicked*/
     std::function<void()> cueButtonAddCallback;

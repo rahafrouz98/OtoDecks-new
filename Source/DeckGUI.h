@@ -45,39 +45,43 @@ public:
     /** implement Slider::Listener */
     void sliderValueChanged(Slider* slider) override;
 
+    /**implement FileDragAndDropTarget*/
     void filesDropped(const StringArray& files, int x, int y) override;
     bool isInterestedInFileDrag(const StringArray& files) override;
 
+    /**implement Timer*/
     void timerCallback()override;
 
-    /**takes a file URL  and its data frin playListColmonent and loads it to the DJAudioPlayer, audioAnalyzer and WaveformDisplay and updates the loadedFile property*/
-    void loadAudioFile(const URL& fileURL, FileStruct filedata);
+    /**takes a FileStruct of an audio form playListColmonent and loads it to the DJAudioPlayer, audioAnalyzer and WaveformDisplay and updates the loadedFile property*/
+    void loadAudioFile(Utilities::FileStruct filedata);
 
-    /**update addToLibraryButton */
+    /**update addToLibraryButton. If there is a file is loded in the deck and the url of file is unique in the 
+    playlist it enables the addToLibraryButton otherwise it will be disabled*/
 	void updateAddToLibraryButton();
 
     /**set colour in cue data of FileStruct for corresponding cue button*/
-    void setCueButtonColourData(int cueID, std::string colour);
+    void setCueButtonColourData(int cueID, juce::Colour colour);
 
     /**set name in cue data of FileStruct for corresponding cue button*/
-    void setCueButtonNameData(int cueID, std::string name);
+    void setCueButtonNameData(int cueID, juce::String name);
 
     /**set the time in the cue data of FileStruct for corresponding cue button*/
-    void DeckGUI::setCueButtonTime(int cueIndex, double time);
+    void DeckGUI::setCueButtonTimeData(int cueIndex, double time);
 
 private:
-    bool left;
+
+    bool isleft;
 
     juce::TextButton loadButton{ "LOAD" };
-    juce::TextButton addToLibraryButton{ "Add to Library" };
-    juce::TextButton clearCueButtons{ "Clear Cue Buttons" };
+    juce::TextButton addToLibraryButton{ "ADD TO LIBRARY" };
+    juce::TextButton clearCueButtons{ "CLEAR CUE BUTTON" };
 
     WaveformDisplay waveformDisplay;
 
     PlaylistComponent* playlistComponent;
 
-    /**holds the data of the last loaded audio trach to the deck*/
-    FileStruct loadedFile;
+    /**holds the data of the loaded audio track */
+    Utilities::FileStruct loadedFile;
 
     juce::Label trackNameLabel;
     juce::Label timerLabel;
@@ -103,24 +107,21 @@ private:
 
     std::array<CueButton, 8> cueButtons;
 
-    /**takes a file and loads it to the DJAudioPlayer and WaveformDisplay and updates the loadedFile property*/
+    /**takes a file and loads it to the DJAudioPlayer and WaveformDisplay and updates the loadedFile data*/
     void loadAudioFile(File chosenFile);
 
     /**set the BPM label*/
     void DeckGUI::setBPMLabel();
 
-    /**convert current time to String format and return*/
-    juce::String currentTime2String() const;
-
     /**loads file on waveformDisplay and musicAnalyzer, updates metadata of loadedFile. playStopButton and labels 
     these tasks are put in a single function to be used in two different (overriden) loadAudioFile() with no repeatation
     */
-    void DeckGUI::stageNewLoadedFile(juce::File file, juce::URL url);
+    void DeckGUI::stageNewLoadedFile(juce::File file);
 
     /**creates a dialog browser and selects a file */
     void DeckGUI::selectFile();
 
-    /** resets the cueButtons: removes data and colour and disables them*/
+    /** resets all cueButtons: removes data and colour and disables them*/
     void resetCueButtons();
 
     /**reset loadedFile Struct, addToLibraryButton, playStopButton and  cueButtons before loading a new file */
@@ -128,8 +129,12 @@ private:
 
     /**updates cueButtons status in accordance with passed FileStruct */
     void DeckGUI::updateCueButtonsStatus();
+    
     /**disables cue buttons*/
     void DeckGUI::disableCueButtons();
+
+    /**returns a string to represent the current position of player and total length in seconds*/
+    String currentTime2String() const;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

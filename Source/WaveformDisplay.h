@@ -42,6 +42,8 @@ public:
     /**float*/
     float getPositionRelative();
 
+    /**set is recording*/
+    void setIsRecording(bool status);
 private:
     AudioThumbnail audioThumb;
     bool fileLoaded;
@@ -50,6 +52,8 @@ private:
     float mouseY;
     
     String getMouseX2TimeInString() const;
+
+    bool isRecording = false;
 
     /**this call back is used to update the postion of playhead in audioTransport*/
     std::function<void()> mouseClickCallback;

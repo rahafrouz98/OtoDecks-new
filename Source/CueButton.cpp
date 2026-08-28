@@ -31,23 +31,26 @@ CueButton::CueButton()
         editImage, 1.0f, juce::Colours::transparentBlack);
     addAndMakeVisible(editButton);
 
-   //opens a CueEditForm form to change the colour of the button or its text
+   //opens a CueEditForm to change the colour of the button or its name
     editButton.onClick = [this]() {
-        std::unique_ptr<CueEditForm> editForm = std::make_unique<CueEditForm>(mainButton.findColour(juce::TextButton::ColourIds::buttonColourId)
-                                                                                                       , nameLabel.getText());
+                std::unique_ptr<CueEditForm> editForm = 
+                    std::make_unique<CueEditForm>(mainButton.findColour(juce::TextButton::ColourIds::buttonColourId), nameLabel.getText());
 
-                //this raw pointer is created to be captured inside lambda
+                //this raw pointer is created to be captured and used inside the lambda function for save button 
+                //as we can not capture the unique pointer in lambda without moving the ownership
                 CueEditForm* editFormRawPointer = editForm.get();
 
+                /***/
                 editForm->setSaveButtonCallBack([this, editFormRawPointer](juce::Colour selectedColour, juce::String selectedCueName) {
                     setCueButtonColour(selectedColour);
                     setCueButtonName(selectedCueName);
 
                     //send data to parent component(DeckGUI)
-                    cueButtonEditedCallback(selectedColour.toString().toStdString(), selectedCueName.toStdString());
+                    cueButtonEditedCallback(selectedColour, selectedCueName);
 
                     //close the calloutbox
-             
+                    
+                    //closes the edit form by finding the parent callout box and calling dismiss()
                     juce::CallOutBox* parentCalloutBox = editFormRawPointer->findParentComponentOfClass<juce::CallOutBox>();
                     if (parentCalloutBox != nullptr)
                     {
@@ -55,7 +58,7 @@ CueButton::CueButton()
                     }
             });
 
-        
+        /**creates an asynchronous calloutbox and transfers the ownership of editForm to it */
         juce::CallOutBox::launchAsynchronously(std::move(editForm), editButton.getScreenBounds(), nullptr);
 
        
@@ -67,7 +70,7 @@ CueButton::CueButton()
         addImage, 0.9f, juce::Colours::transparentBlack,
         addImage, 1.0f, juce::Colours::transparentBlack);
 
-    //give a random colour to the button and send data to DeckGui
+
     addButton.onClick = [this]() { 
             //this is a callback from parent
             cueButtonAddCallback();
@@ -83,13 +86,13 @@ CueButton::CueButton()
         removeImage, 0.9f, juce::Colours::transparentBlack,
         removeImage, 1.0f, juce::Colours::transparentBlack);
 
-            removeButton.onClick = [this]() { 
-                mainButton.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::transparentBlack);
-                nameLabel.setText("", dontSendNotification);
-                //this is a callback from parent
-                cueButtonRemoveCallback(); 
-                toggleEnablingStatusOfChildButtons(false);
-             };
+    removeButton.onClick = [this]() { 
+        mainButton.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::transparentBlack);
+        nameLabel.setText("", dontSendNotification);
+        //this is a callback from parent
+        cueButtonRemoveCallback(); 
+        toggleEnablingStatusOfChildButtons(false);
+        };
 
     //////////////////////////////// nameLabel /////////////////////////////////////////////////
     nameLabel.setColour(juce::Label::ColourIds::backgroundColourId, juce::Colours::transparentBlack);
@@ -100,8 +103,6 @@ CueButton::CueButton()
     
     ////////////////////////////////Main button //////////////////////////////////////////
     addAndMakeVisible(mainButton);
-
-    mainButton.onClick = [this]() {("main");};
 
 
 }
@@ -163,7 +164,7 @@ void CueButton::setCueButtonName(juce::String name)
     nameLabel.setText(name, dontSendNotification);
 }
 
-void CueButton::setCueButtonEditedCallback(std::function<void(std::string, std::string)> callback)
+void CueButton::setCueButtonEditedCallback(std::function<void(juce::Colour, juce::String)> callback)
 {
     cueButtonEditedCallback = callback;
 }

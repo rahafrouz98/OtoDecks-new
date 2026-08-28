@@ -75,14 +75,14 @@ void SampleLoopButton::buttonClicked(Button* button)
 
 void SampleLoopButton::resetButtonData()
 {
-    DBG("g");
+    DBG("REdet");
     url = juce::URL{};
     textEditor.setText("");
     playStopButton.setButtonEnabled(false);
 
 }
 
-void SampleLoopButton::setSample(juce::URL _url, String _name)
+void SampleLoopButton::setSampleDataAndButtonsStatus(juce::URL _url, String _name, bool updateAddRemoveMode)
 {
     url = _url;
     textEditor.setText(_name);
@@ -90,9 +90,11 @@ void SampleLoopButton::setSample(juce::URL _url, String _name)
     if (_url != juce::URL{})
     {
         playStopButton.setButtonEnabled(true);
-       
         addRemoveButton.setButtonEnabled(true);
-        addRemoveButton.setFirstMode(false);
+        if (updateAddRemoveMode)
+        {
+            addRemoveButton.setFirstMode(false);
+        }
     }
 }
 

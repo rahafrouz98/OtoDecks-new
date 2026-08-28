@@ -51,7 +51,7 @@ private:
 
     std::array<SampleLoopButton, 8> sampleButtons;
     //first item is representing url and second item is the displayed name.
-    std::array<SampleStruct, 8> samplesRecord;
+    std::array<Utilities::SampleStruct, 8> samplesRecord;
 
     juce::URL sampledURL = juce::URL{};
 
@@ -93,7 +93,7 @@ private:
     /**writes the extracted buffer from processSignals on to the file*/
     void writeOnFile(juce::AudioBuffer<float> buffer, int startSample, int numSamples);
 
-    /**removes sampled file from player and its waveform and updates buttons*/
+    /**removes sampled file from player, reset sampledURL, and its waveform and updates buttons*/
     void removeSampleFromRecordingSection();
 
     /**loops through sample buttons and enable the addREmove button for them if they do not have loaded URL*/
@@ -105,10 +105,10 @@ private:
     /**delete the loop sample from local memory*/
     void deleteLocalFile(juce::URL url);
 
-    /**writes the loop sample data as a json file in a directory called samples in the same directory as EXE is located*/
+    /**writes the loop samples data as a json file in a directory called samples in the same directory as EXE is located*/
     void writeLoopSamplesData();
 
-    /**loads data in JSON format from a directory called samples located in the same directory as EXE file is located
+    /**loads loop samples data in JSON format from a directory called samples located in the same directory as EXE file is located
     and save it in the samplesRecord array*/
     void loadLoopSamplesData();
 

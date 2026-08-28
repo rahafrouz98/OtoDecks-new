@@ -34,8 +34,8 @@ MainComponent::MainComponent()
     formatManager.registerBasicFormats();
     
     //define the callback functions of playlistComponent for clicking the load buttons
-    playlistComponent.setLoadDeck1Callback([this](URL url, FileStruct filedata) {deckGuiLeft.loadAudioFile(url, filedata);});
-    playlistComponent.setLoadDeck2Callback([this](URL url, FileStruct filedata) {deckGuiRight.loadAudioFile(url, filedata);});
+    playlistComponent.setLoadDeck1Callback([this](URL url, Utilities::FileStruct filedata) {deckGuiLeft.loadAudioFile(filedata);});
+    playlistComponent.setLoadDeck2Callback([this](URL url, Utilities::FileStruct filedata) {deckGuiRight.loadAudioFile(filedata);});
 
     //callback function to update the addToLibraryButton of DeckGui instances when a track is deleted from the library 
     playlistComponent.setDeleteCallback([this]() {

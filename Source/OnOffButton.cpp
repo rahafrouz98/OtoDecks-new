@@ -31,11 +31,10 @@ OnOffButton::OnOffButton(const void* onImageData, int onImageDataSize, const voi
     addAndMakeVisible(button);
 
     button.onClick = [this]() {
-            //toggle the status
+
             status = !status;
             updateImages();
         };
-        
 }
 
 OnOffButton::~OnOffButton()
