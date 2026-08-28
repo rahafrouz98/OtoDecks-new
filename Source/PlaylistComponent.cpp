@@ -93,44 +93,6 @@ void PlaylistComponent::paintCell(Graphics& g, int rowNumber, int columnId, int 
         g.drawText(String(tracks[rowNumber].duration), 2, 0, width - 4, height, Justification::centredLeft, true);
     }
 }
-Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, Component* existingComponentToUpdate)
-{
-    if (existingComponentToUpdate == nullptr)
-    {
-        if (columnId == 5 || columnId == 6)
-        {
-            String side = "";
-            if (columnId == 5)
-            {
-                side = "deckLeft_";
-            }
-            else
-            {
-                side = "deckRight_";
-            }
-            juce::TextButton* btn = new juce::TextButton("load");
-            String id{ side + std::to_string(rowNumber) };
-            btn->setComponentID(id);
-            btn->addListener(this);
-            existingComponentToUpdate = btn;
-        }
-        else if (columnId == 4)
-        {
-            juce::TextEditor* textEditor = new juce::TextEditor();
-            textEditor->onTextChange = [this, rowNumber, textEditor]() { tracks[rowNumber].comment = textEditor->getText(); };
-            existingComponentToUpdate = textEditor;
-        }
-        else if (columnId == 1)
-        {
-            juce::TextButton* btn = new juce::TextButton("X");
-            String id{ "delete_" + std::to_string(rowNumber)};
-            btn->setComponentID(id);
-            btn->addListener(this);
-            existingComponentToUpdate = btn;
-        }
-    }
-    return existingComponentToUpdate;
-}
 
 void PlaylistComponent::addTrackToLibrary(Utilities::FileStruct loadedFile)
 {
@@ -190,6 +152,7 @@ void PlaylistComponent::writePlayListData()
         trackObject->setProperty("url", tracks[i].url.toString(false));
         trackObject->setProperty("name", tracks[i].name);
         trackObject->setProperty("duration", tracks[i].duration);
+        trackObject->setProperty("comment", tracks[i].comment);
 
         juce::Array<juce::var> cueList;
         for (const auto& cue : tracks[i].cueStructs)
@@ -234,6 +197,7 @@ void PlaylistComponent::loadPlayListData()
             tempFileStruct.name = trackObject->getProperty("name");
             tempFileStruct.url = juce::URL{ trackObject->getProperty("url") };
             tempFileStruct.duration = trackObject->getProperty("duration");
+            tempFileStruct.comment = trackObject->getProperty("comment");
 
             juce::var varCueList = trackObject->getProperty("cuelist");
 
@@ -246,8 +210,65 @@ void PlaylistComponent::loadPlayListData()
                 tempFileStruct.cueStructs[j].colour = juce::Colour::fromString(cueObject->getProperty("colour").toString());
                 tempFileStruct.cueStructs[j].name = cueObject->getProperty("name");
                 tempFileStruct.cueStructs[j].time = cueObject->getProperty("time");
+
             }
             tracks.push_back(tempFileStruct);
+        }
+    }
+}
+
+Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, Component* existingComponentToUpdate)
+{
+    if (existingComponentToUpdate == nullptr)
+    {
+        if (columnId == 5 || columnId == 6)
+        {
+            String side = "";
+            if (columnId == 5)
+            {
+                side = "deckLeft_";
+            }
+            else
+            {
+                side = "deckRight_";
+            }
+            juce::TextButton* btn = new juce::TextButton("load");
+            String id{ side + std::to_string(rowNumber) };
+            btn->setComponentID(id);
+            btn->addListener(this);
+            existingComponentToUpdate = btn;
+        }
+        else if (columnId == 4)
+        {
+            juce::TextEditor* textEditor = new juce::TextEditor();
+            String id{std::to_string(rowNumber) };
+            textEditor->setComponentID(id);
+            textEditor->addListener(this);
+            textEditor->setText(tracks[rowNumber].comment, false);
+            existingComponentToUpdate = textEditor;
+        }
+        else if (columnId == 1)
+        {
+            juce::TextButton* btn = new juce::TextButton("X");
+            String id{ "delete_" + std::to_string(rowNumber) };
+            btn->setComponentID(id);
+            btn->addListener(this);
+            existingComponentToUpdate = btn;
+        }
+    }
+    return existingComponentToUpdate;
+}
+
+void PlaylistComponent::updateTextEditorsID(int startIndex)
+{
+    for (int i = startIndex; i < tableComponent.getNumRows(); i++)
+    {
+        //dynamicly casted fron Component pointer to a textEditor pointer to be able to use setText() function
+        auto* textEditorTarget = dynamic_cast<juce::TextEditor*>(tableComponent.getCellComponent(4, i));
+        if (textEditorTarget != nullptr)
+        {
+            textEditorTarget->setComponentID(String(i));
+            textEditorTarget->setText(tracks[i].comment);
         }
     }
 }
@@ -272,13 +293,14 @@ void PlaylistComponent::buttonClicked(juce::Button* button)
     {
         tracks.erase(tracks.begin() + index);
         tableComponent.updateContent();
+        updateTextEditorsID(index);
         deleteCallback();
     }
 }
 
 void PlaylistComponent::textEditorTextChanged(juce::TextEditor& editor)
 {
-
+    tracks[editor.getComponentID().getIntValue()].comment = editor.getText();
 }
 
 void PlaylistComponent::filesDropped(const StringArray& files, int x, int y)

@@ -24,7 +24,7 @@ CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelecte
     textEditor.setTextToShowWhenEmpty("Type the cue button name here.", juce::Colours::lightgrey.withAlpha(0.5f));
     textEditor.clear();
     textEditor.setJustification(juce::Justification::centredLeft);
-    textEditor.setText(preSelectedName, dontSendNotification);
+    textEditor.setText(preSelectedName, false);
 
     ////////////////////////////////////////////// Colour buttons //////////////////////////////////
     for (int i = 0; i < colourButtons.size(); ++i)

@@ -51,7 +51,8 @@ public:
     void setLoadDeckLeftCallback(std::function<void(URL, Utilities::FileStruct)> callback);
     /**set the loadDeckLeft callback function*/
     void setLoadDeckRightCallback(std::function<void(URL, Utilities::FileStruct)> callback);
-    /**set the  deleteCallback function*/
+    /**set the  deleteCallback function. Is used in the main component to receive notification that 
+    the row is deleted and update the decks button*/
     void setDeleteCallback(std::function<void()> callback);
    
 private:
@@ -84,6 +85,10 @@ private:
    
     /**takes an audio fle url in juce::URL format  and return the duration of the audio*/
     double getAudioDuration(juce::URL url);
+
+    /**itterates throw text editors and updates their ID form the the startIndex argument to the end of the 
+    list. It is used to update the textEditor ids after deleting a row from the track. */
+    void updateTextEditorsID(int startIndex);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };

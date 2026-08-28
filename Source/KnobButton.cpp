@@ -27,7 +27,7 @@ KnobButton::KnobButton(juce::String title, double _min, double _max): min(_min),
 
     ///////////////////////////////////////text editor //////////////////////////////////////
     addAndMakeVisible(textEditor);
-    textEditor.setText("0.000");
+    textEditor.setText("0.000", false);
     textEditor.setColour(juce::TextEditor::ColourIds::backgroundColourId, juce::Colours::black);
     textEditor.setJustification(juce::Justification::centred);
     textEditor.onReturnKey = [this]() {
@@ -78,7 +78,7 @@ void KnobButton::resized()
 
 void KnobButton::setRange(double _min, double _max)
 {
-    if (max > min && min > 0)
+    if (max > min && min >=0 )
     {
         min = _min;
         max = _max;

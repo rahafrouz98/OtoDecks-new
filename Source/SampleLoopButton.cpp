@@ -77,7 +77,7 @@ void SampleLoopButton::resetButtonData()
 {
     DBG("REdet");
     url = juce::URL{};
-    textEditor.setText("");
+    textEditor.setText("",false);
     playStopButton.setButtonEnabled(false);
 
 }
@@ -85,7 +85,7 @@ void SampleLoopButton::resetButtonData()
 void SampleLoopButton::setSampleDataAndButtonsStatus(juce::URL _url, String _name, bool updateAddRemoveMode)
 {
     url = _url;
-    textEditor.setText(_name);
+    textEditor.setText(_name, false);
 
     if (_url != juce::URL{})
     {
