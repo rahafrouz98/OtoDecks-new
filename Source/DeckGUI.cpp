@@ -364,7 +364,7 @@ void DeckGUI::updateAddToLibraryButton()
 
 void DeckGUI::setBPMLabel()
 {
-    int adjustedBPM = static_cast<int>( musicAnalyzer.getLiveBPM() * BPMRelativeRate );
+    int adjustedBPM = static_cast<int>( musicAnalyzer.getLiveBPM(MusicAnalyzer::FrequencyBand::bass) * BPMRelativeRate );
     String newBPM = String( adjustedBPM ) + " BPM";
     
     BPMLabel.setText(newBPM, dontSendNotification);

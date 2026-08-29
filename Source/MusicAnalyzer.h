@@ -21,6 +21,16 @@ class MusicAnalyzer  : public juce::AudioAppComponent, public juce::Thread, publ
 public:
     MusicAnalyzer();
     ~MusicAnalyzer() override;
+    /**enum to classify band categories*/
+    enum class FrequencyBand{
+        subBass,
+        bass,
+        lowMid,
+        mid,
+        highMid,
+        treble,
+        undefined
+    };
     void paint (juce::Graphics&) override;
     void resized() override;
 
@@ -36,13 +46,16 @@ public:
     void setLiveTime(float time);
 
     /**get the BPM of the corresponding time*/
-    int getLiveBPM( );
+    int getLiveBPM(FrequencyBand band);
+
 
 private:
 
     static constexpr int fftOrder = 10;
     static constexpr int fftSize = 1 << fftOrder;
-	static constexpr int bandsNumber = 32;
+	static constexpr int bandsNumber = 6;
+
+    juce::CriticalSection lock;
 
     std::array<float, fftSize*2> fftResult{ 0.0f };
 
@@ -68,26 +81,67 @@ private:
     Label specProgLabel;
     Label BPMProgLabel;
 
-    /**Extract spectrogram and frame duration */
-	void analyzer();
-
-    /**Generate 32 band energy spectrum by grouping the average energy of 1024 frequencies of the input spectrum */
-    std::array<float, bandsNumber>generateEnergy32_bandSpectrum(const std::array<float, fftSize*2>& spectrum);
-
-	//the items in the vector is the 32-bandspectrum of one frame, the key is the frame number
-	std::vector<std::array<float, bandsNumber>> energy32_bandSpectrogram;
-
-    /**calculates the BPM sets it*/
-    void setTimeBPMVector();
-
-    //returns a vector of boolean. Each item representing a timeframe as true(beat detected) and false. 
-    std::vector<bool>extractBooleanBeetVector();
-
-    //this vector has pairs, and each pair keep the timeframe index of each beat at the first element and the corresponding BPM at the second element
-    std::map<int, int> beatTimeBPM;
-
-    //keep the last read detected frame
+    /**keep the last read detected frame*/
     int lastReadFrame = 0;
+
+	/**It is an array of a map for each frame. The first item of map is band category and the second is the total energy*/
+	std::vector<std::map< std::string, float>> sixBandSpectrogram;
+
+
+    /**Each item of this vector represent the booloean beat spectrum for each fram. the string is band category and bool is true if 
+    beat is detected for at this time frame and for this band category*/
+    std::vector< std::map <std::string, bool>> booleanBeatSpectrogram;
+
+    /**the outer map first element is representing band category. The first element of inner map is representing band category and the second is 
+    the BPM at that time frame for that band category*/
+    std::map< std::string, std::map <int, int>> beatTimeBPM;
+
+    /**Extract spectrogram and frameDuration */
+	void setSixBandEnergySpectrogram();
+
+    /**calculates the  booleanBeatSpectrogram vector from the sixBandSpectrogram.*/
+    void setBooleanBeatSpectrogram();
+
+    /**calculates the beatTimeBPM from the booleanBeatSpectrogram*/
+    void setTimeBPMMap();
+
+    /**Generate 6 band energy spectrum by grouping the energy of 1024 frequenct bins of the input spectrum. It 
+    returns a map. the first element of map is band category and the second is the total energy for that band*/
+    std::map< std::string, float> generateSixbandEnergySpectrum(const std::array<float, fftSize*2>& spectrum);
+
+
+    /**calculates the variance of each band energy for the specific span of one second and  indicate if the next upcomming frame
+    has beat on any of band categories. windoSpectrum is holding the six-band energy spectrum of last one second and nextFrameSixBandSpectrum is the 
+     upcomming spectrum to detect the beat on it*/
+    std::map<std::string, bool> detectBeatOnFrame(std::queue< std::map< std::string, float>> FIFOWindoSpectrum,
+                                                  const std::map< std::string, float>& nextFrameSixBandSpectrum);
+
+    /**takes a frequrncy and returns a string representing the band category*/
+    std::string bandCategorizer(float frequency) const;
+
+    /**Extract the map of time-BPM for specific bass categor. it returns a map. first item is timeFrame index and second is BPM */
+    std::map<int, int> extractTimeBeatForThisBand(std::string band);
+
+
+    /**converts the FrequencyBand Enum to std::string*/
+    static std::string frequencyBandToString(FrequencyBand band);
+
+    /**converts the std::string to FrequencyBand Enum*/
+    FrequencyBand stringToFrequencyBand(std::string band);
+
+    struct BandFrequncy
+    {
+        float min = 0;
+        float max = 0;
+    };
+
+    BandFrequncy subBass{ 20.0f, 60.0f};
+    BandFrequncy bass { 60.0f, 250.0f };
+    BandFrequncy lowMid { 250.0f, 500.0f };
+    BandFrequncy mid { 500.0f, 2000.0f };
+    BandFrequncy highMid { 2000.0f, 6000.0f };
+    BandFrequncy treble { 6000.0f, 20000.0f };
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MusicAnalyzer)
 };
