@@ -29,6 +29,7 @@ public:
         mid,
         highMid,
         treble,
+        sum,
         undefined
     };
     void paint (juce::Graphics&) override;
@@ -53,7 +54,7 @@ private:
 
     static constexpr int fftOrder = 10;
     static constexpr int fftSize = 1 << fftOrder;
-	static constexpr int bandsNumber = 6;
+	static constexpr int bandsNumber = 7;
 
     juce::CriticalSection lock;
 
@@ -61,18 +62,17 @@ private:
 
     dsp::FFT fft{fftOrder};
 
-    //a separate copy of source reader fro the file is created so two threads (one here and one in DJAudio player)can work at the same time 
     AudioFormatManager formatManager;
     std::unique_ptr<AudioFormatReader> reader;
    
-
     float frameDuration = 0;
     float liveTime=0.0f;
     
-    //atomic double used to share the variables between two thread
+    //atomic double used to share the variables between two thread (MusicAnalyser thread and GUI thread) without data race
     std::atomic <double> atomicSpectrogramPercentage = 0.0;
     std::atomic <double> atomicBPMPercentage = 0.0;
 
+    //These variabels are updated at timer callback to be match with atomic double variables and used as arguments to create
     double spectrogramPercentage = 0;
     double BPMPercentage = 0;
 
@@ -116,7 +116,7 @@ private:
     std::map<std::string, bool> detectBeatOnFrame(std::queue< std::map< std::string, float>> FIFOWindoSpectrum,
                                                   const std::map< std::string, float>& nextFrameSixBandSpectrum);
 
-    /**takes a frequrncy and returns a string representing the band category*/
+    /**takes a frequrncy and returns a string representing the band sub category*/
     std::string bandCategorizer(float frequency) const;
 
     /**Extract the map of time-BPM for specific bass categor. it returns a map. first item is timeFrame index and second is BPM */
@@ -128,6 +128,10 @@ private:
 
     /**converts the std::string to FrequencyBand Enum*/
     FrequencyBand stringToFrequencyBand(std::string band);
+
+    /**returns the average enegrg of whole spectrogram for the specific band. It is used to
+    calculate the aplitude on the bar graph*/
+    float getAverageEnergyOnThisBand(FrequencyBand band);
 
     struct BandFrequncy
     {
@@ -141,6 +145,7 @@ private:
     BandFrequncy mid { 500.0f, 2000.0f };
     BandFrequncy highMid { 2000.0f, 6000.0f };
     BandFrequncy treble { 6000.0f, 20000.0f };
+    BandFrequncy sum{ 20.0f, 20000.0f };
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MusicAnalyzer)
