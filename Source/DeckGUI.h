@@ -72,6 +72,8 @@ private:
 
     bool isleft;
 
+    juce::ComboBox frequencyBandSelector;
+
     juce::TextButton loadButton{ "LOAD" };
     juce::TextButton addToLibraryButton{ "ADD TO LIBRARY" };
     juce::TextButton clearCueButtons{ "CLEAR CUE BUTTON" };

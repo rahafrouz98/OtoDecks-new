@@ -21,17 +21,7 @@ class MusicAnalyzer  : public juce::AudioAppComponent, public juce::Thread, publ
 public:
     MusicAnalyzer();
     ~MusicAnalyzer() override;
-    /**enum to classify band categories*/
-    enum class FrequencyBand{
-        subBass,
-        bass,
-        lowMid,
-        mid,
-        highMid,
-        treble,
-        sum,
-        undefined
-    };
+
     void paint (juce::Graphics&) override;
     void resized() override;
 
@@ -47,14 +37,14 @@ public:
     void setLiveTime(float time);
 
     /**get the BPM of the corresponding time*/
-    int getLiveBPM(FrequencyBand band);
+    int getLiveBPM();
 
 
 private:
 
     static constexpr int fftOrder = 10;
     static constexpr int fftSize = 1 << fftOrder;
-	static constexpr int bandsNumber = 7;
+	static constexpr int bandsNumber = 4;
 
     juce::CriticalSection lock;
 
@@ -81,57 +71,35 @@ private:
     Label specProgLabel;
     Label BPMProgLabel;
 
-    /**keep the last read detected frame*/
-    int lastReadFrame = 0;
-
 	/**It is an array of a map for each frame. The first item of map is band category and the second is the total energy*/
 	std::vector<std::map< std::string, float>> sixBandSpectrogram;
 
 
-    /**Each item of this vector represent the booloean beat spectrum for each fram. the string is band category and bool is true if 
-    beat is detected for at this time frame and for this band category*/
-    std::vector< std::map <std::string, bool>> booleanBeatSpectrogram;
+    /**Each item of this vector represent the booloean beat spectrum for each fram for the whole spectrum. */
+    std::vector<bool> booleanBeatSpectrogram;
 
-    /**the outer map first element is representing band category. The first element of inner map is representing band category and the second is 
-    the BPM at that time frame for that band category*/
-    std::map< std::string, std::map <int, int>> beatTimeBPM;
+    /**The first element is representing timeframe and second one is the BPM*/
+    std::map <int, int> timeBPM;
 
     /**Extract spectrogram and frameDuration */
 	void setSixBandEnergySpectrogram();
 
-    /**calculates the  booleanBeatSpectrogram vector from the sixBandSpectrogram.*/
+    /**calculates booleanBeatSpectrogram vector from the sixBandSpectrogram and by using data from averageEnergy map.*/
     void setBooleanBeatSpectrogram();
 
-    /**calculates the beatTimeBPM from the booleanBeatSpectrogram*/
-    void setTimeBPMMap();
+    /**calculates timeBPM from the booleanBeatSpectrogram*/
+    void setTimeBPM();
 
     /**Generate 6 band energy spectrum by grouping the energy of 1024 frequenct bins of the input spectrum. It 
     returns a map. the first element of map is band category and the second is the total energy for that band*/
     std::map< std::string, float> generateSixbandEnergySpectrum(const std::array<float, fftSize*2>& spectrum);
 
-
-    /**calculates the variance of each band energy for the specific span of one second and  indicate if the next upcomming frame
-    has beat on any of band categories. windoSpectrum is holding the six-band energy spectrum of last one second and nextFrameSixBandSpectrum is the 
-     upcomming spectrum to detect the beat on it*/
-    std::map<std::string, bool> detectBeatOnFrame(std::queue< std::map< std::string, float>> FIFOWindoSpectrum,
-                                                  const std::map< std::string, float>& nextFrameSixBandSpectrum);
+    /**returns true if beat is detected for the next frame. It takes an std::queue as the first argument representing
+    the spectrums of the frames of the last 1 second. The second argument is the energy og next fram*/
+    bool detectBeatOnFrame(std::queue< float> FIFOWindoAllSpectrum,float nextFrameEnergy);
 
     /**takes a frequrncy and returns a string representing the band sub category*/
     std::string bandCategorizer(float frequency) const;
-
-    /**Extract the map of time-BPM for specific bass categor. it returns a map. first item is timeFrame index and second is BPM */
-    std::map<int, int> extractTimeBeatForThisBand(std::string band);
-
-
-    /**converts the FrequencyBand Enum to std::string*/
-    static std::string frequencyBandToString(FrequencyBand band);
-
-    /**converts the std::string to FrequencyBand Enum*/
-    FrequencyBand stringToFrequencyBand(std::string band);
-
-    /**returns the average enegrg of whole spectrogram for the specific band. It is used to
-    calculate the aplitude on the bar graph*/
-    float getAverageEnergyOnThisBand(FrequencyBand band);
 
     struct BandFrequncy
     {
@@ -139,13 +107,10 @@ private:
         float max = 0;
     };
 
-    BandFrequncy subBass{ 20.0f, 60.0f};
-    BandFrequncy bass { 60.0f, 250.0f };
-    BandFrequncy lowMid { 250.0f, 500.0f };
-    BandFrequncy mid { 500.0f, 2000.0f };
-    BandFrequncy highMid { 2000.0f, 6000.0f };
-    BandFrequncy treble { 6000.0f, 20000.0f };
-    BandFrequncy sum{ 20.0f, 20000.0f };
+    BandFrequncy low{ 20.0f, 250.0f};
+    BandFrequncy mid { 250.0f, 8000.0f };
+    BandFrequncy high { 8000.0f, 20000. };
+    BandFrequncy all{ 20.0f, 20000.0f };
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MusicAnalyzer)

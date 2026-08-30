@@ -34,6 +34,7 @@ MusicAnalyzer::MusicAnalyzer(): Thread("Music Analyzer Thread")
 
     addAndMakeVisible(BPMProgressBar);
     BPMProgressBar.setColour(juce::ProgressBar::ColourIds::foregroundColourId, juce::Colour(88, 211, 255));
+
 }
 
 MusicAnalyzer::~MusicAnalyzer()
@@ -53,23 +54,23 @@ void MusicAnalyzer::paint(juce::Graphics& g)
     {
         int liveFrameIndex = static_cast<int>(liveTime / frameDuration);
 
-        int spectrogramSize = static_cast<int> (sixBandSpectrogram.size());
+        int spectrogramSize = static_cast<int>(sixBandSpectrogram.size());
         
-
+        auto area = getLocalBounds();
+        auto barGraphArea = area.removeFromTop(getHeight() * 5 / 6);
         for (const auto& [band, energy] : sixBandSpectrogram[liveFrameIndex])
         {
-            juce::uint8 blue = static_cast<juce::uint8>(energy);
-            juce::uint8 green = static_cast<juce::uint8>(energy);
-            juce::uint8 red = static_cast<juce::uint8>(energy);
-            g.setColour(juce::Colour::fromRGBA(0, green, 0,255));
+            juce::uint8 blue = static_cast<juce::uint8>(255);
+            juce::uint8 green = static_cast<juce::uint8>(energy / 2.0f);
+            juce::uint8 red = static_cast<juce::uint8>(energy / 2.0f);
+            g.setColour(juce::Colour::fromRGBA(red, green, blue,255));
 
             int barWidth = static_cast<int>( getWidth() / bandsNumber );
-            int barHeight = static_cast<int>(energy);
-            g.fillRect( barWidth * static_cast<int>(stringToFrequencyBand(band)), 
-                        getHeight() - barHeight,
-                        barWidth,
-                        barHeight
-                        );
+            int barHeight = static_cast<int>(energy / 2.0f);
+            g.fillRect(barGraphArea.removeFromLeft(barWidth).removeFromBottom(barHeight));
+            
+            g.setColour(juce::Colours::white);
+            g.drawText(band, area.removeFromLeft(barWidth), juce::Justification::centred);
         }
        
     }
@@ -79,14 +80,12 @@ void MusicAnalyzer::paint(juce::Graphics& g)
 
 void MusicAnalyzer::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
 
-    specProgLabel.setBounds(getWidth() / 2- getWidth() / 4, getHeight() / 3 - getHeight() / 10, getWidth() / 2, getHeight() / 10);
+    specProgLabel.setBounds(getWidth() / 2 - getWidth() / 4, getHeight() / 3 - getHeight() / 10, getWidth() / 2, getHeight() / 10);
     SpectrogramProgressBar.setBounds(getWidth() / 4, getHeight() / 3, getWidth() / 2, getHeight() / 10);
 
-    BPMProgLabel.setBounds(getWidth() / 2 - getWidth() / 4, getHeight() * 2 / 3- getHeight() / 10, getWidth() / 2, getHeight() / 10);
-    BPMProgressBar.setBounds(getWidth() / 4, getHeight() *2 / 3, getWidth() / 2, getHeight() / 10);
+    BPMProgLabel.setBounds(getWidth() / 2 - getWidth() / 4, getHeight() * 2 / 3 - getHeight() / 10, getWidth() / 2, getHeight() / 10);
+    BPMProgressBar.setBounds(getWidth() / 4, getHeight() * 2 / 3, getWidth() / 2, getHeight() / 10);
 
 }
 void MusicAnalyzer::releaseResources()
@@ -122,8 +121,7 @@ void MusicAnalyzer::run()
     startTimer(20);
     setSixBandEnergySpectrogram();
     setBooleanBeatSpectrogram();
-    setTimeBPMMap();
-    signalThreadShouldExit();
+    setTimeBPM();
     stopTimer();
     //sends the lambda function to the message thread queue to hide the progress bar
     MessageManager::callAsync([this](){
@@ -136,8 +134,12 @@ void MusicAnalyzer::run()
 }
 void MusicAnalyzer::setSixBandEnergySpectrogram()
 {
-    //reset the spectrogram vector for new audio
-    sixBandSpectrogram.clear();
+    //this lock solves the issue of competition between paint() and sixBandSpectrogram.clear()
+    {
+        juce::ScopedLock scopeLock(lock);
+         sixBandSpectrogram.clear();
+    }
+
     frameDuration = 0;
 
 	juce::AudioBuffer<float> audioBuffer(1, fftSize);
@@ -189,7 +191,6 @@ void MusicAnalyzer::setSixBandEnergySpectrogram()
 		//convert the fftResault to a six-band energy spectrum for this frame
         std::map< std::string, float>  bandSpectrum = generateSixbandEnergySpectrum(fftResult);
 
-        juce::ScopedLock scopeLock(lock);
         sixBandSpectrogram.push_back( bandSpectrum );
         
         atomicSpectrogramPercentage = readerStartSample / double(numberOfAudioSamples);
@@ -238,9 +239,9 @@ std::map< std::string, float> MusicAnalyzer::generateSixbandEnergySpectrum(const
         bandSpectrum[bandCategory] += spectrum[binPointer];
 
         //accumulate the total energy of all bins in human earing range
-        if (frequency >= sum.min && frequency < sum.max)
+        if (frequency >= all.min && frequency < all.max)
         {
-            bandSpectrum["sum"] += spectrum[binPointer];
+            bandSpectrum["all"] += spectrum[binPointer];
         }
 
         binPointer++;
@@ -251,31 +252,22 @@ std::map< std::string, float> MusicAnalyzer::generateSixbandEnergySpectrum(const
 
 std::string MusicAnalyzer::bandCategorizer(float frequency) const
 {
-    if (frequency >= subBass.min && frequency < subBass.max)
+    if (frequency >= low.min && frequency < low.max)
     {
-        return "subBass";
-    }
-    if (frequency >= bass.min && frequency < bass.max)
-    {
-        return "bass";
-    }
-    if (frequency >= lowMid.min && frequency < lowMid.max)
-    {
-        return "lowMid";
+        return "low";
     }
     if (frequency >= mid.min && frequency < mid.max)
     {
         return "mid";
     }
-    if (frequency >= highMid.min && frequency < highMid.max)
+    if (frequency >= high.min && frequency < high.max)
     {
-        return "highMid";
+        return "high";
     }
-    if (frequency >= treble.min && frequency < treble.max)
+    if (frequency >= all.min && frequency < all.max)
     {
-        return "treble";
+        return "all";
     }
-
     //if frequency is higher or lower is not detectable by human
     return "";
 }
@@ -289,37 +281,15 @@ void MusicAnalyzer::setLiveTime(float time)
     }
 }
 
-void MusicAnalyzer::setTimeBPMMap()
+
+void MusicAnalyzer::setTimeBPM()
 {
-    //reset the beatTime_BPM vector for new audio
-     juce::ScopedLock scopeLock(lock);
-    beatTimeBPM.clear();
-    if (frameDuration == 0)
-    {
-        return;
-    }
+   
+    timeBPM.clear();
     
-    //extract the time-beat map for all band categories and add it to beatTimeBPM
-    beatTimeBPM["subBass"] = extractTimeBeatForThisBand("subBass");
-
-    beatTimeBPM["bass"] = extractTimeBeatForThisBand("bass");
-
-    beatTimeBPM["lowMid"] = extractTimeBeatForThisBand("lowMid");
-
-    beatTimeBPM["mid"] = extractTimeBeatForThisBand("mid");
-
-    beatTimeBPM["highMid"] = extractTimeBeatForThisBand("highMid");
-
-    beatTimeBPM["treble"] = extractTimeBeatForThisBand("treble");
-
-    beatTimeBPM["sum"] = extractTimeBeatForThisBand("treble");
-}
-
-std::map<int, int>MusicAnalyzer::extractTimeBeatForThisBand(std::string band)
-{
-    std::map<int, int> bandTimeBeat;
-    //run a separate loop for detecting the first beat so the second loop does not have to use a condition for detecting the first beat and
+   //run a separate loop for detecting the first beat so the second loop does not have to use a condition for detecting the first beat and
    // increase the performance 
+
     bool isFirstBeatDetected = false;
     int lastDetectedFrame = 0;
 
@@ -327,12 +297,12 @@ std::map<int, int>MusicAnalyzer::extractTimeBeatForThisBand(std::string band)
     {
         if (threadShouldExit())
         {
-            return std::map<int, int>{};
+            return;
         }
-        if (booleanBeatSpectrogram[frameIndex][band] == true)
+        if (booleanBeatSpectrogram[frameIndex] == true)
         {
             //ther is no previous beat detected so the fist is 0 BPM
-            bandTimeBeat[frameIndex] = 0;
+            timeBPM[frameIndex] = 0;
             lastDetectedFrame = frameIndex;
             isFirstBeatDetected = true;
             break;
@@ -344,18 +314,12 @@ std::map<int, int>MusicAnalyzer::extractTimeBeatForThisBand(std::string band)
     {
         //continue for the rest of the beats in the second loop
         for (int frameIndex = lastDetectedFrame + 1; frameIndex < booleanBeatSpectrogram.size(); frameIndex++)
-        {
-
-            //25 percent pf progress is considered for going throhgh booleanBeatSpectrogram and analyse BPM of beat detected frames
-            double secondProgress = (static_cast<double>(frameIndex) / booleanBeatSpectrogram.size()) * 0.25;
-            atomicBPMPercentage = atomicBPMPercentage + secondProgress;
-
-           
+        {    
             if (threadShouldExit())
             {
-                return std::map<int, int>{};
+                return;
             }
-            if (booleanBeatSpectrogram[frameIndex][band] == true)
+            if (booleanBeatSpectrogram[frameIndex] == true)
             {
 
                 double frameTime = frameIndex * frameDuration;
@@ -365,45 +329,36 @@ std::map<int, int>MusicAnalyzer::extractTimeBeatForThisBand(std::string band)
                 // a refactory time period is considered so time between beat detections can not be less than 
                 //refactory time which is considered 250BPM
                 //also beat detections less than 60BPM (one per second is not very common and rythmic in music
-                //the reange of beats to be marked is considered between 60BPM and 350BPM
+
                 if (BPM < 60 || BPM > 250)
                 {
                     continue;
                 }
-                bandTimeBeat[frameIndex] = BPM;
+                timeBPM[frameIndex] = BPM;
                 lastDetectedFrame = frameIndex;
             }
         }
     }
-    return bandTimeBeat;
 }
 
 void MusicAnalyzer::setBooleanBeatSpectrogram()
 {
     //number of frames for one second
-    int numberOfFramesInWindow = static_cast<int>( 1.0f / frameDuration );
+    int numberOfFramesInWindow = static_cast<int>(1.0f / frameDuration);
 
-    //it holds the collection of time frams spectrum . std::queue is used to optimize the process
+    //it holds the energy of last one second frames. std::queue is used to optimize the process
     //of removing the itme from front and add to the back
-    std::queue< std::map< std::string, float>> windowSpectrum;
+    std::queue< float> windowSpectrum;
 
-    //add the first batch of spectrum of frames  to windoSpectrum to have a 1-second baseline for beat detection
+    //add the first batch of total energy of frames as a baseline for beat detection
     for (int i = 0; i < numberOfFramesInWindow && i < sixBandSpectrogram.size(); i++)
     {
-        windowSpectrum.push(sixBandSpectrogram[i]);
+        windowSpectrum.push(sixBandSpectrogram[i]["all"]);
 
         //we do not detect beat for the first second of audio as we do not have enough data yet
-        booleanBeatSpectrogram.push_back(std::map<std::string, bool>{
-            {"subBass", false}, 
-            { "bass", false }, 
-            { "lowMid", false }, 
-            { "mid", false }, 
-            { "highMid", false }, 
-            { "treble", false },
-            { "sum" , false}
-        });
+        booleanBeatSpectrogram.push_back(false);
     }
-    
+
     //compare each next frame spectrum with a wincowSpectrum of 1_second period before the frame and detect beat
     for (int i = numberOfFramesInWindow; i < sixBandSpectrogram.size(); i++)
     {
@@ -411,168 +366,78 @@ void MusicAnalyzer::setBooleanBeatSpectrogram()
         {
             return;
         }
-        std::map<std::string, bool> detectedBeatOnFrame = detectBeatOnFrame(windowSpectrum, sixBandSpectrogram[i]);
-        booleanBeatSpectrogram.push_back(detectedBeatOnFrame);
+        bool isBeatDetected = detectBeatOnFrame(windowSpectrum, sixBandSpectrogram[i]["all"]);
+        booleanBeatSpectrogram.push_back(isBeatDetected);
 
         //remove the old frame from the window and add a new one for the next calculation
-
         windowSpectrum.pop();
-        windowSpectrum.push(sixBandSpectrogram[i]);
-    
-        //75 percent of progress is considered for extracting booleanBeatSpectrogram
-        atomicBPMPercentage = (static_cast<double>(booleanBeatSpectrogram.size() ) /
-                                                    (sixBandSpectrogram.size())) * 0.75;
+        windowSpectrum.push(sixBandSpectrogram[i]["all"]);
 
+        //75 percent of progress is considered for extracting booleanBeatSpectrogram
+        atomicBPMPercentage = (static_cast<double>(booleanBeatSpectrogram.size()) /
+            (sixBandSpectrogram.size()));
     }
 }
 
-std::map<std::string, bool> MusicAnalyzer::detectBeatOnFrame( std::queue< std::map< std::string, float>> FIFOWindoSpectrum,
-                                                            const std::map< std::string, float>& nextFrameSixBandSpectrum)
+bool MusicAnalyzer::detectBeatOnFrame(std::queue< float> FIFOWindoAllSpectrum, float nextFrameEnergy)
 {
-    std::map<std::string, bool> bandbeatMap;
 
     //to be able to itterate through items of windowSpectrom i changed queue to a vector
-    std::vector< std::map< std::string, float>>windoSpectrum;
-    while (!FIFOWindoSpectrum.empty())
+    std::vector< float> windoSpectrum;
+    while (!FIFOWindoAllSpectrum.empty())
     {
         //moves the item to the vectorr without copying it
-        windoSpectrum.push_back(std::move(FIFOWindoSpectrum.front()));
-        FIFOWindoSpectrum.pop();
+        windoSpectrum.push_back(std::move(FIFOWindoAllSpectrum.front()));
+        FIFOWindoAllSpectrum.pop();
     }
 
     if (windoSpectrum.size() == 0)
     {
-        return std::map<std::string, bool>{};
+        return false;
     }
 
-    //This map keeps the sum energy of each band for this frame
-    std::map< std::string, float> sumEnergyMap;
+    //This map keeps the sum energy of all frames of one second
+    float sumEnergy = 0;
 
-    //This map keeps the average energy of each band for all frames of this second
-    std::map< std::string, float> averageEnergyMap;
+    //This map keeps the average energy for all frames of one second
+    float averageEnergy = 0;
 
-    //This map keeps the square variance sum of each band through all frames of this second
-    std::map< std::string, float> sumVarianceEnergyMap;
-
-    //This map keeps the variance of each band through all frames of this second
-    std::map< std::string, float> varianceEnergyMap;
-
-    //calculate the sum of energy of all frames for each band 
-    for (const auto& frame : windoSpectrum)
+    //calculate the sum of energy of all frames 
+    for (const auto& energy : windoSpectrum)
     {
-        for (const auto& [bandCategory, energy] : frame)
-        {
-            sumEnergyMap[bandCategory] += energy;
-        }
+            sumEnergy+= energy;
     }
 
-    //calculate the average of energy of each band for the whole span of frames
-    for (const auto& [bandCategory, energySum] : sumEnergyMap)
+     averageEnergy= sumEnergy / windoSpectrum.size();
+  
+
+    //check the energy of the nextFrameSixBandSpectrum and if it pass the cireteria return true otherwise return false 
+    //formula from https://gamedev.net/tutorials/programming/math-and-physics/beat-detection-algorithms-r1952
+
+    if (nextFrameEnergy > 1.3 * averageEnergy)
     {
-        averageEnergyMap[bandCategory] = energySum / windoSpectrum.size();
+        return true;
     }
 
-    //calculate the square variance sum of each band for the whole span of frames
-    for (const auto& frame : windoSpectrum)
-    {
-        for (const auto& [bandCategory, energy] : frame)
-        {
-            sumVarianceEnergyMap[bandCategory] += ( (energy - averageEnergyMap[bandCategory]) *
-                (energy - averageEnergyMap[bandCategory]));
-        }
-    }
-
-    //calculate the variance sum  each band for the whole span of frames
-    for (const auto& [bandCategory, arianceEnergySum] : sumVarianceEnergyMap)
-    {
-        varianceEnergyMap[bandCategory] = arianceEnergySum / windoSpectrum.size();
-    }
-
-
-    //check the energy of each band of the nextFrameSixBandSpectrum and if it pass the cireteria but true on the beatMap for that band 
-    for (const auto& [bandCategory, energy] : nextFrameSixBandSpectrum)
-    {
-        //formula from https://gamedev.net/tutorials/programming/math-and-physics/beat-detection-algorithms-r1952
-
-        float C = (+0.0025714 * varianceEnergyMap[bandCategory]) + 1.5142857;
-
-        if (energy > 10 * averageEnergyMap[bandCategory] )
-        {
-            bandbeatMap[bandCategory] = true;
-        }
-        else
-        {
-            bandbeatMap[bandCategory] = false;
-        }
-    }
-
-    return bandbeatMap;
+    return false;
 }
 
-int MusicAnalyzer::getLiveBPM(FrequencyBand band)
+int MusicAnalyzer::getLiveBPM()
 {
-    if (isThreadRunning() || frameDuration == 0)
+    if (isThreadRunning() || frameDuration == 0 )
     {
         return 0;
     }
     int currentFrame = int(liveTime / frameDuration);
 
-    std::string stringifiedBand = frequencyBandToString(band);
-
     //finds the next detected frame after this current time to return its BPM
-    auto nextBeatedFramePointer = beatTimeBPM[stringifiedBand].upper_bound(currentFrame);
+    auto nextBeatedFramePointer = timeBPM.upper_bound(currentFrame);
 
-    if (nextBeatedFramePointer != beatTimeBPM[stringifiedBand].end())
+    if (nextBeatedFramePointer != timeBPM.end())
     {
         return nextBeatedFramePointer->second;
     }
 
     return 0;
 
-}
-
-float MusicAnalyzer::getAverageEnergyOnThisBand(FrequencyBand band)
-{
-    float sumEnergy = 0;
-    for (auto& frame: sixBandSpectrogram)
-    {
-        sumEnergy += frame[frequencyBandToString(band)];
-    }
-    return sumEnergy / sixBandSpectrogram.size();
-}
-
-std::string MusicAnalyzer::frequencyBandToString(FrequencyBand band)
-{
-    switch (band)
-    {
-        case FrequencyBand::subBass: 
-            return "subBass";
-        case FrequencyBand::bass:   
-            return "bass";
-        case FrequencyBand::lowMid:  
-            return "lowMid";
-        case FrequencyBand::mid:     
-            return "mid";
-        case FrequencyBand::highMid:
-            return "highMid";
-        case FrequencyBand::treble: 
-            return "treble";
-        case FrequencyBand::sum:
-            return "sum";
-        default:
-            return "unknown";
-    }
-}
-
-
-MusicAnalyzer::FrequencyBand MusicAnalyzer::stringToFrequencyBand(std::string band)
-{
-    if (band == "subBass") return  FrequencyBand::subBass;
-    if (band == "bass") return  FrequencyBand::bass;
-    if (band == "lowMid") return  FrequencyBand::lowMid;
-    if (band == "mid") return  FrequencyBand::mid;
-    if (band == "highMid") return  FrequencyBand::highMid;
-    if (band == "treble") return  FrequencyBand::treble;
-    else return FrequencyBand::undefined;
-    
 }

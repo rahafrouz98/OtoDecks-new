@@ -191,8 +191,8 @@ void DeckGUI::resized()
     }
     else
     {
-        timerlabelArea = labelArea.removeFromLeft(static_cast<int>(width / 3.0f));
         BPMLAbelArea = labelArea.removeFromLeft(static_cast<int>(width / 3.0f));
+        timerlabelArea = labelArea.removeFromLeft(static_cast<int>(width / 3.0f));
         nameLabelArea = labelArea;
 
         //row one
@@ -217,6 +217,8 @@ void DeckGUI::resized()
     trackNameLabel.setBounds(nameLabelArea);
     BPMLabel.setBounds(BPMLAbelArea);
     timerLabel.setBounds(timerlabelArea);
+
+
 
     ///////////////////////////////////// Knobs /////////////////////////////////////////////////////////
 
@@ -364,7 +366,7 @@ void DeckGUI::updateAddToLibraryButton()
 
 void DeckGUI::setBPMLabel()
 {
-    int adjustedBPM = static_cast<int>( musicAnalyzer.getLiveBPM(MusicAnalyzer::FrequencyBand::sum) * BPMRelativeRate );
+    int adjustedBPM = static_cast<int>( musicAnalyzer.getLiveBPM() * BPMRelativeRate );
     String newBPM = String( adjustedBPM ) + " BPM";
     
     BPMLabel.setText(newBPM, dontSendNotification);
