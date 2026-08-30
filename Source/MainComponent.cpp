@@ -94,10 +94,7 @@ void MainComponent::paint (Graphics& g)
 void MainComponent::paintOverChildren(Graphics& g)
 {
     g.setColour(juce::Colours::lightgrey);
-    if (!looperAndMicrophonWrapper.isEmpty())
-    {
-        g.drawRect(looperAndMicrophonWrapper, 1);
-    }
+    
 }
 
 void MainComponent::resized()
@@ -114,17 +111,19 @@ void MainComponent::resized()
     deckGuiRight.setBounds(decksArea);
 
                                          
+    auto loopSamplerArea = loopsamplerMicArea.removeFromTop(loopsamplerMicArea.getHeight() * 5.0f / 6.0f);
+    
     looperAndMicrophonWrapper = loopsamplerMicArea;
-    auto micArea = loopsamplerMicArea.removeFromTop(static_cast<int>(loopsamplerMicArea.getHeight() * 0.5f));
+    
+    auto micArea = loopsamplerMicArea;
                                   
-    auto loopSamplerArea = loopsamplerMicArea;
-
-    microphone.setBounds(micArea);
     loopSampler.setBounds(loopSamplerArea);
+    
+    microphone.setBounds(micArea);
 
     auto playlistArea = area;
+
     playlistComponent.setBounds(playlistArea);
-    
 }
 
 

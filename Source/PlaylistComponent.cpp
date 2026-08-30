@@ -60,9 +60,9 @@ void PlaylistComponent::resized()
     // components that your component contains..
     tableComponent.setBounds(0, 0, getWidth(), getHeight());
     tableComponent.getHeader().setColumnWidth(1, getWidth() * 1 / 32);
-    tableComponent.getHeader().setColumnWidth(2, getWidth() * 6 / 32 );
+    tableComponent.getHeader().setColumnWidth(2, getWidth() * 8 / 32 );
     tableComponent.getHeader().setColumnWidth(3, getWidth() * 3 / 32 );
-    tableComponent.getHeader().setColumnWidth(4, getWidth() * 10 / 32);
+    tableComponent.getHeader().setColumnWidth(4, getWidth() * 8 / 32);
     tableComponent.getHeader().setColumnWidth(5, getWidth() * 6 / 32);
     tableComponent.getHeader().setColumnWidth(6, getWidth() * 6 / 32);
 }

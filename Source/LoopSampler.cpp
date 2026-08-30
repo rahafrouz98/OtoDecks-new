@@ -87,34 +87,27 @@ void LoopSampler::resized()
     // components that your component contains..
 
     auto area = getLocalBounds();
-    area = area.reduced(getWidth() / 70.0f);
 
-    auto loopSamplesArea = area.removeFromTop(getHeight() * .60);
+    auto loopSamplesArea = area.removeFromTop(getHeight() * .80f).withTrimmedTop(getWidth() * 0.2);
 
-    // it is a four row table of loopSample buttons
-    int cueButtonHeight = static_cast<int>(loopSamplesArea.getHeight() / 4.0f);
-    int cueButtonWidth = static_cast<int>(loopSamplesArea.getWidth() / 2.0f);
+    // it is a column of 8 loopSample buttons
+    int cueButtonHeight = static_cast<int>( loopSamplesArea.getHeight() / 8.0f );
 
-    for (int row = 0; row < 4; ++row)
+    for (int row = 0; row < 8; ++row)
     {
-        auto rowArea = loopSamplesArea.removeFromBottom(cueButtonHeight);
-        for (int col = 0; col < 2; ++col)
-        {
-            int index = row * 2 + col;
-            if (index >= sampleButtons.size())
-            {
-                break;
-            }
-            auto cueButtonArea = rowArea.removeFromLeft(cueButtonWidth).reduced(static_cast<int>(cueButtonWidth*.01f));
-            sampleButtons[index].setBounds(cueButtonArea);
-        }
+        auto buttonRowArea = loopSamplesArea.removeFromTop( cueButtonHeight);
+                                        
+        sampleButtons[row].setBounds( buttonRowArea
+                           .withSizeKeepingCentre( buttonRowArea.getWidth() * 0.8f,
+                                                   buttonRowArea.getHeight() * 0.9f ));
+        
     }
+    auto waveArea = area.removeFromTop( getHeight() * 0.1f );
 
-    auto waveArea = area.removeFromTop(getHeight() * .20);
-    waveformDisplay.setBounds(waveArea);
+    waveformDisplay.setBounds(waveArea.withSizeKeepingCentre( waveArea.getWidth() * 0.8f,
+                                                              waveArea.getHeight() * 0.9f ));
 
-    auto buttonArea = area.withTrimmedLeft(static_cast<int>(getWidth() / 6.0f)).withTrimmedRight(static_cast<int>(getWidth() /6.0f)).
-        withTrimmedTop(static_cast<int>(getHeight() / 40));
+    auto buttonArea = area.withTrimmedLeft(static_cast<int>(getWidth() / 6.0f)).withTrimmedRight(static_cast<int>(getWidth() / 6.0f));
     
     auto leftDeckButtonArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 5.0f)).reduced(static_cast<int>(getHeight() / 70.0f));
     leftDeckImageButton.setBounds(leftDeckButtonArea);

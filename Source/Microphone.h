@@ -45,7 +45,7 @@ private:
 
     OnOffButton micButton{ BinaryData::mic_png, BinaryData::mic_pngSize, BinaryData::disabledmic_png, BinaryData::disabledmic_pngSize };
 
-    KnobButton knob{"MIC"};
+    juce::Slider slider{"MIC"};
 
     float level = 0.25f;
 

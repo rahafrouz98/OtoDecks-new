@@ -50,17 +50,16 @@ void SampleLoopButton::resized()
 {
     auto area = getLocalBounds();
     
-    auto playStopArea = area.removeFromLeft(getWidth() / 5.0f);
+    auto playStopArea = area.removeFromLeft(getWidth() / 7.0f);
 
     playStopButton.setBounds(playStopArea.withSizeKeepingCentre(playStopArea.getHeight() * 0.4f, 
                                                                 playStopArea.getHeight() * 0.4f));
 
-    auto textEditArea = area.removeFromBottom(getHeight()* 2/ 3.0f);
-    textEditor.setBounds(textEditArea.withSizeKeepingCentre(textEditArea.getWidth() * 0.8f ,
-                                                             textEditArea.getHeight() * 0.8f ));
+    auto textEditArea = area.removeFromLeft(getWidth() * 5 / 7.0f);
+    textEditor.setBounds(textEditArea.withSizeKeepingCentre(textEditArea.getWidth() ,
+                                                             textEditArea.getHeight() * 0.6f ));
 
-    addRemoveButton.setBounds(area.removeFromRight(getWidth() / 4.0f).withSizeKeepingCentre(area.getHeight()*0.8,
-                                                                 area.getHeight()*0.8));
+    addRemoveButton.setBounds(area.withSizeKeepingCentre(area.getHeight()*0.4,area.getHeight()*0.4));
 }
 
 juce::URL SampleLoopButton::getURL()

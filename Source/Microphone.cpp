@@ -18,11 +18,13 @@ Microphone::Microphone(juce::AudioDeviceManager& _deviceManager): deviceManager(
     addAndMakeVisible(micButton);
     micButton.setFirstMode(false);
 
-    ////////////////////////////////////////////// Knob ///////////////////////////////////////////////////////
-    addAndMakeVisible(knob);
-    knob.addListener(this);
-    knob.setKnobValue(0.25f);
-    
+    ////////////////////////////////////////////// slider ///////////////////////////////////////////////////////
+    addAndMakeVisible(slider);
+    slider.addListener(this);
+    slider.setRange(0.0, 1.0);
+    slider.setValue(0.25f);
+    slider.setNumDecimalPlacesToDisplay(4);
+    slider.setColour(juce::Slider::ColourIds::textBoxBackgroundColourId, juce::Colours::black);
 }
 
 Microphone::~Microphone()
@@ -38,20 +40,18 @@ void Microphone::paint (juce::Graphics& g)
 
 void Microphone::resized()
 {
-    auto area = getLocalBounds();
+    auto area = getLocalBounds().withTrimmedLeft(static_cast<int>(getWidth() * 0.1f)).
+                                 withTrimmedRight(static_cast<int>(getWidth() * 0.1f));
 
-    auto knobArea = area.removeFromRight(static_cast<int>(area.getWidth() / 2.0f));
+    auto sliderArea = area.removeFromLeft(static_cast<int>(area.getWidth() * 0.7f));
                         
-    knob.setBounds( knobArea.withSizeKeepingCentre(static_cast<int>(getWidth()  / 3.0f) ,
-                                                   static_cast<int>(getHeight() / 2.0f )));
+    slider.setBounds(sliderArea.withSizeKeepingCentre(static_cast<int>(sliderArea.getWidth()) ,
+                                                      static_cast<int>(sliderArea.getHeight() * 0.5f )));
     
-    auto micArea = area.withTrimmedLeft(static_cast<int>(area.getWidth() / 4.0f));
-    micButton.setBounds(micArea.withSizeKeepingCentre(static_cast<int>(area.getWidth() / 2.0f),
-                                                   static_cast<int>(area.getHeight()/ 2.0f)));
-    (knob.getHeight());
-    (knob.getWidth());
-    (getHeight());
-    (getWidth());
+    
+    micButton.setBounds(area.withSizeKeepingCentre(static_cast<int>(area.getWidth()* 0.3f),
+                                                   static_cast<int>(area.getHeight() * 0.3f)));
+ 
 }
 
 
