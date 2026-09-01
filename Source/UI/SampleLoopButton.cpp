@@ -1,17 +1,7 @@
-/*
-  ==============================================================================
-
-    SampleLoopButton.cpp
-    Created: 25 Aug 2026 11:11:38pm
-    Author:  hraha
-
-  ==============================================================================
-*/
 
 #include <JuceHeader.h>
 #include "SampleLoopButton.h"
 
-//==============================================================================
 SampleLoopButton::SampleLoopButton()
 {
     setSize(45, 146);
@@ -39,10 +29,7 @@ SampleLoopButton::~SampleLoopButton()
 
 void SampleLoopButton::paint (juce::Graphics& g)
 {
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
     g.setColour(juce::Colours::lightgrey);
-
     g.drawRoundedRectangle(getLocalBounds().toFloat(), getHeight() / 4.0f, 2.0f);
 }
 
@@ -59,7 +46,8 @@ void SampleLoopButton::resized()
     textEditor.setBounds(textEditArea.withSizeKeepingCentre(textEditArea.getWidth() ,
                                                              textEditArea.getHeight() * 0.6f ));
 
-    addRemoveButton.setBounds(area.withSizeKeepingCentre(area.getHeight()*0.4,area.getHeight()*0.4));
+    addRemoveButton.setBounds(area.withSizeKeepingCentre( area.getHeight()*0.4, 
+                                                          area.getHeight()*0.4));
 }
 
 juce::URL SampleLoopButton::getURL()
@@ -74,14 +62,15 @@ void SampleLoopButton::buttonClicked(Button* button)
 
 void SampleLoopButton::resetButtonData()
 {
-    DBG("REdet");
     url = juce::URL{};
     textEditor.setText("",false);
     playStopButton.setButtonEnabled(false);
 
 }
 
-void SampleLoopButton::setSampleDataAndButtonsStatus(juce::URL _url, String _name, bool updateAddRemoveMode)
+void SampleLoopButton::setSampleDataAndButtonsStatus(juce::URL _url, 
+                                                     String _name, 
+                                                      bool updateAddRemoveMode)
 {
     url = _url;
     textEditor.setText(_name, false);

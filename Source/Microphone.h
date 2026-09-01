@@ -1,23 +1,15 @@
-/*
-  ==============================================================================
-
-    Microphone.h
-    Created: 23 Aug 2026 8:17:22pm
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #pragma once
 
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "KnobButton.h"
-#include "OnOffButton.h"
+#include "UI/KnobButton.h"
+#include "UI/OnOffButton.h"
 #include <random>
 
 
-class Microphone: public juce::Component, public AudioSource, public juce::Slider::Listener
+class Microphone: public juce::Component, 
+                  public AudioSource, 
+                  public juce::Slider::Listener
 {
 public:
     Microphone( juce::AudioDeviceManager& _deviceManager);
@@ -32,13 +24,16 @@ public:
 
     /**a callback for knob value change*/
     void sliderValueChanged( juce::Slider* slider )override;
+
     /**returns the status of microphone to indicate if it is active of not*/
     bool getStatus()const;
 
-    /**is called by the AudioAppComponent::getNextAudioBlock and captures the original buffer before being cleared by audio mixer*/
+    /**is called by the AudioAppComponent::getNextAudioBlock and captures the original buffer before being 
+    cleared by audio mixer*/
     void setInputBuffer(const juce::AudioSourceChannelInfo& bufferToFill);
 
-    /**returns a const reference to the processedBuffer. It must be called after getNextAudioBlock is called so updated buffer is given*/
+    /**returns a const reference to the processedBuffer. It must be called after getNextAudioBlock is called
+    so updated buffer is given*/
     const juce::AudioBuffer<float>& getProceccedBuffer() const;
 
 private:
@@ -50,8 +45,6 @@ private:
     float level = 0.25f;
 
     juce::Random random;
-
-    bool enabled = false;
 
     juce::AudioDeviceManager& deviceManager;
 

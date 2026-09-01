@@ -1,24 +1,15 @@
-/*
-  ==============================================================================
 
-    WaveformDisplay.cpp
-    Created: 20 Jul 2026 7:56:25am
-    Author:  hraha
-
-  ==============================================================================
-*/
 
 #include <JuceHeader.h>
 #include "WaveformDisplay.h"
 
-//==============================================================================
-WaveformDisplay::WaveformDisplay(AudioFormatManager& formatManagerToUse, AudioThumbnailCache& cacheToUse):
-	audioThumb(1000, formatManagerToUse, cacheToUse), fileLoaded(false), playHeadPosition(0), mouseY(0.0f), mouseX(0.0f)
-{
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-    audioThumb.addChangeListener(this);
 
+WaveformDisplay::WaveformDisplay(AudioFormatManager& formatManagerToUse, 
+                                 AudioThumbnailCache& cacheToUse):
+	                             audioThumb(1000, formatManagerToUse, cacheToUse)
+                  
+{
+    audioThumb.addChangeListener(this);
 }
 
 WaveformDisplay::~WaveformDisplay()
@@ -27,20 +18,13 @@ WaveformDisplay::~WaveformDisplay()
 
 void WaveformDisplay::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
 
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   
 
     g.fillAll(juce::Colours::black);
     g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+    g.drawRect (getLocalBounds(), 1);   
 
-    //print playhead marker
 
     if (fileLoaded)
     {
@@ -69,35 +53,74 @@ void WaveformDisplay::paint (juce::Graphics& g)
         if (isMouseOver(true) && mouseClickCallback!= nullptr)
         {
             g.setFont(juce::FontOptions(15.0f));
+
             g.setColour(juce::Colour(170, 90, 245));
+
             String timeStamp = String(getMouseX2TimeInString());
+
             if (mouseY < getHeight() / 2.0f && mouseX < getWidth() / 2.0f)
             {
                 g.setColour(Colours::grey);
-                g.fillRect(static_cast<int>(mouseX) + 10, static_cast<int>(mouseY), 80,20);
+
+                g.fillRect(static_cast<int>(mouseX) + 10, 
+                           static_cast<int>(mouseY), 
+                           80,
+                           20);
+
                 g.setColour(Colours::blue);
-                g.drawText(timeStamp, static_cast<int>(mouseX) + 10, static_cast<int>(mouseY), 80, 20, Justification::left, true);
+
+                g.drawText(timeStamp, static_cast<int>(mouseX) + 10,
+                                      static_cast<int>(mouseY), 
+                                      80, 
+                                      20, 
+                                     Justification::left, 
+                                     true);
             }
             else if (mouseY < getHeight() / 2.0f && mouseX > getWidth() / 2.0f)
             {
                 g.setColour(Colours::grey);
-                g.fillRect(static_cast<int>(mouseX) - 80, static_cast<int>(mouseY) , 80, 20);
-                g.setColour(Colours::blue);
-                g.drawText(timeStamp, static_cast<int>(mouseX) - 90, static_cast<int>(mouseY), 80, 20, Justification::right, true);
+                g.fillRect(static_cast<int>(mouseX) - 80, 
+                           static_cast<int>(mouseY), 
+                           80, 
+                           20);
+
+                g.setColour( Colours::blue );
+                g.drawText( timeStamp,
+                            static_cast<int>(mouseX) - 90, 
+                            static_cast<int>(mouseY), 
+                            80, 
+                            20, 
+                            Justification::right, 
+                            true);
             }
             else if (mouseY > getHeight() / 2.0f && mouseX > getWidth() / 2.0f)
             {
                 g.setColour(Colours::grey);
-                g.fillRect(static_cast<int>(mouseX) - 80, static_cast<int>(mouseY)-20 , 80, 20);
+                g.fillRect(static_cast<int>(mouseX) - 80, 
+                           static_cast<int>(mouseY)-20,
+                           80, 
+                           20);
                 g.setColour(Colours::blue);
-                g.drawText(timeStamp, static_cast<int>(mouseX) - 90, static_cast<int>(mouseY)-20, 80, 20, Justification::right, true);
+                g.drawText(timeStamp,
+                           static_cast<int>(mouseX) - 90,
+                           static_cast<int>(mouseY)-20, 
+                           80, 
+                           20, 
+                           Justification::right, 
+                           true);
             }
             else //mouseY > getHeight() / 2.0f && mouseX < getWidth() / 2.0f
             {
                 g.setColour(Colours::grey);
                 g.fillRect(static_cast<int>(mouseX) + 10, static_cast<int>(mouseY) - 20, 80, 20);
                 g.setColour(Colours::blue);
-                g.drawText(timeStamp, static_cast<int>(mouseX) + 10, static_cast<int>(mouseY) - 20, 80, 20, Justification::left, true);
+                g.drawText(timeStamp, 
+                          static_cast<int>(mouseX) + 10, 
+                          static_cast<int>(mouseY) - 20, 
+                          80, 
+                          20, 
+                          Justification::left,
+                          true);
             }
         }
     }
@@ -122,8 +145,6 @@ void WaveformDisplay::paint (juce::Graphics& g)
 
 void WaveformDisplay::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
 
 }
 
@@ -157,11 +178,11 @@ void WaveformDisplay::mouseDown(const MouseEvent& event)
     playHeadPosition = event.position.x;
     if (mouseClickCallback != nullptr)
     {
-        mouseClickCallback();
+        mouseClickCallback(getPositionRelative());
     }
 }
 
-void WaveformDisplay::setMouseClickCallback(std::function<void()> callback)
+void WaveformDisplay::setMouseClickCallback(std::function<void(float)> callback)
 {
     mouseClickCallback = callback;
 }

@@ -1,22 +1,14 @@
-/*
-  ==============================================================================
-
-    OnOffButton.cpp
-    Created: 20 Aug 2026 9:15:06am
-    Author:  hraha
-
-  ==============================================================================
-*/
 
 #include <JuceHeader.h>
 #include "OnOffButton.h"
 
-//==============================================================================
-OnOffButton::OnOffButton(const void* onImageData, int onImageDataSize, const void* offImageData, int offImageDataSize): status(true)
+OnOffButton::OnOffButton(const void* onImageData, 
+                         int onImageDataSize, 
+                         const void* offImageData, 
+                         int offImageDataSize): status(true)
 {
     setSize(300, 300);
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+
     onImage = ImageCache::getFromMemory(onImageData, onImageDataSize);
     if (offImageData != nullptr)
     {
@@ -43,20 +35,11 @@ OnOffButton::~OnOffButton()
 
 void OnOffButton::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));  
 }
 
 void OnOffButton::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
     button.setBounds(getLocalBounds());
 }
 
@@ -67,6 +50,7 @@ void OnOffButton::addListener(juce::Button::Listener* listener)
 
 void OnOffButton::setButtonEnabled(bool enabled)
 {
+    DBG("f");
     button.setEnabled(enabled);
 }
 
@@ -88,7 +72,8 @@ void OnOffButton::setFirstMode(bool statusTarget)
 
 void OnOffButton::updateImages()
 {
-    //this condition is for the case that instance is using just one image for the first mode
+    /**this condition is for the case that instance is using just one image
+    for the first mode*/
     if (!offImage.isValid())
     {
         return;

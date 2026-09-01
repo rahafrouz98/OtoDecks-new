@@ -16,17 +16,25 @@ class DJAudioPlayer: public AudioSource {
         DJAudioPlayer(AudioFormatManager& formatManager);
         ~DJAudioPlayer();
         //=========================================================================
+
+        /**implement the AudioSource*/
         void prepareToPlay(int samplesPerBlockExpected, double sampleRate) override;
+        /**Implement the AudioSource*/
         void getNextAudioBlock(const AudioSourceChannelInfo& bufferToFill) override;
+        /**Implement the AudioSource*/
         void releaseResources() override;
 
         /**loads the audio track and returns true if the audio file is loaded successfully*/
         bool loadURL(URL audioURL);
+        /**set gain of the AudioTransportSource*/
         void setGain(double gain);
+        /**set speed of ResamplingAudioSource*/
         void setSpeed(double ratio);
+        /**set position of AudioTransportSource*/
         void setPosition(double posInsecs);
-
+        /**Start playing*/
         void start();
+        /**Stop playing*/
         void stop();
         /** get the relative position of the play head*/
         float getPostionRelative() const;

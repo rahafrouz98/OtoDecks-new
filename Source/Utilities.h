@@ -33,18 +33,21 @@ class Utilities
             juce::URL url{};
             juce::String name = "";
         };
-        /**takes the directory name which is in the same folder as execution file is located, takes file name and 
-        returns a juce::var representing JSON data*/
+        /**takes the directory name which is in the same folder as execution file is 
+        located, takes file name and returns a juce::var representing JSON data*/
         static juce::var loadJsonData(juce::String fileName);
 
-        /**takes takes the directory name which is in the same folder as execution file is located, takes file name,
-        takes data in the juce::var format and wirtes it in the file in JSON format*/
+        /**takes takes the directory name which is in the same folder as execution file 
+        is located, takes file name, takes data in the juce::var format and wirtes it in
+        the file in JSON format*/
         static void writeJsonData(juce::String fileName, juce::var dataVar);
 
         //this is the directory where execution file is located
-        inline static const juce::File mainDirectory = juce::File::getSpecialLocation(juce::File::currentApplicationFile).getParentDirectory();
+        inline static const juce::File mainDirectory = juce::File::getSpecialLocation(
+            juce::File::currentApplicationFile).getParentDirectory();
         
-        /**this is the direcetory called data inside the mainDirectory to keep the samples and meta data */
+        /**this is the direcetory called data inside the mainDirectory to keep the samples
+        and meta data */
         inline static const juce::File desChildDirectory = mainDirectory.getChildFile("data");
      
 };

@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    DJAudioPlayer.cpp
-    Created: 17 Jul 2026 7:44:36am
-    Author:  hraha
-
-  ==============================================================================
-*/
 
 #include "DJAudioPlayer.h"
 
@@ -32,7 +23,11 @@ void DJAudioPlayer::getNextAudioBlock(const AudioSourceChannelInfo& bufferToFill
     latestBuffer.setSize(2, numSamples, false, true, true);
     for (int channel = 0; channel < latestBuffer.getNumChannels(); ++channel)
     {
-        latestBuffer.copyFrom(channel, 0, *bufferToFill.buffer, channel,bufferToFill.startSample, bufferToFill.numSamples);
+        latestBuffer.copyFrom(channel, 
+                              0, 
+                              *bufferToFill.buffer, 
+                              channel,bufferToFill.startSample,
+                              bufferToFill.numSamples);
     }
 }
 void DJAudioPlayer::releaseResources()
@@ -68,14 +63,13 @@ void DJAudioPlayer::setSpeed(double ratio)
     if (ratio > 0 && ratio < 100.0)
     {
         resampleSource.setResamplingRatio(ratio);
-        //to clean the buffer from samples hold for interpolation when music jumps to another location
-        resampleSource.flushBuffers();
     }
 }
 void DJAudioPlayer::setPosition(double posInsecs)
 {
     transportSource.setPosition(posInsecs);
-    //to clean the buffer from samples hold for interpolation when music jumps to another location
+    //to clean the buffer from samples hold for interpolation
+    // when music jumps to another location
     resampleSource.flushBuffers();
 }
 
@@ -94,7 +88,8 @@ float DJAudioPlayer::getPostionRelative() const
     {
         return 0.0;
     }
-    return float(transportSource.getCurrentPosition() / transportSource.getLengthInSeconds());
+    return float(transportSource.getCurrentPosition() / 
+                 transportSource.getLengthInSeconds());
 }
 double DJAudioPlayer::calculateAudioLength() const
 { 
@@ -128,8 +123,9 @@ void DJAudioPlayer::toggleLooping()
 
     if (readerSource != nullptr)
     {
-        //this reseting the position is because when the looping status of reader changes for some reason
-        //the total length of the audio is added to the transortSource postion and it cause when it is set to no loop
+        //this reseting the position is because when the looping status 
+        // of reader changes, for some reason the total length of the audio
+        // is added to the transortSource postion and it cause when it is set to no loop
         // the playhead jump to the end
         auto transportPosition = transportSource.getCurrentPosition();
         readerSource->setLooping(isLooping);

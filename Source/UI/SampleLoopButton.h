@@ -1,21 +1,9 @@
-/*
-  ==============================================================================
-
-    SampleLoopButton.h
-    Created: 25 Aug 2026 11:11:38pm
-    Author:  hraha
-
-  ==============================================================================
-*/
 
 #pragma once
 
 #include <JuceHeader.h>
 #include "OnOffButton.h"
 
-//==============================================================================
-/*
-*/
 class SampleLoopButton  : public juce::Component, public juce::Button::Listener
 {
 public:
@@ -31,14 +19,13 @@ public:
     /**set id */
     void setID(int id);
 
-    /**loads sample data and updates the status of buttons. updateAddRemoveMode=true is used when we need 
-    to change the mode without onClickcallback. If it is false the mode will be toggled by callback */
+    /**loads sample data and updates the status of buttons. updateAddRemoveMode=true is used 
+    when we need to change the mode without onClickcallback. If it is false the mode will be 
+    toggled by callback */
     void setSampleDataAndButtonsStatus(juce::URL _url, String _name, bool updateAddRemoveMode = false);
 
     /**remove data from the button and disable play button*/
     void resetButtonData();
-
-    
 
     /**adds Listener to the button*/
     void addListener(juce::Button::Listener* listener);
@@ -68,12 +55,17 @@ public:
     int getID();
 private:
 
-    OnOffButton playStopButton{ BinaryData::play_png, BinaryData::play_pngSize, BinaryData::pause_png, BinaryData::pause_pngSize };
-    OnOffButton addRemoveButton{ BinaryData::add_png, BinaryData::add_pngSize, BinaryData::remove_png, BinaryData::remove_pngSize };
+    OnOffButton playStopButton{ BinaryData::play_png, 
+                                BinaryData::play_pngSize, 
+                                BinaryData::pause_png,
+                                BinaryData::pause_pngSize };
+
+    OnOffButton addRemoveButton{ BinaryData::add_png, 
+                                 BinaryData::add_pngSize,
+                                 BinaryData::remove_png, 
+                                 BinaryData::remove_pngSize };
 
     juce::TextEditor textEditor;
-
-    juce::GroupComponent groupComponent;
 
     int buttonID;
 

@@ -1,25 +1,11 @@
-/*
-  ==============================================================================
-
-    playlistComponent.cpp
-    Created: 20 Jul 2026 2:11:28pm
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "PlaylistComponent.h"
 
-//==============================================================================
 PlaylistComponent::PlaylistComponent()
 {
-
-    /**reads the data from the playlist file and load on the tracks vector*/
-    //read the json file and load data on the tracks vector
     loadPlayListData();
   
-    ///////////////////////////////////////////////////////// Table component/////////////////////////////////////
+    ////////////////////////////////// Table component/////////////////////////////////
     tableComponent.getHeader().addColumn("X", 1, 50 );
     tableComponent.getHeader().addColumn("Track Title", 2, 300);
     tableComponent.getHeader().addColumn("Duration", 3, 300);
@@ -32,7 +18,7 @@ PlaylistComponent::PlaylistComponent()
     addAndMakeVisible(tableComponent);
     tableComponent.updateContent();
 
-    ///////////////////////////////////////////////////////// FormatMAnager //////////////////////////////////////
+    /////////////////////////////////// FormatMAnager //////////////////////////////////
     formatManager.registerBasicFormats();
 }
 
@@ -46,18 +32,16 @@ PlaylistComponent::~PlaylistComponent()
 void PlaylistComponent::paint (juce::Graphics& g)
 {
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   
 
     g.setColour (juce::Colours::white);
     g.setFont (juce::FontOptions (14.0f));
     g.drawText ("playlistComponent", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+                juce::Justification::centred, true);   
 }
 
 void PlaylistComponent::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
     tableComponent.setBounds(0, 0, getWidth(), getHeight());
     tableComponent.getHeader().setColumnWidth(1, getWidth() * 1 / 32);
     tableComponent.getHeader().setColumnWidth(2, getWidth() * 8 / 32 );
@@ -71,7 +55,11 @@ int PlaylistComponent::getNumRows()
 {
     return static_cast<int>(tracks.size());
 }
-void PlaylistComponent::paintRowBackground(Graphics& g, int rowNumber, int width, int height, bool rowIsSelected)
+void PlaylistComponent::paintRowBackground( Graphics& g, 
+                                            int rowNumber, 
+                                            int width, 
+                                            int height, 
+                                            bool rowIsSelected)
 {
     if (rowIsSelected)
     {
@@ -82,15 +70,32 @@ void PlaylistComponent::paintRowBackground(Graphics& g, int rowNumber, int width
         g.fillAll(Colours::darkgrey);
     }
 }
-void PlaylistComponent::paintCell(Graphics& g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
+
+void PlaylistComponent::paintCell( Graphics& g, 
+                                   int rowNumber, 
+                                   int columnId, 
+                                   int width, 
+                                   int height,
+                                   bool rowIsSelected)
 {
     if (columnId == 2)
     {
-        g.drawText(tracks[rowNumber].name, 2, 0, width - 4, height, Justification::centredLeft, true);
+        g.drawText(tracks[rowNumber].name, 
+                   2, 
+                   0,
+                   width - 4, 
+                   height, 
+                   Justification::centredLeft, 
+                   true );
     }
     else if (columnId == 3)
     {
-        g.drawText(String(tracks[rowNumber].duration), 2, 0, width - 4, height, Justification::centredLeft, true);
+        g.drawText(String(tracks[rowNumber].duration), 
+                   2, 
+                   0, 
+                   width - 4, 
+                   height, 
+                   Justification::centredLeft, true);
     }
 }
 
@@ -109,7 +114,6 @@ void PlaylistComponent::addTrackToLibrary(juce::File file)
     
     tracks.push_back(loadedFile);
     tableComponent.updateContent();
-
 }
 
 double PlaylistComponent::getAudioDuration(juce::URL url)
@@ -129,7 +133,10 @@ double PlaylistComponent::getAudioDuration(juce::URL url)
 
 bool PlaylistComponent::isURLUnique(juce::URL url)
 {
-    auto it = std::find_if(tracks.begin(), tracks.end(), [url](auto track) {return track.url == url;});
+    auto it = std::find_if(tracks.begin(), 
+                           tracks.end(), 
+                           [url](auto track) {return track.url == url;});
+
     if (it == tracks.end())
     {
         return true;
@@ -142,8 +149,9 @@ bool PlaylistComponent::isURLUnique(juce::URL url)
 
 void PlaylistComponent::writePlayListData()
 {
-    /**Each item of this array represent a FileStruct which is converted to an juce::DynamicObject.
-    Each of these items have another juce::array for representing the cueButtons for each track*/
+    /**Each item of this array represent a FileStruct which is converted to an
+    juce::DynamicObject.Each of these items have another juce::array for representing 
+    the cueButtons for each track*/
     juce::Array<juce::var> playlistData;
     for (int i = 0; i < tracks.size(); ++i)
     {
@@ -174,7 +182,6 @@ void PlaylistComponent::writePlayListData()
 
     //writes the data to a json file called sampleData
     Utilities::writeJsonData("playlist", dataVar);
-
 }
 
 void PlaylistComponent::loadPlayListData()
@@ -207,7 +214,9 @@ void PlaylistComponent::loadPlayListData()
             {
                 juce::DynamicObject* cueObject = new juce::DynamicObject();
                 cueObject = (*arrayCueList)[j].getDynamicObject();
-                tempFileStruct.cueStructs[j].colour = juce::Colour::fromString(cueObject->getProperty("colour").toString());
+                tempFileStruct.cueStructs[j].colour = juce::Colour::
+                                                      fromString(cueObject->getProperty("colour").
+                                                                 toString());
                 tempFileStruct.cueStructs[j].name = cueObject->getProperty("name");
                 tempFileStruct.cueStructs[j].time = cueObject->getProperty("time");
 
@@ -217,7 +226,10 @@ void PlaylistComponent::loadPlayListData()
     }
 }
 
-Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, Component* existingComponentToUpdate)
+Component* PlaylistComponent::refreshComponentForCell(int rowNumber, 
+                                                      int columnId, 
+                                                      bool isRowSelected, 
+                                                      Component* existingComponentToUpdate)
 {
     if (existingComponentToUpdate == nullptr)
     {
@@ -263,8 +275,10 @@ void PlaylistComponent::updateTextEditorsID(int startIndex)
 {
     for (int i = startIndex; i < tableComponent.getNumRows(); i++)
     {
-        //dynamicly casted fron Component pointer to a textEditor pointer to be able to use setText() function
-        auto* textEditorTarget = dynamic_cast<juce::TextEditor*>(tableComponent.getCellComponent(4, i));
+        //dynamicly casted fron Component pointer to a textEditor pointer to 
+        // be able to use setText() function
+        auto* textEditorTarget = dynamic_cast<juce::TextEditor*>
+                                      (tableComponent.getCellComponent(4, i));
         if (textEditorTarget != nullptr)
         {
             textEditorTarget->setComponentID(String(i));
@@ -273,21 +287,20 @@ void PlaylistComponent::updateTextEditorsID(int startIndex)
     }
 }
 
-////////////////////////////////////////////////// Call backs ///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////// Call backs ////////////////////////////
 void PlaylistComponent::buttonClicked(juce::Button* button)
 {
     String id = button->getComponentID();
     StringArray tokens;
     tokens.addTokens(id, "_", "");
     int index = tokens[1].getIntValue();
-    URL url{ tracks[index].url };
     if (tokens[0] == "deckLeft")
     {
-        loadDeckLeft(url, tracks[index]);
+        loadDeckLeft(tracks[index]);
     }
     else if (tokens[0] == "deckRight")
     {
-        loadDeckRight(url, tracks[index]);
+        loadDeckRight(tracks[index]);
     }
     else if (tokens[0] == "delete")
     {
@@ -316,12 +329,14 @@ bool PlaylistComponent::isInterestedInFileDrag(const StringArray& files)
     return true;
 }
 
-void PlaylistComponent::setLoadDeckLeftCallback(std::function<void(URL, Utilities::FileStruct)> callback)
+void PlaylistComponent::setLoadDeckLeftCallback
+                        (std::function<void(Utilities::FileStruct)> callback)
 {
     loadDeckLeft = callback;
 }
 
-void PlaylistComponent::setLoadDeckRightCallback(std::function<void(URL, Utilities::FileStruct)> callback)
+void PlaylistComponent::setLoadDeckRightCallback
+                        (std::function<void(Utilities::FileStruct)> callback)
 {
     loadDeckRight = callback;
 }

@@ -1,22 +1,8 @@
-/*
-  ==============================================================================
-
-    CueButton.cpp
-    Created: 21 Aug 2026 8:07:05am
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "CueButton.h"
 
-//==============================================================================
 CueButton::CueButton()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
     setSize(300, 300);
 
     //////////////////////////////// Images ///////////////////////////////////////
@@ -32,16 +18,22 @@ CueButton::CueButton()
     addAndMakeVisible(editButton);
 
    //opens a CueEditForm to change the colour of the button or its name
-    editButton.onClick = [this]() {
-                std::unique_ptr<CueEditForm> editForm = 
-                    std::make_unique<CueEditForm>(mainButton.findColour(juce::TextButton::ColourIds::buttonColourId), nameLabel.getText());
+    editButton.onClick = 
+        [this]() 
+        {
+            juce::Colour mainButtonColour = mainButton.findColour(juce::TextButton::ColourIds::buttonColourId);
+            //creates a unique pointer to and editform
+             std::unique_ptr<CueEditForm> editForm = 
+                 std::make_unique<CueEditForm>( mainButtonColour,nameLabel.getText());
 
-                //this raw pointer is created to be captured and used inside the lambda function for save button 
-                //as we can not capture the unique pointer in lambda without moving the ownership
-                CueEditForm* editFormRawPointer = editForm.get();
+            //this raw pointer is created to be captured and used inside the lambda function for save button 
+            //as we can not capture the unique pointer in lambda without moving the ownership
+            CueEditForm* editFormRawPointer = editForm.get();
 
-                /***/
-                editForm->setSaveButtonCallBack([this, editFormRawPointer](juce::Colour selectedColour, juce::String selectedCueName) {
+            /**sets the saveButton callback to receive the selected colour and name from the editForm*/
+            editForm->setSaveButtonCallBack(
+                [this, editFormRawPointer](juce::Colour selectedColour, juce::String selectedCueName) 
+                {
                     setCueButtonColour(selectedColour);
                     setCueButtonName(selectedCueName);
 
@@ -56,13 +48,10 @@ CueButton::CueButton()
                     {
                         parentCalloutBox->dismiss();
                     }
-            });
-
-        /**creates an asynchronous calloutbox and transfers the ownership of editForm to it */
-        juce::CallOutBox::launchAsynchronously(std::move(editForm), editButton.getScreenBounds(), nullptr);
-
-       
-    };
+                });
+            /**creates an asynchronous calloutbox and transfers the ownership of editForm to it */
+            juce::CallOutBox::launchAsynchronously(std::move(editForm), editButton.getScreenBounds(), nullptr);
+         };
 
     /////////////////////////////// Add button ////////////////////////////////////////
     addButton.setImages(false, true, true,
@@ -99,6 +88,7 @@ CueButton::CueButton()
     nameLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
     nameLabel.setInterceptsMouseClicks(false, false); //it is needed to prevent overlapping with addButton
     nameLabel.setJustificationType(juce::Justification::centredLeft);
+    nameLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colours::black);
     addAndMakeVisible(nameLabel);
     
     ////////////////////////////////Main button //////////////////////////////////////////
@@ -113,15 +103,7 @@ CueButton::~CueButton()
 
 void CueButton::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId)); 
 }
 
 void CueButton::resized()
@@ -141,13 +123,9 @@ void CueButton::resized()
 
     if (addButton.isEnabled())
     {
-        addButton.setVisible(true);
         addButton.setBounds(area.withSizeKeepingCentre(gridSize*2, gridSize*2));
     }
-    else
-    {
-        addButton.setVisible(false);
-    }
+
     
     mainButton.setBounds(area);
     mainButton.toBack();
@@ -220,19 +198,19 @@ void CueButton::toggleEnablingStatusOfChildButtons(bool targetStatus)
         editButton.setEnabled(true);
         removeButton.setEnabled(true);
         addButton.setEnabled(false);
+        addButton.setVisible(false);
 
-        //resized is needed to update the visibility and positioning of addButton
-        resized();
     }
     else
     {
         editButton.setEnabled(false);
         removeButton.setEnabled(false);
         addButton.setEnabled(true);
+        addButton.setVisible(true);
 
-        //resized is needed to update the visibility and positioning of addButton
-        resized();
     }
+    //resized is needed to update the visibility and positioning of addButton
+    resized();
 }
 
 const juce::Button* CueButton::getButtonPointer()const

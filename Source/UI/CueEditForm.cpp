@@ -1,27 +1,18 @@
-/*
-  ==============================================================================
 
-    CueEditForm.cpp
-    Created: 21 Aug 2026 1:46:59pm
-    Author:  hraha
-
-  ==============================================================================
-*/
 
 #include <JuceHeader.h>
 #include "CueEditForm.h"
 
-//==============================================================================
-CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelectedName ): selectedColour(preSelectedColour), selectedCueName(preSelectedName)
+CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelectedName ): 
+                           selectedColour(preSelectedColour), selectedCueName(preSelectedName)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
     setSize(300, 200);
     
     //////////////////////////////////////////////// Text Editor /////////////////////////////////////
     addAndMakeVisible(textEditor);
     textEditor.setMultiLine(false);
-    textEditor.setTextToShowWhenEmpty("Type the cue button name here.", juce::Colours::lightgrey.withAlpha(0.5f));
+    textEditor.setTextToShowWhenEmpty("Type the cue button name here.", 
+                                       juce::Colours::lightgrey.withAlpha(0.5f));
     textEditor.clear();
     textEditor.setJustification(juce::Justification::centredLeft);
     textEditor.setText(preSelectedName, false);
@@ -32,6 +23,7 @@ CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelecte
         juce::Colour colour = convertCueColourToJuceColour(static_cast<CueColour>(i));
         colourButtons[i].setColour(juce::TextButton::buttonColourId, colour);
         addAndMakeVisible(colourButtons[i]);
+
         if (colour == preSelectedColour)
         {
             //it is used to highlight the button when it is selected
@@ -40,7 +32,8 @@ CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelecte
         }
    
         /**changes the data for selected colour*/
-        colourButtons[i].onClick = [this,colour, i]() {
+        colourButtons[i].onClick = [this,colour, i]() 
+            {
                 selectedColour = colour; 
                
                 if (colourSelectedIndex >= 0)
@@ -52,7 +45,8 @@ CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelecte
                 colourSelectedIndex = i;
             };
 
-        /* it draws the button with  a white boarder around the button when its property called "isSelected" is true*/
+        /* it draws the button with  a white boarder around the button when its property called 
+        "isSelected" is true*/
         colourButtons[i].setLookAndFeel(&colourButtonLookAndFeel);
 
         /**updates the selectedCueName as the user is typing inside the text editor*/
@@ -90,7 +84,7 @@ CueEditForm::~CueEditForm()
 void CueEditForm::paint (juce::Graphics& g)
 {
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   
 }
 
 void CueEditForm::resized()
@@ -98,12 +92,12 @@ void CueEditForm::resized()
 
     auto area = getLocalBounds();
 
-    ///////////////////////////////////////////////////////////////text editor //////////////////////////////////////
+    /////////////////////////////////////////////////text editor /////////////////////////////////////
     auto textEditArea = area.removeFromTop(static_cast<int>(getHeight() / 5));
     textEditor.setBounds(textEditArea.withSizeKeepingCentre(static_cast<int>(textEditArea.getWidth() ), 
                                                             static_cast<int>(textEditArea.getHeight() * 0.9f)));
 
-    ////////////////////////////////////////////////////////////// colour buttons //////////////////////////////////////
+    /////////////////////////////////////////////// colour buttons ////////////////////////////////////
     // it is a two row table of colour buttons
     auto coloursArea = area.removeFromTop(getHeight() *2 / 3);
     int cueButtonHeight = static_cast<int>(coloursArea.getHeight() / 2);
@@ -129,14 +123,14 @@ void CueEditForm::resized()
         }
     }
 
-    ///////////////////////////////////////////////////////////////// Save Button ////////////////////////////////////////////
+    //////////////////////////////////////////////// Save Button ////////////////////////////////////////
     auto saveArea = area.removeFromLeft(getWidth() / 2);
     saveButton.setBounds(saveArea.withSizeKeepingCentre(static_cast<int>(saveArea.getWidth()),
                                                         static_cast<int>(saveArea.getHeight() * 0.9f)));
 
     saveButton.onClick = [this]() {saveButtonCallback(selectedColour, selectedCueName); };
 
-    //////////////////////////////////////////////////////////////// cancel button //////////////////////////////////////////
+    ////////////////////////////////////////////// cancel button //////////////////////////////////////////
     cancelButton.setBounds(area.withSizeKeepingCentre(static_cast<int>(area.getWidth()),
                                                       static_cast<int>(area.getHeight() * 0.9f)));  
 }

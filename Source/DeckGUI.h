@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    DeckGUI.h
-    Created: 17 Jul 2026 12:18:23pm
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
@@ -16,14 +6,12 @@
 #include "utilities.h"
 #include "playlistComponent.h"
 #include "MusicAnalyzer.h"
-#include "KnobButton.h"
-#include "OnOffButton.h"
+#include "UI/KnobButton.h"
+#include "UI/OnOffButton.h"
 #include <numbers>
-#include "CueButton.h"
+#include "UI/CueButton.h"
 #include "LoopSampler.h"
-//==============================================================================
-/*
-*/
+
 class DeckGUI  : public juce::Component, 
                  public juce::Button::Listener, 
                  public juce::Slider::Listener, 
@@ -32,8 +20,14 @@ class DeckGUI  : public juce::Component,
 	            
 {
 public:
-    /**it creates a deck for the DJ app. left=true places cue buttons and knobs on left and left=false places them on right*/
-    DeckGUI(DJAudioPlayer* _player, AudioFormatManager& formatManagerToUse, AudioThumbnailCache& cacheToUse, PlaylistComponent* _playlistComponent, bool left =true);
+    /**it creates a deck for the DJ app. left=true places cue buttons and knobs on 
+    left and left=false places them on right*/
+    DeckGUI(DJAudioPlayer* _player,
+            AudioFormatManager& formatManagerToUse, 
+            AudioThumbnailCache& cacheToUse, 
+            PlaylistComponent* _playlistComponent, 
+            bool left =true);
+
     ~DeckGUI() override;
 
     void paint (juce::Graphics&) override;
@@ -52,11 +46,13 @@ public:
     /**implement Timer*/
     void timerCallback()override;
 
-    /**takes a FileStruct of an audio form playListColmonent and loads it to the DJAudioPlayer, audioAnalyzer and WaveformDisplay and updates the loadedFile property*/
+    /**take a FileStruct of an audio form playListColmonent and loads it to the
+    DJAudioPlayer, audioAnalyzer and WaveformDisplay and updates the loadedFile property*/
     void loadAudioFile(Utilities::FileStruct filedata);
 
-    /**update addToLibraryButton. If there is a file is loded in the deck and the url of file is unique in the 
-    playlist it enables the addToLibraryButton otherwise it will be disabled*/
+    /**update addToLibraryButton. If there is a file loaded in the deck and the url of 
+    file is unique in the playlist it enables the addToLibraryButton otherwise it will be 
+    disabled*/
 	void updateAddToLibraryButton();
 
     /**set colour in cue data of FileStruct for corresponding cue button*/
@@ -82,7 +78,7 @@ private:
 
     PlaylistComponent* playlistComponent;
 
-    /**holds the data of the loaded audio track */
+    /**hold the data of the loaded audio track */
     Utilities::FileStruct loadedFile;
 
     juce::Label trackNameLabel;
@@ -94,9 +90,11 @@ private:
     KnobButton tempoKnob{ juce::String("BPM") };
     KnobButton positionKnob{ juce::String("POS") };
 
-    OnOffButton playStopButton{ BinaryData::play_png, BinaryData::play_pngSize, BinaryData::pause_png, BinaryData::pause_pngSize };
-    OnOffButton loopNoLoopButton{ BinaryData::loop_png, BinaryData::loop_pngSize, BinaryData::noloop_png, BinaryData::noloop_pngSize };
+    OnOffButton playStopButton{ BinaryData::play_png, BinaryData::play_pngSize, 
+                                BinaryData::pause_png, BinaryData::pause_pngSize };
 
+    OnOffButton loopNoLoopButton{ BinaryData::loop_png, BinaryData::loop_pngSize, 
+                                  BinaryData::noloop_png, BinaryData::noloop_pngSize };
     double currentTime;
 
     double BPMRelativeRate = 1;
@@ -109,33 +107,36 @@ private:
 
     std::array<CueButton, 8> cueButtons;
 
-    /**takes a file and loads it to the DJAudioPlayer and WaveformDisplay and updates the loadedFile data*/
+    /**take a file and loads it to the DJAudioPlayer and WaveformDisplay and updates
+    the loadedFile data*/
     void loadAudioFile(File chosenFile);
 
     /**set the BPM label*/
     void DeckGUI::setBPMLabel();
 
-    /**loads file on waveformDisplay and musicAnalyzer, updates metadata of loadedFile. playStopButton and labels 
-    these tasks are put in a single function to be used in two different (overriden) loadAudioFile() with no repeatation
-    */
+    /**load file on waveformDisplay and musicAnalyzer, updates metadata of loadedFile. 
+    playStopButton and labels these tasks are put in a single function to be used in two 
+    different (overriden) loadAudioFile() with no repeatation*/
     void DeckGUI::stageNewLoadedFile(juce::File file);
 
-    /**creates a dialog browser and selects a file */
+    /**create a dialog browser and selects a file */
     void DeckGUI::selectFile();
 
-    /** resets all cueButtons: removes data and colour and disables them*/
+    /** reset all cueButtons: removes data and colour and disables them*/
     void resetCueButtons();
 
-    /**reset loadedFile Struct, addToLibraryButton, playStopButton and  cueButtons before loading a new file */
+    /**reset loadedFile Struct, addToLibraryButton, playStopButton and  cueButtons before
+    loading a new file */
     void resetComponentsBeforeLoadingFile();
 
-    /**updates cueButtons status in accordance with passed FileStruct */
+    /**update cueButtons status in accordance with passed FileStruct */
     void DeckGUI::updateCueButtonsStatus();
     
-    /**disables cue buttons*/
+    /**disable cue buttons*/
     void DeckGUI::disableCueButtons();
 
-    /**returns a string to represent the current position of player and total length in seconds*/
+    /**return a string to represent the current position of player and total length
+    in seconds*/
     String currentTime2String() const;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)

@@ -1,22 +1,12 @@
-/*
-  ==============================================================================
-
-    KnobButton.cpp
-    Created: 19 Aug 2026 6:37:30am
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "KnobButton.h"
 
-//==============================================================================
-KnobButton::KnobButton(juce::String title, double _min, double _max): min(_min), max(_max)
+KnobButton::KnobButton(juce::String title, double _min, double _max): 
+                       min(_min), max(_max)
 {
     setSize(300, 400);
    
-    //////////////////////////////////////// knob////////////////////////////////////////////
+    //////////////////////////////////////// knob////////////////////////////////////
     knob.setLookAndFeel(&knobLookandFeel);
     knob.setSliderStyle(juce::Slider::Rotary);
     knob.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
@@ -25,17 +15,22 @@ KnobButton::KnobButton(juce::String title, double _min, double _max): min(_min),
     knob.setValue(0.0);
     knob.onValueChange = [this]() { textEditor.setText(String(knob.getValue(),3));};
 
-    ///////////////////////////////////////text editor //////////////////////////////////////
+    ///////////////////////////////////////text editor //////////////////////////////
     addAndMakeVisible(textEditor);
     textEditor.setText("0.000", false);
-    textEditor.setColour(juce::TextEditor::ColourIds::backgroundColourId, juce::Colours::black);
+
+    textEditor.setColour(juce::TextEditor::ColourIds::backgroundColourId, 
+                         juce::Colours::black);
+
     textEditor.setJustification(juce::Justification::centred);
+
     textEditor.onReturnKey = [this]() {
             if (isfinalInputValid())
             {
                 knob.setValue(textEditor.getText().getDoubleValue());
             }
         };
+
     textEditor.onTextChange = [this]() {
             if (!isEditingInputValid())
             {
@@ -43,7 +38,7 @@ KnobButton::KnobButton(juce::String title, double _min, double _max): min(_min),
             }
         };
 
-    //////////////////////////////////////group component ////////////////////////////////////
+    //////////////////////////////////////group component ////////////////////////////
     addAndMakeVisible(groupComponent);
     groupComponent.setText(title);
     groupComponent.setTextLabelPosition(juce::Justification::centred);
@@ -57,7 +52,6 @@ KnobButton::~KnobButton()
 
 void KnobButton::paint (juce::Graphics& g)
 {
-
 }
 
 void KnobButton::resized()

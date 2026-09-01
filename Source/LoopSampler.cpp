@@ -1,63 +1,66 @@
-/*
-  ==============================================================================
-
-    LoopSampler.cpp
-    Created: 23 Aug 2026 7:52:08am
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "LoopSampler.h"
 
-//==============================================================================
-LoopSampler::LoopSampler(DJAudioPlayer* _player, DJAudioPlayer& _leftPlayer,
-    DJAudioPlayer& _rightPlayer, Microphone& _microphone, AudioFormatManager& _formatManagerToUse,
-    AudioThumbnailCache& _cacheToUse): leftPlayer(_leftPlayer), rightPlayer(_rightPlayer),microphone(_microphone),
-    player(_player), waveformDisplay(_formatManagerToUse, _cacheToUse)
+LoopSampler::LoopSampler( DJAudioPlayer* _player, 
+                          DJAudioPlayer& _leftPlayer,
+                          DJAudioPlayer& _rightPlayer, 
+                          Microphone& _microphone, 
+                          AudioFormatManager& _formatManagerToUse,
+                          AudioThumbnailCache& _cacheToUse): 
+                                            leftPlayer(_leftPlayer), 
+                                            rightPlayer(_rightPlayer),
+                                            microphone(_microphone),
+                                            player(_player), 
+                                            waveformDisplay(_formatManagerToUse, _cacheToUse)
 {
-    ////////////////////////////////////////////// Loas sample data //////////////////////////////////////////////////
+    //////////////////////////////////// Loas sample data /////////////////////////////////////
     loadLoopSamplesData();
 
-
-    /////////////////////////////////////////////// loop sample buttons ///////////////////////////////////////////////
+    //////////////////////////////////// loop sample buttons //////////////////////////////////
     for (int i = 0; i < sampleButtons.size(); ++i)
     {
         addAndMakeVisible(sampleButtons[i]);
         sampleButtons[i].addListener(this);
-        sampleButtons[i].setTextChangeCallBack([this, i](juce::String text) { samplesRecord[i].name = text;});
+        sampleButtons[i].setTextChangeCallBack(
+            [this, i](juce::String text) 
+            { 
+                samplesRecord[i].name = text;
+            }
+        );
         sampleButtons[i].setID(i);
-        sampleButtons[i].setSampleDataAndButtonsStatus(samplesRecord[i].url, samplesRecord[i].name, true);
+        sampleButtons[i].setSampleDataAndButtonsStatus(samplesRecord[i].url, 
+                                                       samplesRecord[i].name,
+                                                       true);
     }
 
-    ///////////////////////////////////////////// left deck button //////////////////////////////////////////////
+    /////////////////////////////////// left deck button /////////////////////////////////////
     addAndMakeVisible(leftDeckImageButton);
     leftDeckImageButton.addListener(this);
     leftDeckImageButton.setFirstMode(false);
 
-    ////////////////////////////////////////////// Start stop record button //////////////////////////////////////////////
+    ////////////////////////////// Start stop record button //////////////////////////////////
     addAndMakeVisible(startStopRecordImageButton);
     startStopRecordImageButton.addListener(this);
 
-    ////////////////////////////////////////////// delete image button ///////////////////////////////////////////
+    ///////////////////////////////// delete image button ///////////////////////////////////
     addAndMakeVisible(deleteImageButton);
     deleteImageButton.addListener(this);
     deleteImageButton.setButtonEnabled(false);
-    ///////////////////////////////////////////// play sample record //////////////////////////////////////////////
+
+    //////////////////////////////////// play sample record ///////////////////////////////////
     addAndMakeVisible(playSampleImageButton);
     playSampleImageButton.addListener(this);
+    playSampleImageButton.setButtonEnabled(false);
     
-
-    ///////////////////////////////////////////// right deck button //////////////////////////////////////////////
+    /////////////////////////////////// right deck button ////////////////////////////////////
     addAndMakeVisible(rightDeckImageButton);
     rightDeckImageButton.addListener(this);
     rightDeckImageButton.setFirstMode(false);
 
-    ///////////////////////////////////////////// wavedisplay ///////////////////////////////////////////////////////
+    //////////////////////////////////// wavedisplay //////////////////////////////////////////
     addAndMakeVisible(waveformDisplay);
 
-    ///////////////////////////////////////////// Timer ////////////////////////////////////////////////////////////
+    /////////////////////////////////////// Timer /////////////////////////////////////////////
     startTimer(100);
 
 
@@ -75,20 +78,16 @@ LoopSampler::~LoopSampler()
 }
 
 void LoopSampler::paint (juce::Graphics& g)
-{
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+{  
 
 }
 
 void LoopSampler::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-
     auto area = getLocalBounds();
 
-    auto loopSamplesArea = area.removeFromTop(getHeight() * .80f).withTrimmedTop(getWidth() * 0.2);
+    auto loopSamplesArea = area.removeFromTop(getHeight() * .80f).
+                                         withTrimmedTop(getWidth() * 0.2);
 
     // it is a column of 8 loopSample buttons
     int cueButtonHeight = static_cast<int>( loopSamplesArea.getHeight() / 8.0f );
@@ -107,23 +106,31 @@ void LoopSampler::resized()
     waveformDisplay.setBounds(waveArea.withSizeKeepingCentre( waveArea.getWidth() * 0.8f,
                                                               waveArea.getHeight() * 0.9f ));
 
-    auto buttonArea = area.withTrimmedLeft(static_cast<int>(getWidth() / 6.0f)).withTrimmedRight(static_cast<int>(getWidth() / 6.0f));
+    auto buttonArea = area.withTrimmedLeft(static_cast<int>(getWidth() / 6.0f)).
+                                           withTrimmedRight(static_cast<int>(getWidth() / 6.0f));
     
-    auto leftDeckButtonArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 5.0f)).reduced(static_cast<int>(getHeight() / 70.0f));
+    auto leftDeckButtonArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 5.0f)).
+                                         reduced(static_cast<int>(getHeight() / 70.0f));
+   
     leftDeckImageButton.setBounds(leftDeckButtonArea);
 
-    auto starStoptRecordArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 4.0f)).reduced(static_cast<int>(getHeight() / 70.0f));
+    auto starStoptRecordArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 4.0f)).
+                                          reduced(static_cast<int>(getHeight() / 70.0f));
     startStopRecordImageButton.setBounds(starStoptRecordArea);
 
-    auto deleteArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 3.0f)).reduced(static_cast<int>(getHeight() / 70.0f));
+    auto deleteArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 3.0f)).
+                                 reduced(static_cast<int>(getHeight() / 70.0f));
+
     deleteImageButton.setBounds(deleteArea);
 
-    auto playSampleArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 2.0f)).reduced(static_cast<int>(getHeight() / 70.0f));
+    auto playSampleArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 2.0f)).
+                                     reduced(static_cast<int>(getHeight() / 70.0f));
+
     playSampleImageButton.setBounds(playSampleArea);
 
     auto rightDeckButtonArea = buttonArea.reduced(static_cast<int>(getHeight() / 70.0f));
-    rightDeckImageButton.setBounds(rightDeckButtonArea);
 
+    rightDeckImageButton.setBounds(rightDeckButtonArea);
 }
 
 void LoopSampler::processSignals()
@@ -134,6 +141,7 @@ void LoopSampler::processSignals()
         return;
     }
     samplerBuffer.clear();
+
     const juce::AudioBuffer<float>& micBuffer = microphone.getProceccedBuffer();
     const juce::AudioBuffer<float>& leftPlayerBuffer = leftPlayer.getLatestBuffer();
     const juce::AudioBuffer<float>& rightPlayerBuffer = rightPlayer.getLatestBuffer();
@@ -143,7 +151,12 @@ void LoopSampler::processSignals()
     {
         for (int channel = 0; channel < samplerBuffer.getNumChannels(); ++channel)
         {
-            samplerBuffer.addFrom(channel, 0, micBuffer, channel, 0, leftPlayerBuffer.getNumSamples());
+            samplerBuffer.addFrom(channel, 
+                                  0, 
+                                  micBuffer, 
+                                  channel, 
+                                  0, 
+                                  leftPlayerBuffer.getNumSamples());
         }
     }
     
@@ -153,22 +166,35 @@ void LoopSampler::processSignals()
 
         for (int channel = 0; channel < samplerBuffer.getNumChannels(); ++channel)
         {
-            samplerBuffer.addFrom(channel, 0, leftPlayerBuffer, channel ,0, leftPlayerBuffer.getNumSamples());
+            samplerBuffer.addFrom(channel,
+                                  0, 
+                                  leftPlayerBuffer, 
+                                  channel,
+                                  0, 
+                                  leftPlayerBuffer.getNumSamples());
         }
     }
+
     //get the next block of samples from the right player
     if (rightDeckImageButton.getStatus())
     {
         for (int channel = 0; channel < samplerBuffer.getNumChannels(); ++channel)
         {
-            samplerBuffer.addFrom(channel, 0, rightPlayerBuffer, channel, 0, rightPlayerBuffer.getNumSamples());
+            samplerBuffer.addFrom(channel, 
+                                  0, 
+                                  rightPlayerBuffer, 
+                                  channel, 
+                                  0, 
+                                  rightPlayerBuffer.getNumSamples());
         }
     }
    
     writeOnFile(samplerBuffer, 0, samplerBuffer.getNumSamples());
 
 }
-void LoopSampler::writeOnFile(juce::AudioBuffer<float> buffer, int startSample,int numSamples )
+void LoopSampler::writeOnFile(juce::AudioBuffer<float> buffer, 
+                              int startSample,
+                              int numSamples )
 {
     if (writer != nullptr)
     {
@@ -185,61 +211,46 @@ void LoopSampler::startRecording()
         return;
     }
 
-
     std::unique_ptr<juce::OutputStream> stream = file.createOutputStream();
 
-    writer.reset(wavFormat.createWriterFor(stream.release(), possibleSampleRate,
-                                             static_cast<unsigned int>(numberOfChannels), possibleBitsPerSample, {}, 0));
-
+    writer.reset(wavFormat.createWriterFor(stream.release(), 
+                                           possibleSampleRate,
+                                           static_cast<unsigned int>(samplerBuffer.getNumChannels()), 
+                                           possibleBitsPerSample, 
+                                           {}, 
+                                           0));
 }
 
 
 juce::File LoopSampler::selectSampleAudioFile()
 {
-
     if (!Utilities::desChildDirectory.exists())
     {
         Utilities::desChildDirectory.createDirectory();
     }
     juce::String uniqueName = juce::Uuid().toString();
-    juce::File sampledFile = Utilities::desChildDirectory.getChildFile(uniqueName).withFileExtension("wav");
+    juce::File sampledFile = Utilities::desChildDirectory.getChildFile(uniqueName).
+                                                          withFileExtension("wav");
 
-    if (sampledFile.existsAsFile())
-    {
-        sampledFile.deleteFile();
-    }
     sampledURL = juce::URL{ sampledFile };
 
     return sampledFile;
 }
 
-void LoopSampler::setNumberOfChannels(int numChannels)
+void LoopSampler::prepareToRcord(int samplesPerBlockExpected, int numberOfChannels)
 {
-    numberOfChannels = numChannels;
-}
-
-void LoopSampler::releaseResources()
-{
-
-}
-void LoopSampler::getNextAudioBlock(const AudioSourceChannelInfo& bufferToFill)
-{
-
-}
-void LoopSampler::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
-{
-    numberOfChannels = 2;
     samplerBuffer.setSize(numberOfChannels, samplesPerBlockExpected,false,true,true);
-
 }
+
 void LoopSampler::removeSampleFromRecordingSection()
 {
     deleteImageButton.setButtonEnabled(false);
     player->unloadFile();
     playSampleImageButton.setFirstMode(true);
-    playSampleImageButton.setEnabled(false);
+    playSampleImageButton.setButtonEnabled(false);
     waveformDisplay.unloadURL();
     sampledURL = juce::URL{};
+    disableAddRemoveForEmptysampleButtons();
 }
 void LoopSampler::enableAddRemoveForEmptysampleButtons()
 {
@@ -306,12 +317,10 @@ void LoopSampler::writeLoopSamplesData()
 
 void LoopSampler::loadLoopSamplesData()
 {
-    DBG("LOAD");
     juce::var varData = Utilities::loadJsonData("sampledLoops");
 
     if (varData.isArray())
     {
-
         juce::Array<juce::var>* varArray = varData.getArray();
 
         for (int i = 0; i < samplesRecord.size() && i < varArray->size(); ++i)
@@ -324,8 +333,7 @@ void LoopSampler::loadLoopSamplesData()
     }
 }
 
-
-///////////////////////////////////////////////////button event listener ///////////////////////////////////////////////
+/////////////////////////////////button event listener ////////////////////////////////////
 void LoopSampler::buttonClicked(Button* button)
 {
     //delete the recorded sample
@@ -336,16 +344,16 @@ void LoopSampler::buttonClicked(Button* button)
         startStopRecordImageButton.setEnabled(true);
     }
 
-    else if (static_cast<const juce::Button*>(button) == startStopRecordImageButton.getButtonPointer())
+    else if (static_cast<const juce::Button*>(button) == 
+                                    startStopRecordImageButton.getButtonPointer())
     {
         //start recording
         if (startStopRecordImageButton.getStatus())
         {
-            waveformDisplay.unloadURL();
+            removeSampleFromRecordingSection();
             waveformDisplay.setIsRecording(true);
             startRecording();
             deleteImageButton.setButtonEnabled(false);
-            disableAddRemoveForEmptysampleButtons();
         }
         //stop recording
         else
@@ -355,7 +363,8 @@ void LoopSampler::buttonClicked(Button* button)
             {
                 player->loadURL(sampledURL);
                 deleteImageButton.setButtonEnabled(true);
-                playSampleImageButton.setEnabled(true);
+                playSampleImageButton.setButtonEnabled(true);
+                playSampleImageButton.setFirstMode(true);
                 waveformDisplay.loadURL(sampledURL);
                 waveformDisplay.setIsRecording(false);
                 enableAddRemoveForEmptysampleButtons();
@@ -364,7 +373,8 @@ void LoopSampler::buttonClicked(Button* button)
         }
     }
     //play the new sampled audio (not added to buttons yet)
-    else if (static_cast<const juce::Button*>(button) == playSampleImageButton.getButtonPointer())
+    else if (static_cast<const juce::Button*>(button) == 
+                                     playSampleImageButton.getButtonPointer())
     {
         if (player->isPlaying())
         {
@@ -382,7 +392,8 @@ void LoopSampler::buttonClicked(Button* button)
         // paly and stop button on sample buttons
         for (auto& sampleButton : sampleButtons)
         {
-            if (static_cast<const juce::Button*>(button) == sampleButton.getPlayStopButtonPointer())
+            if (static_cast<const juce::Button*>(button) ==
+                                             sampleButton.getPlayStopButtonPointer())
             {
                 //play sample
                 if (sampleButton.getPlayStopButtonStatus())
@@ -399,7 +410,8 @@ void LoopSampler::buttonClicked(Button* button)
                 }
             }
             // add and remove button on sample buttons
-            else if (static_cast<const juce::Button*>(button) == sampleButton.getAddRemoveButtonPointer())
+            else if (static_cast<const juce::Button*>(button) == 
+                                            sampleButton.getAddRemoveButtonPointer())
             {
                 //add sample
                 if (sampleButton.getAddRemoveButtonStatus())
@@ -419,10 +431,10 @@ void LoopSampler::buttonClicked(Button* button)
                     samplesRecord[sampleButton.getID()].name = "";
                     samplesRecord[sampleButton.getID()].url = juce::URL{};
                     sampleButton.resetButtonData();
-                    //if there is no new sampled audio
+                    sampleButton.setAddRemoveButtonEnabled(false);
                     if (sampledURL == juce::URL{})
                     {
-                        sampleButton.setAddRemoveButtonEnabled(false);
+                        waveformDisplay.unloadURL();
                     }
                 }
             }

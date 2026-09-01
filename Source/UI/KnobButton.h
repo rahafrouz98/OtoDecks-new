@@ -1,21 +1,9 @@
-/*
-  ==============================================================================
-
-    KnobButton.h
-    Created: 19 Aug 2026 6:37:30am
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
 #include "KnobLookAndFeel.h"
 #include <regex>
-//==============================================================================
-/*
-*/
+
 class KnobButton  : public juce::Component
 {
 public:
@@ -31,7 +19,7 @@ public:
     /**return a const pointer of the slider */
     const juce::Slider* getSliderPointer() const;
 
-    /**adds listener to the slider*/
+    /**add listener to the slider*/
     void addListener(juce::Slider::Listener*);
 
     /**set the value of knob*/
@@ -47,7 +35,14 @@ private:
     double min;
     double max;
 
+    /**Text is starting with a one to eleven digits on the left side of decimal, 
+    and with maximum 3 digits on the right side*/
     std::regex finalPattern{ R"(^[0-9]{1,11}(?:\.{0,1}[0-9]{0,3})?$)" };
+
+    /**Text is starting with a one to eleven digits on the left side of decimal,
+    and with maximum 3 digits on the right side. It can have  no charechter, or
+    it can accept numbers with no digit on the right side of decimal point*/
+
     std::regex editingPattern{ R"(^[0-9]{0,11}(?:\.{0,1}[0-9]{0,3})?$)" };
 
     /**returns true if the final value of textEditor (after clicking return key) is valid*/

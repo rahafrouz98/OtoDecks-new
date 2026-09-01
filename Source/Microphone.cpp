@@ -1,24 +1,13 @@
-/*
-  ==============================================================================
-
-    Microphone.cpp
-    Created: 23 Aug 2026 8:17:22pm
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "Microphone.h"
 
-//==============================================================================
 Microphone::Microphone(juce::AudioDeviceManager& _deviceManager): deviceManager(_deviceManager)
 {
-    ////////////////////////////////////////////// Microphone /////////////////////////////////////////////////
+    ////////////////////////////////////////////// Microphone //////////////////////////////////////////
     addAndMakeVisible(micButton);
     micButton.setFirstMode(false);
 
-    ////////////////////////////////////////////// slider ///////////////////////////////////////////////////////
+    ////////////////////////////////////////////// slider //////////////////////////////////////////////
     addAndMakeVisible(slider);
     slider.addListener(this);
     slider.setRange(0.0, 1.0);
@@ -33,9 +22,7 @@ Microphone::~Microphone()
 
 void Microphone::paint (juce::Graphics& g)
 {
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));  
 }
 
 void Microphone::resized()
@@ -64,50 +51,57 @@ void Microphone::releaseResources()
 {
 }
 
-//code is inspired from https://juce.com/tutorials/tutorial_processing_audio_input/ 
-
 void Microphone::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     if (!micButton.getStatus())
     {
         return;
     }
-    
-
     juce::AudioIODevice* device = deviceManager.getCurrentAudioDevice();
     juce::BigInteger activeInputChannels = device->getActiveInputChannels();
     juce::BigInteger activeOutputChannels = device->getActiveOutputChannels();
     int maxInputChannels = activeInputChannels.getHighestBit();
     int maxOutputChannels = activeOutputChannels.getHighestBit();
 
-    processedBuffer.setSize(bufferToFill.buffer->getNumChannels(), bufferToFill.buffer->getNumSamples(), false, true, true);
+    processedBuffer.setSize( bufferToFill.buffer->getNumChannels(), 
+                             bufferToFill.buffer->getNumSamples(),
+                             false, 
+                             true, 
+                             true);
 
     for (int channel = 0; channel < maxOutputChannels; ++channel)
     {
         if ((!activeOutputChannels[channel]) || maxInputChannels == 0)
         {
-            bufferToFill.buffer->clear(channel, bufferToFill.startSample, bufferToFill.numSamples);
+            bufferToFill.buffer->clear(channel,
+                                       bufferToFill.startSample,
+                                       bufferToFill.numSamples);
         }
         else
         {
             int mappedInputChannel = channel % maxInputChannels;
 
-            if (activeInputChannels[channel])
+            if (activeInputChannels[mappedInputChannel])
             {
-                const float* inBuffer = capturedBuffer.getReadPointer(mappedInputChannel, bufferToFill.startSample);
-                 float* outBuffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
+                const float* inBuffer = capturedBuffer.getReadPointer(mappedInputChannel, 
+                                                                      bufferToFill.startSample);
+
+                 float* outBuffer = bufferToFill.buffer->getWritePointer(channel,
+                                                                         bufferToFill.startSample);
 
                 for (int sample = 0; sample < bufferToFill.numSamples;++sample)
                 {
-                    float noise = (random.nextFloat() * 2.0f) - 1.0f;
                     outBuffer[sample] = inBuffer[sample] * level;
                 }
             }
-            processedBuffer.copyFrom(channel, 0, *bufferToFill.buffer, channel, 
-                                                                 bufferToFill.startSample,bufferToFill.numSamples);
+            processedBuffer.copyFrom(channel, 
+                                     0, 
+                                     *bufferToFill.buffer,
+                                     channel, 
+                                     bufferToFill.startSample,
+                                     bufferToFill.numSamples);
         }
-    }
-    
+    }  
 }
 
 void Microphone::sliderValueChanged(Slider* slider)

@@ -1,24 +1,26 @@
-/*
-  ==============================================================================
-
-    DeckGUI.cpp
-    Created: 17 Jul 2026 12:18:23pm
-    Author:  hraha
-
-  ==============================================================================
-*/
 
 #include <JuceHeader.h>
 #include "DeckGUI.h"
 
-//==============================================================================
-DeckGUI::DeckGUI(DJAudioPlayer* _player, AudioFormatManager& formatManagerToUse, AudioThumbnailCache& cacheToUse, PlaylistComponent* _playlistComponent, bool _left):
-    player(_player), waveformDisplay(formatManagerToUse, cacheToUse), playlistComponent(_playlistComponent), currentTime(0.0), isleft(_left)
+
+DeckGUI::DeckGUI( DJAudioPlayer* _player, 
+                  AudioFormatManager& formatManagerToUse, 
+                  AudioThumbnailCache& cacheToUse, 
+                  PlaylistComponent* _playlistComponent, 
+                  bool _left):
+                      player(_player),
+                      waveformDisplay(formatManagerToUse, cacheToUse), 
+                      playlistComponent(_playlistComponent), 
+                      currentTime(0.0), 
+                      isleft(_left)
 {
+
+    //////////////////////////////// WaveformDisplay //////////////////
     addAndMakeVisible(waveformDisplay);
-    waveformDisplay.setMouseClickCallback([this]() {
-        double targetTime = waveformDisplay.getPositionRelative() * loadedFile.duration;
-        player->setPosition(targetTime);
+
+    waveformDisplay.setMouseClickCallback([this](float relativePosition) {
+            double targetTime = relativePosition* loadedFile.duration;
+            player->setPosition(targetTime);
         });
     
     ///////////////////////////////buttons///////////////////////////////
@@ -48,13 +50,14 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player, AudioFormatManager& formatManagerToUse,
         cueButtons[i].setEnableButtons(false);
 
         //set callback to receive data from CueEditForm when its save button is clicked
-        cueButtons[i].setCueButtonEditedCallback([this, i](juce::Colour colour, juce::String name) {
-            setCueButtonNameData(i, name);
-            setCueButtonColourData(i, colour);
+        cueButtons[i].setCueButtonEditedCallback( [this, i](juce::Colour colour,
+                                                  juce::String name) {
+                setCueButtonNameData(i, name);
+                setCueButtonColourData(i, colour);
             });
 
-        /**set callback to receive add button clicked event and add colour to button, mark time and update cue data
-         int the loadedFile Struct*/
+        /**set callback to receive add button clicked event and add colour to button,
+        mark time and update cue data int the loadedFile Struct*/
         cueButtons[i].setCueButtonAddCallback([this,i]() {
                 cueButtons[i].setMarkedTime(currentTime);
                 juce::Colour colour = CueEditForm::convertCueColourToJuceColour( static_cast<CueEditForm::CueColour>(i));
@@ -97,19 +100,19 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player, AudioFormatManager& formatManagerToUse,
     BPMLabel.setColour(Label::ColourIds::backgroundColourId, Colours::black);
     BPMLabel.setColour(Label::ColourIds::outlineColourId, Colours::grey);
 
-    ///////////////////////////////Knobs////////////////////////////////////////////////////////////////
+    ///////////////////////////////Knobs////////////////////////////////////////////
     addAndMakeVisible(tempoKnob);
     tempoKnob.setRange(0.1, 10.0);
-    tempoKnob.addListener(this);
     tempoKnob.setKnobValue(1.0);
 
     addAndMakeVisible(volumeKnob);
     volumeKnob.setRange(0.0, 2.0);
     volumeKnob.setKnobValue(1.0);
-    volumeKnob.addListener(this);
-
     addAndMakeVisible(positionKnob);
+
     positionKnob.addListener(this);
+    tempoKnob.addListener(this);
+    volumeKnob.addListener(this);
 
     ///////////////////////// MusicAnalyzer ///////////////////////////////////////
     addAndMakeVisible(musicAnalyzer);
@@ -122,17 +125,15 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player, AudioFormatManager& formatManagerToUse,
 DeckGUI::~DeckGUI()
 {
     stopTimer();
-
-    fChooser.reset();
 }
 
 void DeckGUI::paint(juce::Graphics& g)
 {
 
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));   
 
     g.setColour(juce::Colours::grey);
-    g.drawRect(getLocalBounds(), 1);   // draw an outline around the component
+    g.drawRect(getLocalBounds(), 1);  
 
 }
 
@@ -212,7 +213,7 @@ void DeckGUI::resized()
     }
 
 
-    ///////////////////////////////////// labels /////////////////////////////////////////////////////////
+    ///////////////////////////////////// labels //////////////////////////////////////
 
     trackNameLabel.setBounds(nameLabelArea);
     BPMLabel.setBounds(BPMLAbelArea);
@@ -220,22 +221,27 @@ void DeckGUI::resized()
 
 
 
-    ///////////////////////////////////// Knobs /////////////////////////////////////////////////////////
+    ///////////////////////////////////// Knobs /////////////////////////////////////////
 
-    tempoKnob.setBounds(tempoArea.withSizeKeepingCentre(static_cast<int>(tempoArea.getWidth() * 0.9f), 
-                                                        static_cast<int>(tempoArea.getHeight() * 0.9f)));
-    volumeKnob.setBounds(volArea.withSizeKeepingCentre(static_cast<int>(volArea.getWidth() * 0.9f),
-                                                        static_cast<int>(volArea.getHeight() * 0.9f)));
-    positionKnob.setBounds(posArea.withSizeKeepingCentre(static_cast<int>(posArea.getWidth() * 0.9f),
-                                                         static_cast<int>(posArea.getHeight() * 0.9f)));
+    tempoKnob.setBounds(tempoArea.
+                        withSizeKeepingCentre(static_cast<int>(tempoArea.getWidth() * 0.9f), 
+                                              static_cast<int>(tempoArea.getHeight() * 0.9f)));
+    volumeKnob.setBounds(volArea.
+                         withSizeKeepingCentre(static_cast<int>(volArea.getWidth() * 0.9f),
+                                               static_cast<int>(volArea.getHeight() * 0.9f)));
+    positionKnob.setBounds(posArea.
+                         withSizeKeepingCentre(static_cast<int>(posArea.getWidth() * 0.9f),
+                                               static_cast<int>(posArea.getHeight() * 0.9f)));
 
     ////////////////////////////////////// Play Stop button ///////////////////////////////
-    playStopButton.setBounds(playStopArea.withSizeKeepingCentre(static_cast<int>(playStopArea.getWidth() * 0.7f),
-                                                             static_cast<int>(playStopArea.getHeight() * 0.7f)));
+    playStopButton.setBounds(playStopArea.
+                         withSizeKeepingCentre(static_cast<int>(playStopArea.getWidth() * 0.7f),
+                                               static_cast<int>(playStopArea.getHeight() * 0.7f)));
 
     ////////////////////////////////////// looping button /////////////////////////////////////
-    loopNoLoopButton.setBounds(loopButtonArea.withSizeKeepingCentre(static_cast<int>(loopButtonArea.getWidth() * 0.7f),
-                                                                 static_cast<int>(loopButtonArea.getHeight() * 0.7f)));
+    loopNoLoopButton.setBounds(loopButtonArea.
+                         withSizeKeepingCentre(static_cast<int>(loopButtonArea.getWidth() * 0.7f),
+                                               static_cast<int>(loopButtonArea.getHeight() * 0.7f)));
 
     ///////////////////////////////////// cue buttons ////////////////////////////////////////
     cueArea = cueArea.reduced(getWidth() / 70);
@@ -261,9 +267,11 @@ void DeckGUI::resized()
     }
     
 
-    ///////////////////////////////////// load button ////////////////////////////////////
-    loadButton.setBounds(loadAndLibButtonArea.removeFromLeft(static_cast<int>(loadAndLibButtonArea.getWidth() / 2.0f)).
-                                              reduced(2));
+    ///////////////////////////////////// load button ///////////////////////////////////
+    loadButton.setBounds(loadAndLibButtonArea.
+                          removeFromLeft(
+                              static_cast<int>(loadAndLibButtonArea.getWidth() / 2.0f))
+                                                                    .reduced(2));
 
     ///////////////////////////////////// AddToLibrary button ////////////////////////////
     addToLibraryButton.setBounds(loadAndLibButtonArea.reduced(2));
@@ -294,7 +302,6 @@ void DeckGUI::loadAudioFile(Utilities::FileStruct filedata)
         stageNewLoadedFile(chosenFile);
         updateCueButtonsStatus();
     }
-
 }
 
 void DeckGUI::loadAudioFile(File chosenFile)
@@ -381,7 +388,8 @@ String DeckGUI::currentTime2String() const
 void DeckGUI::selectFile()
 {
     fChooser= std::make_unique<FileChooser>("Please select the file you want to load...");
-    auto folderChooserFlags = juce::FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
+    auto folderChooserFlags = juce::FileBrowserComponent::openMode 
+                              | FileBrowserComponent::canSelectFiles;
     fChooser->launchAsync(folderChooserFlags, [this](const FileChooser& chooser)
         {
             File chosenFile = chooser.getResult();
@@ -440,7 +448,7 @@ void DeckGUI::updateCueButtonsStatus()
 }
 
 
-////////////////////////////////////////////////////////// call backs ///////////////////////////////////////////////
+////////////////////////////////////////////////////////// call backs ///////////////////
 /** implement Button::Listener */
 void DeckGUI::buttonClicked(Button* button)
 {
@@ -462,6 +470,7 @@ void DeckGUI::buttonClicked(Button* button)
     {
         player->toggleLooping();
     }
+    //Load file
     else if (button == &loadButton)
     {
 
@@ -534,6 +543,8 @@ void DeckGUI::timerCallback()
     if (player != nullptr)
     {
         currentTime = player->getCurrentPosition();
+        // if the looping is off set the play head to the start position and 
+        // update the playStop button
         if (player->getPostionRelative() >= .999 && !(player->isPlaying()))
         {
             player->setPosition(0);
@@ -542,9 +553,12 @@ void DeckGUI::timerCallback()
         }
 
         waveformDisplay.setPlayHeadPosition(player->getPostionRelative());
-
     }
-    // if the looping is off set the play head to the start position and update the playStop button
+    else
+    {
+        currentTime = 0;
+    }
+
     musicAnalyzer.setLiveTime(static_cast<float>(currentTime));
 
     timerLabel.setText(currentTime2String(), dontSendNotification);

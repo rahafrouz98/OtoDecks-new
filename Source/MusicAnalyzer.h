@@ -74,18 +74,15 @@ private:
 	/**It is an array of a map for each frame. The first item of map is band category and the second is the total energy*/
 	std::vector<std::map< std::string, float>> sixBandSpectrogram;
 
-
-    /**Each item of this vector represent the booloean beat spectrum for each fram for the whole spectrum. */
-    std::vector<bool> booleanBeatSpectrogram;
-
     /**The first element is representing timeframe and second one is the BPM*/
     std::map <int, int> timeBPM;
 
     /**Extract spectrogram and frameDuration */
 	void setSixBandEnergySpectrogram();
 
-    /**calculates booleanBeatSpectrogram vector from the sixBandSpectrogram and by using data from averageEnergy map.*/
-    void setBooleanBeatSpectrogram();
+
+    /**calculates booleanBeatSpectrogram vector from the sixBandSpectrogram.*/
+    std::vector<bool> extractBooleanBeatSpectrogram();
 
     /**calculates timeBPM from the booleanBeatSpectrogram*/
     void setTimeBPM();

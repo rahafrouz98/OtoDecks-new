@@ -146,21 +146,21 @@
     <Lib/>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\SampleLoopButton.cpp"/>
+    <ClCompile Include="..\..\Source\UI\ColourButtonLookAndFeel.cpp"/>
+    <ClCompile Include="..\..\Source\UI\CueButton.cpp"/>
+    <ClCompile Include="..\..\Source\UI\CueEditForm.cpp"/>
+    <ClCompile Include="..\..\Source\UI\KnobButton.cpp"/>
+    <ClCompile Include="..\..\Source\UI\KnobLookAndFeel.cpp"/>
+    <ClCompile Include="..\..\Source\UI\OnOffButton.cpp"/>
+    <ClCompile Include="..\..\Source\UI\SampleLoopButton.cpp"/>
     <ClCompile Include="..\..\Source\Microphone.cpp"/>
     <ClCompile Include="..\..\Source\LoopSampler.cpp"/>
-    <ClCompile Include="..\..\Source\ColourButtonLookAndFeel.cpp"/>
-    <ClCompile Include="..\..\Source\CueEditForm.cpp"/>
-    <ClCompile Include="..\..\Source\CueButton.cpp"/>
     <ClCompile Include="..\..\Source\MusicAnalyzer.cpp"/>
     <ClCompile Include="..\..\Source\playlistComponent.cpp"/>
     <ClCompile Include="..\..\Source\WaveformDisplay.cpp"/>
     <ClCompile Include="..\..\Source\DeckGUI.cpp"/>
     <ClCompile Include="..\..\Source\DJAudioPlayer.cpp"/>
     <ClCompile Include="..\..\Source\MainComponent.cpp"/>
-    <ClCompile Include="..\..\Source\KnobLookAndFeel.cpp"/>
-    <ClCompile Include="..\..\Source\KnobButton.cpp"/>
-    <ClCompile Include="..\..\Source\OnOffButton.cpp"/>
     <ClCompile Include="..\..\Source\Utilities.cpp"/>
     <ClCompile Include="..\..\Source\Main.cpp"/>
     <ClCompile Include="..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
@@ -3271,21 +3271,21 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_opengl.cpp"/>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\SampleLoopButton.h"/>
+    <ClInclude Include="..\..\Source\UI\ColourButtonLookAndFeel.h"/>
+    <ClInclude Include="..\..\Source\UI\CueButton.h"/>
+    <ClInclude Include="..\..\Source\UI\CueEditForm.h"/>
+    <ClInclude Include="..\..\Source\UI\KnobButton.h"/>
+    <ClInclude Include="..\..\Source\UI\KnobLookAndFeel.h"/>
+    <ClInclude Include="..\..\Source\UI\OnOffButton.h"/>
+    <ClInclude Include="..\..\Source\UI\SampleLoopButton.h"/>
     <ClInclude Include="..\..\Source\Microphone.h"/>
     <ClInclude Include="..\..\Source\LoopSampler.h"/>
-    <ClInclude Include="..\..\Source\ColourButtonLookAndFeel.h"/>
-    <ClInclude Include="..\..\Source\CueEditForm.h"/>
-    <ClInclude Include="..\..\Source\CueButton.h"/>
     <ClInclude Include="..\..\Source\MusicAnalyzer.h"/>
     <ClInclude Include="..\..\Source\playlistComponent.h"/>
     <ClInclude Include="..\..\Source\WaveformDisplay.h"/>
     <ClInclude Include="..\..\Source\DeckGUI.h"/>
     <ClInclude Include="..\..\Source\MainComponent.h"/>
     <ClInclude Include="..\..\Source\DJAudioPlayer.h"/>
-    <ClInclude Include="..\..\Source\KnobButton.h"/>
-    <ClInclude Include="..\..\Source\OnOffButton.h"/>
-    <ClInclude Include="..\..\Source\KnobLookAndFeel.h"/>
     <ClInclude Include="..\..\Source\Utilities.h"/>
     <ClInclude Include="..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h"/>
     <ClInclude Include="..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
@@ -4967,22 +4967,22 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Source\disabledleft.png"/>
-    <None Include="..\..\Source\disabledright.png"/>
-    <None Include="..\..\Source\left.png"/>
-    <None Include="..\..\Source\right.png"/>
-    <None Include="..\..\Source\disabledmic.png"/>
-    <None Include="..\..\Source\mic.png"/>
-    <None Include="..\..\Source\stoprecording.png"/>
-    <None Include="..\..\Source\startrecord.png"/>
-    <None Include="..\..\Source\pen.png"/>
-    <None Include="..\..\Source\loop.png"/>
-    <None Include="..\..\Source\no-loop.png"/>
-    <None Include="..\..\Source\pause.png"/>
-    <None Include="..\..\Source\play.png"/>
-    <None Include="..\..\Source\add.png"/>
-    <None Include="..\..\Source\delete.png"/>
-    <None Include="..\..\Source\remove.png"/>
+    <None Include="..\..\Source\Assets\add.png"/>
+    <None Include="..\..\Source\Assets\delete.png"/>
+    <None Include="..\..\Source\Assets\disabledleft.png"/>
+    <None Include="..\..\Source\Assets\disabledmic.png"/>
+    <None Include="..\..\Source\Assets\disabledright.png"/>
+    <None Include="..\..\Source\Assets\left.png"/>
+    <None Include="..\..\Source\Assets\loop.png"/>
+    <None Include="..\..\Source\Assets\mic.png"/>
+    <None Include="..\..\Source\Assets\no-loop.png"/>
+    <None Include="..\..\Source\Assets\pause.png"/>
+    <None Include="..\..\Source\Assets\pen.png"/>
+    <None Include="..\..\Source\Assets\play.png"/>
+    <None Include="..\..\Source\Assets\remove.png"/>
+    <None Include="..\..\Source\Assets\right.png"/>
+    <None Include="..\..\Source\Assets\startrecord.png"/>
+    <None Include="..\..\Source\Assets\stoprecording.png"/>
     <None Include="..\..\..\JUCE\modules\juce_audio_devices\native\asio\LICENSE.txt"/>
     <None Include="..\..\..\JUCE\modules\juce_audio_devices\native\oboe\src\common\README.md"/>
     <None Include="..\..\..\JUCE\modules\juce_audio_devices\native\oboe\src\flowgraph\resampler\README.md"/>

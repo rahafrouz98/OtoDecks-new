@@ -4,38 +4,53 @@
               jucerFormatVersion="1" defines="JUCE_MODAL_LOOPS_PERMITTED=1">
   <MAINGROUP id="mcJZqF" name="OtoDecks">
     <GROUP id="{356C603F-01E1-55B2-02A0-F2D89D9A59E6}" name="Source">
-      <FILE id="ick1il" name="SampleLoopButton.cpp" compile="1" resource="0"
-            file="Source/SampleLoopButton.cpp"/>
-      <FILE id="ZdIp4l" name="SampleLoopButton.h" compile="0" resource="0"
-            file="Source/SampleLoopButton.h"/>
-      <FILE id="fQHbaj" name="disabledleft.png" compile="0" resource="1"
-            file="Source/disabledleft.png"/>
-      <FILE id="geYNmv" name="disabledright.png" compile="0" resource="1"
-            file="Source/disabledright.png"/>
-      <FILE id="i9seAm" name="left.png" compile="0" resource="1" file="Source/left.png"/>
-      <FILE id="GWHsG5" name="right.png" compile="0" resource="1" file="Source/right.png"/>
-      <FILE id="RPLZ3E" name="disabledmic.png" compile="0" resource="1" file="Source/disabledmic.png"/>
-      <FILE id="oBVFfl" name="mic.png" compile="0" resource="1" file="Source/mic.png"/>
+      <GROUP id="{33315214-9A7F-96BD-81D0-EF06C8738FC0}" name="Assets">
+        <FILE id="D9tmgt" name="add.png" compile="0" resource="1" file="Source/Assets/add.png"/>
+        <FILE id="Ueggo0" name="delete.png" compile="0" resource="1" file="Source/Assets/delete.png"/>
+        <FILE id="qmYcmp" name="disabledleft.png" compile="0" resource="1"
+              file="Source/Assets/disabledleft.png"/>
+        <FILE id="sqXgHB" name="disabledmic.png" compile="0" resource="1" file="Source/Assets/disabledmic.png"/>
+        <FILE id="xuj0Bk" name="disabledright.png" compile="0" resource="1"
+              file="Source/Assets/disabledright.png"/>
+        <FILE id="TqNvMa" name="left.png" compile="0" resource="1" file="Source/Assets/left.png"/>
+        <FILE id="aoSMch" name="loop.png" compile="0" resource="1" file="Source/Assets/loop.png"/>
+        <FILE id="HQjMcL" name="mic.png" compile="0" resource="1" file="Source/Assets/mic.png"/>
+        <FILE id="jgwD6p" name="no-loop.png" compile="0" resource="1" file="Source/Assets/no-loop.png"/>
+        <FILE id="ydNW6g" name="pause.png" compile="0" resource="1" file="Source/Assets/pause.png"/>
+        <FILE id="HHMv7z" name="pen.png" compile="0" resource="1" file="Source/Assets/pen.png"/>
+        <FILE id="d4Km8p" name="play.png" compile="0" resource="1" file="Source/Assets/play.png"/>
+        <FILE id="nBGN8R" name="remove.png" compile="0" resource="1" file="Source/Assets/remove.png"/>
+        <FILE id="KHrayq" name="right.png" compile="0" resource="1" file="Source/Assets/right.png"/>
+        <FILE id="nuoBg3" name="startrecord.png" compile="0" resource="1" file="Source/Assets/startrecord.png"/>
+        <FILE id="PJJbnj" name="stoprecording.png" compile="0" resource="1"
+              file="Source/Assets/stoprecording.png"/>
+      </GROUP>
+      <GROUP id="{D3393742-448D-7A39-BBD9-B9FF664D31C9}" name="UI">
+        <FILE id="TqRq8h" name="ColourButtonLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/UI/ColourButtonLookAndFeel.cpp"/>
+        <FILE id="WUM1fd" name="ColourButtonLookAndFeel.h" compile="0" resource="0"
+              file="Source/UI/ColourButtonLookAndFeel.h"/>
+        <FILE id="iAgDU4" name="CueButton.cpp" compile="1" resource="0" file="Source/UI/CueButton.cpp"/>
+        <FILE id="yq4xJi" name="CueButton.h" compile="0" resource="0" file="Source/UI/CueButton.h"/>
+        <FILE id="T1W4Xj" name="CueEditForm.cpp" compile="1" resource="0" file="Source/UI/CueEditForm.cpp"/>
+        <FILE id="DIXbkg" name="CueEditForm.h" compile="0" resource="0" file="Source/UI/CueEditForm.h"/>
+        <FILE id="tye2BG" name="KnobButton.cpp" compile="1" resource="0" file="Source/UI/KnobButton.cpp"/>
+        <FILE id="rRy35O" name="KnobButton.h" compile="0" resource="0" file="Source/UI/KnobButton.h"/>
+        <FILE id="QFXrpn" name="KnobLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/UI/KnobLookAndFeel.cpp"/>
+        <FILE id="vSzIrH" name="KnobLookAndFeel.h" compile="0" resource="0"
+              file="Source/UI/KnobLookAndFeel.h"/>
+        <FILE id="w8m7M9" name="OnOffButton.cpp" compile="1" resource="0" file="Source/UI/OnOffButton.cpp"/>
+        <FILE id="nVpphi" name="OnOffButton.h" compile="0" resource="0" file="Source/UI/OnOffButton.h"/>
+        <FILE id="tlrQgQ" name="SampleLoopButton.cpp" compile="1" resource="0"
+              file="Source/UI/SampleLoopButton.cpp"/>
+        <FILE id="cuISkt" name="SampleLoopButton.h" compile="0" resource="0"
+              file="Source/UI/SampleLoopButton.h"/>
+      </GROUP>
       <FILE id="jqnmHE" name="Microphone.cpp" compile="1" resource="0" file="Source/Microphone.cpp"/>
       <FILE id="Wvwp5u" name="Microphone.h" compile="0" resource="0" file="Source/Microphone.h"/>
-      <FILE id="DrTvwZ" name="stoprecording.png" compile="0" resource="1"
-            file="Source/stoprecording.png"/>
-      <FILE id="RoCjzn" name="startrecord.png" compile="0" resource="1" file="Source/startrecord.png"/>
       <FILE id="RXttom" name="LoopSampler.cpp" compile="1" resource="0" file="Source/LoopSampler.cpp"/>
       <FILE id="UrcSLS" name="LoopSampler.h" compile="0" resource="0" file="Source/LoopSampler.h"/>
-      <FILE id="HFa31e" name="ColourButtonLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/ColourButtonLookAndFeel.cpp"/>
-      <FILE id="uB4JPc" name="ColourButtonLookAndFeel.h" compile="0" resource="0"
-            file="Source/ColourButtonLookAndFeel.h"/>
-      <FILE id="ojFPkc" name="CueEditForm.cpp" compile="1" resource="0" file="Source/CueEditForm.cpp"/>
-      <FILE id="xS8StD" name="CueEditForm.h" compile="0" resource="0" file="Source/CueEditForm.h"/>
-      <FILE id="KwjRM2" name="pen.png" compile="0" resource="1" file="Source/pen.png"/>
-      <FILE id="kzCYCg" name="CueButton.cpp" compile="1" resource="0" file="Source/CueButton.cpp"/>
-      <FILE id="bP8oo7" name="CueButton.h" compile="0" resource="0" file="Source/CueButton.h"/>
-      <FILE id="khB76w" name="loop.png" compile="0" resource="1" file="Source/loop.png"/>
-      <FILE id="C4e5Rz" name="no-loop.png" compile="0" resource="1" file="Source/no-loop.png"/>
-      <FILE id="KiToma" name="pause.png" compile="0" resource="1" file="Source/pause.png"/>
-      <FILE id="GDWcqc" name="play.png" compile="0" resource="1" file="Source/play.png"/>
       <FILE id="owfgzF" name="MusicAnalyzer.cpp" compile="1" resource="0"
             file="Source/MusicAnalyzer.cpp"/>
       <FILE id="FWro0j" name="MusicAnalyzer.h" compile="0" resource="0" file="Source/MusicAnalyzer.h"/>
@@ -55,20 +70,9 @@
       <FILE id="Ez1VFG" name="DJAudioPlayer.h" compile="0" resource="0" file="Source/DJAudioPlayer.h"/>
       <FILE id="OJ0Xrs" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
-      <FILE id="OaecRF" name="KnobButton.h" compile="0" resource="0" file="Source/KnobButton.h"/>
-      <FILE id="GxzVND" name="KnobLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/KnobLookAndFeel.cpp"/>
-      <FILE id="QDHMuX" name="OnOffButton.h" compile="0" resource="0" file="Source/OnOffButton.h"/>
-      <FILE id="qzyti9" name="KnobButton.cpp" compile="1" resource="0" file="Source/KnobButton.cpp"/>
-      <FILE id="RyGRGv" name="OnOffButton.cpp" compile="1" resource="0" file="Source/OnOffButton.cpp"/>
-      <FILE id="VOBr5l" name="KnobLookAndFeel.h" compile="0" resource="0"
-            file="Source/KnobLookAndFeel.h"/>
-      <FILE id="pRACKp" name="add.png" compile="0" resource="1" file="Source/add.png"/>
       <FILE id="Z0wRet" name="Utilities.cpp" compile="1" resource="0" file="Source/Utilities.cpp"/>
       <FILE id="CoVVKI" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="eoflSd" name="delete.png" compile="0" resource="1" file="Source/delete.png"/>
       <FILE id="aKECHF" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
-      <FILE id="XI8Nui" name="remove.png" compile="0" resource="1" file="Source/remove.png"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

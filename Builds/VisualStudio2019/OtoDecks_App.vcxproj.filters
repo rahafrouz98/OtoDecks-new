@@ -2,6 +2,12 @@
 
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="OtoDecks\Source\Assets">
+      <UniqueIdentifier>{6BE4919B-EC4A-6CD4-1329-41842D1B3D15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OtoDecks\Source\UI">
+      <UniqueIdentifier>{CF157F59-38E1-F6E9-39DE-2D2467E6F010}</UniqueIdentifier>
+    </Filter>
     <Filter Include="OtoDecks\Source">
       <UniqueIdentifier>{35A3AE94-1AB3-89C0-566C-A97F5D4E91F7}</UniqueIdentifier>
     </Filter>
@@ -874,22 +880,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\SampleLoopButton.cpp">
-      <Filter>OtoDecks\Source</Filter>
+    <ClCompile Include="..\..\Source\UI\ColourButtonLookAndFeel.cpp">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UI\CueButton.cpp">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UI\CueEditForm.cpp">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UI\KnobButton.cpp">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UI\KnobLookAndFeel.cpp">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UI\OnOffButton.cpp">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UI\SampleLoopButton.cpp">
+      <Filter>OtoDecks\Source\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Microphone.cpp">
       <Filter>OtoDecks\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\LoopSampler.cpp">
-      <Filter>OtoDecks\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ColourButtonLookAndFeel.cpp">
-      <Filter>OtoDecks\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\CueEditForm.cpp">
-      <Filter>OtoDecks\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\CueButton.cpp">
       <Filter>OtoDecks\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\MusicAnalyzer.cpp">
@@ -908,15 +923,6 @@
       <Filter>OtoDecks\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\MainComponent.cpp">
-      <Filter>OtoDecks\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\KnobLookAndFeel.cpp">
-      <Filter>OtoDecks\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\KnobButton.cpp">
-      <Filter>OtoDecks\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\OnOffButton.cpp">
       <Filter>OtoDecks\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities.cpp">
@@ -4248,22 +4254,31 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\SampleLoopButton.h">
-      <Filter>OtoDecks\Source</Filter>
+    <ClInclude Include="..\..\Source\UI\ColourButtonLookAndFeel.h">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UI\CueButton.h">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UI\CueEditForm.h">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UI\KnobButton.h">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UI\KnobLookAndFeel.h">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UI\OnOffButton.h">
+      <Filter>OtoDecks\Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UI\SampleLoopButton.h">
+      <Filter>OtoDecks\Source\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Microphone.h">
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\LoopSampler.h">
-      <Filter>OtoDecks\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ColourButtonLookAndFeel.h">
-      <Filter>OtoDecks\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CueEditForm.h">
-      <Filter>OtoDecks\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CueButton.h">
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\MusicAnalyzer.h">
@@ -4282,15 +4297,6 @@
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\DJAudioPlayer.h">
-      <Filter>OtoDecks\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\KnobButton.h">
-      <Filter>OtoDecks\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\OnOffButton.h">
-      <Filter>OtoDecks\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\KnobLookAndFeel.h">
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities.h">
@@ -9332,53 +9338,53 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Source\disabledleft.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\add.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\disabledright.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\delete.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\left.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\disabledleft.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\right.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\disabledmic.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\disabledmic.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\disabledright.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\mic.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\left.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\stoprecording.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\loop.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\startrecord.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\mic.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\pen.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\no-loop.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\loop.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\pause.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\no-loop.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\pen.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\pause.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\play.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\play.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\remove.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\add.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\right.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\delete.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\startrecord.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
-    <None Include="..\..\Source\remove.png">
-      <Filter>OtoDecks\Source</Filter>
+    <None Include="..\..\Source\Assets\stoprecording.png">
+      <Filter>OtoDecks\Source\Assets</Filter>
     </None>
     <None Include="..\..\..\JUCE\modules\juce_audio_devices\native\asio\LICENSE.txt">
       <Filter>JUCE Modules\juce_audio_devices\native\asio</Filter>

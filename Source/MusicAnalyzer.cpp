@@ -49,15 +49,22 @@ void MusicAnalyzer::paint(juce::Graphics& g)
 
     g.fillAll(juce::Colours::black);
 
+    int liveFrameIndex = 0;
+            
     juce::ScopedLock scopeLock(lock);
-    if (sixBandSpectrogram.size() != 0 && !isThreadRunning())
+    if (frameDuration > 0)
     {
-        int liveFrameIndex = static_cast<int>(liveTime / frameDuration);
+        liveFrameIndex = static_cast<int>(liveTime / frameDuration);
+    }
 
+    //because vector.size() is unsigned liveFrameIndex < sixBandSpectrogram.size() - 1  condition is not enough as it underflows
+    if (sixBandSpectrogram.size() > 0 && liveFrameIndex < sixBandSpectrogram.size() - 1  && !isThreadRunning())
+    {
         int spectrogramSize = static_cast<int>(sixBandSpectrogram.size());
         
         auto area = getLocalBounds();
         auto barGraphArea = area.removeFromTop(getHeight() * 5 / 6);
+
         for (const auto& [band, energy] : sixBandSpectrogram[liveFrameIndex])
         {
             juce::uint8 blue = static_cast<juce::uint8>(255);
@@ -120,7 +127,6 @@ void MusicAnalyzer::run()
 {
     startTimer(20);
     setSixBandEnergySpectrogram();
-    setBooleanBeatSpectrogram();
     setTimeBPM();
     stopTimer();
     //sends the lambda function to the message thread queue to hide the progress bar
@@ -285,8 +291,13 @@ void MusicAnalyzer::setLiveTime(float time)
 void MusicAnalyzer::setTimeBPM()
 {
    
-    timeBPM.clear();
+    {
+        juce::ScopedLock scopeLock(lock);
+        timeBPM.clear();
+    }
     
+    std::vector<bool> booleanBeatSpectrogram = extractBooleanBeatSpectrogram();
+
    //run a separate loop for detecting the first beat so the second loop does not have to use a condition for detecting the first beat and
    // increase the performance 
 
@@ -341,8 +352,10 @@ void MusicAnalyzer::setTimeBPM()
     }
 }
 
-void MusicAnalyzer::setBooleanBeatSpectrogram()
+std::vector<bool> MusicAnalyzer::extractBooleanBeatSpectrogram()
 {
+    std::vector<bool> booleanBeatSpectrogram;
+
     //number of frames for one second
     int numberOfFramesInWindow = static_cast<int>(1.0f / frameDuration);
 
@@ -364,7 +377,7 @@ void MusicAnalyzer::setBooleanBeatSpectrogram()
     {
         if (threadShouldExit())
         {
-            return;
+            return booleanBeatSpectrogram;
         }
         bool isBeatDetected = detectBeatOnFrame(windowSpectrum, sixBandSpectrogram[i]["all"]);
         booleanBeatSpectrogram.push_back(isBeatDetected);
@@ -377,6 +390,7 @@ void MusicAnalyzer::setBooleanBeatSpectrogram()
         atomicBPMPercentage = (static_cast<double>(booleanBeatSpectrogram.size()) /
             (sixBandSpectrogram.size()));
     }
+    return booleanBeatSpectrogram;
 }
 
 bool MusicAnalyzer::detectBeatOnFrame(std::queue< float> FIFOWindoAllSpectrum, float nextFrameEnergy)

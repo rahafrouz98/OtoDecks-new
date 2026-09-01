@@ -72,21 +72,21 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
-  $(JUCE_OBJDIR)/SampleLoopButton_e6a91ac9.o \
+  $(JUCE_OBJDIR)/ColourButtonLookAndFeel_430f49ce.o \
+  $(JUCE_OBJDIR)/CueButton_f909d0d3.o \
+  $(JUCE_OBJDIR)/CueEditForm_98e47a8f.o \
+  $(JUCE_OBJDIR)/KnobButton_9254b5c4.o \
+  $(JUCE_OBJDIR)/KnobLookAndFeel_a58f7176.o \
+  $(JUCE_OBJDIR)/OnOffButton_55831330.o \
+  $(JUCE_OBJDIR)/SampleLoopButton_cb0fab7c.o \
   $(JUCE_OBJDIR)/Microphone_abc889b3.o \
   $(JUCE_OBJDIR)/LoopSampler_2b20a925.o \
-  $(JUCE_OBJDIR)/ColourButtonLookAndFeel_7a8579e1.o \
-  $(JUCE_OBJDIR)/CueEditForm_eeabef22.o \
-  $(JUCE_OBJDIR)/CueButton_953b4e26.o \
   $(JUCE_OBJDIR)/MusicAnalyzer_13f91bcc.o \
   $(JUCE_OBJDIR)/playlistComponent_9dae34c.o \
   $(JUCE_OBJDIR)/WaveformDisplay_c81a80a6.o \
   $(JUCE_OBJDIR)/DeckGUI_914d8333.o \
   $(JUCE_OBJDIR)/DJAudioPlayer_f05158f2.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
-  $(JUCE_OBJDIR)/KnobLookAndFeel_2a946489.o \
-  $(JUCE_OBJDIR)/KnobButton_7c52e2d1.o \
-  $(JUCE_OBJDIR)/OnOffButton_ab4a87c3.o \
   $(JUCE_OBJDIR)/Utilities_707bb76b.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/BinaryData_ce4232d4.o \
@@ -136,7 +136,37 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : $(OBJECTS_APP) $(JUCE_OBJDIR)/execinfo.cmd $
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(shell cat $(JUCE_OBJDIR)/execinfo.cmd) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
 
-$(JUCE_OBJDIR)/SampleLoopButton_e6a91ac9.o: ../../Source/SampleLoopButton.cpp
+$(JUCE_OBJDIR)/ColourButtonLookAndFeel_430f49ce.o: ../../Source/UI/ColourButtonLookAndFeel.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling ColourButtonLookAndFeel.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/CueButton_f909d0d3.o: ../../Source/UI/CueButton.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling CueButton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/CueEditForm_98e47a8f.o: ../../Source/UI/CueEditForm.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling CueEditForm.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/KnobButton_9254b5c4.o: ../../Source/UI/KnobButton.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling KnobButton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/KnobLookAndFeel_a58f7176.o: ../../Source/UI/KnobLookAndFeel.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling KnobLookAndFeel.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/OnOffButton_55831330.o: ../../Source/UI/OnOffButton.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling OnOffButton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/SampleLoopButton_cb0fab7c.o: ../../Source/UI/SampleLoopButton.cpp
 	-$(V_AT)mkdir -p $(@D)
 	@echo "Compiling SampleLoopButton.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
@@ -149,21 +179,6 @@ $(JUCE_OBJDIR)/Microphone_abc889b3.o: ../../Source/Microphone.cpp
 $(JUCE_OBJDIR)/LoopSampler_2b20a925.o: ../../Source/LoopSampler.cpp
 	-$(V_AT)mkdir -p $(@D)
 	@echo "Compiling LoopSampler.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ColourButtonLookAndFeel_7a8579e1.o: ../../Source/ColourButtonLookAndFeel.cpp
-	-$(V_AT)mkdir -p $(@D)
-	@echo "Compiling ColourButtonLookAndFeel.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/CueEditForm_eeabef22.o: ../../Source/CueEditForm.cpp
-	-$(V_AT)mkdir -p $(@D)
-	@echo "Compiling CueEditForm.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/CueButton_953b4e26.o: ../../Source/CueButton.cpp
-	-$(V_AT)mkdir -p $(@D)
-	@echo "Compiling CueButton.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/MusicAnalyzer_13f91bcc.o: ../../Source/MusicAnalyzer.cpp
@@ -194,21 +209,6 @@ $(JUCE_OBJDIR)/DJAudioPlayer_f05158f2.o: ../../Source/DJAudioPlayer.cpp
 $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp
 	-$(V_AT)mkdir -p $(@D)
 	@echo "Compiling MainComponent.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/KnobLookAndFeel_2a946489.o: ../../Source/KnobLookAndFeel.cpp
-	-$(V_AT)mkdir -p $(@D)
-	@echo "Compiling KnobLookAndFeel.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/KnobButton_7c52e2d1.o: ../../Source/KnobButton.cpp
-	-$(V_AT)mkdir -p $(@D)
-	@echo "Compiling KnobButton.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/OnOffButton_ab4a87c3.o: ../../Source/OnOffButton.cpp
-	-$(V_AT)mkdir -p $(@D)
-	@echo "Compiling OnOffButton.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Utilities_707bb76b.o: ../../Source/Utilities.cpp

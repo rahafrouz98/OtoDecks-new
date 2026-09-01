@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    CueButton.h
-    Created: 21 Aug 2026 8:07:05am
-    Author:  hraha
-
-  ==============================================================================
-*/
 
 #pragma once
 
@@ -14,9 +5,6 @@
 #include "CueEditForm.h"
 #include <functional>
 
-//==============================================================================
-/*
-*/
 class CueButton  : public juce::Component
 {
 public:
@@ -26,7 +14,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    /**it is a call back to receive data from CueEditButton when its save button is clicked.
+    /**Set a callback to receive data from CueEditButton when its save button is clicked.
     it updates the mainButton and send data to DeckGui . It takes a calback function as the argument and
     the callback takes two arguments.First Argument is colour and second represents name*/
     void setCueButtonEditedCallback(std::function<void(juce::Colour, juce::String)> callback);
