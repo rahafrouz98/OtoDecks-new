@@ -332,7 +332,7 @@ void DeckGUI::stageNewLoadedFile(juce::File chosenFile)
     waveformDisplay.loadURL(loadedFile.url);
 
     //setup file on musicAnalyzer
-    musicAnalyzer.loadAudioData(chosenFile);
+    musicAnalyzer.analyzeAudio(chosenFile);
 
 
     updateAddToLibraryButton();
