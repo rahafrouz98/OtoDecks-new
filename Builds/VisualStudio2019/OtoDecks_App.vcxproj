@@ -146,6 +146,7 @@
     <Lib/>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\PlaylistComponent.cpp"/>
     <ClCompile Include="..\..\Source\UI\ColourButtonLookAndFeel.cpp"/>
     <ClCompile Include="..\..\Source\UI\CueButton.cpp"/>
     <ClCompile Include="..\..\Source\UI\CueEditForm.cpp"/>
@@ -156,7 +157,6 @@
     <ClCompile Include="..\..\Source\Microphone.cpp"/>
     <ClCompile Include="..\..\Source\LoopSampler.cpp"/>
     <ClCompile Include="..\..\Source\MusicAnalyzer.cpp"/>
-    <ClCompile Include="..\..\Source\playlistComponent.cpp"/>
     <ClCompile Include="..\..\Source\WaveformDisplay.cpp"/>
     <ClCompile Include="..\..\Source\DeckGUI.cpp"/>
     <ClCompile Include="..\..\Source\DJAudioPlayer.cpp"/>
@@ -3271,6 +3271,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_opengl.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\PlaylistComponent.h"/>
     <ClInclude Include="..\..\Source\UI\ColourButtonLookAndFeel.h"/>
     <ClInclude Include="..\..\Source\UI\CueButton.h"/>
     <ClInclude Include="..\..\Source\UI\CueEditForm.h"/>
@@ -3281,7 +3282,6 @@
     <ClInclude Include="..\..\Source\Microphone.h"/>
     <ClInclude Include="..\..\Source\LoopSampler.h"/>
     <ClInclude Include="..\..\Source\MusicAnalyzer.h"/>
-    <ClInclude Include="..\..\Source\playlistComponent.h"/>
     <ClInclude Include="..\..\Source\WaveformDisplay.h"/>
     <ClInclude Include="..\..\Source\DeckGUI.h"/>
     <ClInclude Include="..\..\Source\MainComponent.h"/>

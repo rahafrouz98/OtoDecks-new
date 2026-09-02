@@ -880,6 +880,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\PlaylistComponent.cpp">
+      <Filter>OtoDecks\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UI\ColourButtonLookAndFeel.cpp">
       <Filter>OtoDecks\Source\UI</Filter>
     </ClCompile>
@@ -908,9 +911,6 @@
       <Filter>OtoDecks\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\MusicAnalyzer.cpp">
-      <Filter>OtoDecks\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\playlistComponent.cpp">
       <Filter>OtoDecks\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\WaveformDisplay.cpp">
@@ -4254,6 +4254,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\PlaylistComponent.h">
+      <Filter>OtoDecks\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\UI\ColourButtonLookAndFeel.h">
       <Filter>OtoDecks\Source\UI</Filter>
     </ClInclude>
@@ -4282,9 +4285,6 @@
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\MusicAnalyzer.h">
-      <Filter>OtoDecks\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\playlistComponent.h">
       <Filter>OtoDecks\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\WaveformDisplay.h">

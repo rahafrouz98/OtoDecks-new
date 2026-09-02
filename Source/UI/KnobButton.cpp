@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "KnobButton.h"
 
 KnobButton::KnobButton(juce::String title, double _min, double _max): 
@@ -50,24 +49,27 @@ KnobButton::~KnobButton()
     knob.setLookAndFeel(nullptr);
 }
 
-void KnobButton::paint (juce::Graphics& g)
+void KnobButton::paint (juce::Graphics& )
 {
 }
 
 void KnobButton::resized()
 {
 
-    auto rowH = getHeight() / 12;
-    auto margin = 8;
-    auto width = getWidth()- margin*2;
+    int rowH = static_cast<int> (getHeight() / 12.0f);
+    int margin = 8;
+    int width = getWidth()- margin*2;
 
     //label.setBounds(margin, 0, width, rowH*3);
     groupComponent.setBounds(getLocalBounds());
 
-    knob.setBounds(margin+(width/2)-(rowH*3), rowH*2.5, rowH * 6., rowH*6);
+    knob.setBounds( margin + static_cast<int>(width/2.0f) - (rowH*3),
+                    static_cast<int>(rowH * 2.5f), 
+                    rowH * 6, 
+                    rowH * 6 );
 
-    textEditor.setBounds(margin, rowH*9, width, rowH*2.5);
-    textEditor.setFont(14.0f);
+    textEditor.setBounds( margin, rowH*9, width, static_cast<int>(rowH*2.5f));
+    textEditor.setFont(juce::FontOptions(14.0f));
 }
 
 void KnobButton::setRange(double _min, double _max)

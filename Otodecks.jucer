@@ -4,6 +4,10 @@
               jucerFormatVersion="1" defines="JUCE_MODAL_LOOPS_PERMITTED=1">
   <MAINGROUP id="mcJZqF" name="OtoDecks">
     <GROUP id="{356C603F-01E1-55B2-02A0-F2D89D9A59E6}" name="Source">
+      <FILE id="M4bXsQ" name="PlaylistComponent.cpp" compile="1" resource="0"
+            file="Source/PlaylistComponent.cpp"/>
+      <FILE id="Rwotu1" name="PlaylistComponent.h" compile="0" resource="0"
+            file="Source/PlaylistComponent.h"/>
       <GROUP id="{33315214-9A7F-96BD-81D0-EF06C8738FC0}" name="Assets">
         <FILE id="D9tmgt" name="add.png" compile="0" resource="1" file="Source/Assets/add.png"/>
         <FILE id="Ueggo0" name="delete.png" compile="0" resource="1" file="Source/Assets/delete.png"/>
@@ -54,10 +58,6 @@
       <FILE id="owfgzF" name="MusicAnalyzer.cpp" compile="1" resource="0"
             file="Source/MusicAnalyzer.cpp"/>
       <FILE id="FWro0j" name="MusicAnalyzer.h" compile="0" resource="0" file="Source/MusicAnalyzer.h"/>
-      <FILE id="ReICKI" name="playlistComponent.cpp" compile="1" resource="0"
-            file="Source/playlistComponent.cpp"/>
-      <FILE id="rudmoM" name="playlistComponent.h" compile="0" resource="0"
-            file="Source/playlistComponent.h"/>
       <FILE id="ZwBVoH" name="WaveformDisplay.cpp" compile="1" resource="0"
             file="Source/WaveformDisplay.cpp"/>
       <FILE id="NleScp" name="WaveformDisplay.h" compile="0" resource="0"

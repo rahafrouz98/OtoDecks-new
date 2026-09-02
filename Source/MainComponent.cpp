@@ -76,7 +76,7 @@ void MainComponent::releaseResources()
     rightPlayer.releaseResources();
 }
 
-void MainComponent::paint (Graphics& g)
+void MainComponent::paint (Graphics& )
 {
 }
 void MainComponent::paintOverChildren(Graphics& g)

@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "CueButton.h"
 
 CueButton::CueButton()

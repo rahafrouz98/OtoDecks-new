@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "ColourButtonLookAndFeel.h"
 
 ColourButtonLookAndFeel::ColourButtonLookAndFeel()

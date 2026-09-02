@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "LoopSampler.h"
 
 LoopSampler::LoopSampler( DJAudioPlayer* _player, 
@@ -439,5 +438,4 @@ void LoopSampler::buttonClicked(Button* button)
             }
         }
     }
-
 }

@@ -72,6 +72,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/PlaylistComponent_76bc332c.o \
   $(JUCE_OBJDIR)/ColourButtonLookAndFeel_430f49ce.o \
   $(JUCE_OBJDIR)/CueButton_f909d0d3.o \
   $(JUCE_OBJDIR)/CueEditForm_98e47a8f.o \
@@ -82,7 +83,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/Microphone_abc889b3.o \
   $(JUCE_OBJDIR)/LoopSampler_2b20a925.o \
   $(JUCE_OBJDIR)/MusicAnalyzer_13f91bcc.o \
-  $(JUCE_OBJDIR)/playlistComponent_9dae34c.o \
   $(JUCE_OBJDIR)/WaveformDisplay_c81a80a6.o \
   $(JUCE_OBJDIR)/DeckGUI_914d8333.o \
   $(JUCE_OBJDIR)/DJAudioPlayer_f05158f2.o \
@@ -136,6 +136,11 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : $(OBJECTS_APP) $(JUCE_OBJDIR)/execinfo.cmd $
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(shell cat $(JUCE_OBJDIR)/execinfo.cmd) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
 
+$(JUCE_OBJDIR)/PlaylistComponent_76bc332c.o: ../../Source/PlaylistComponent.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling PlaylistComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/ColourButtonLookAndFeel_430f49ce.o: ../../Source/UI/ColourButtonLookAndFeel.cpp
 	-$(V_AT)mkdir -p $(@D)
 	@echo "Compiling ColourButtonLookAndFeel.cpp"
@@ -184,11 +189,6 @@ $(JUCE_OBJDIR)/LoopSampler_2b20a925.o: ../../Source/LoopSampler.cpp
 $(JUCE_OBJDIR)/MusicAnalyzer_13f91bcc.o: ../../Source/MusicAnalyzer.cpp
 	-$(V_AT)mkdir -p $(@D)
 	@echo "Compiling MusicAnalyzer.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/playlistComponent_9dae34c.o: ../../Source/playlistComponent.cpp
-	-$(V_AT)mkdir -p $(@D)
-	@echo "Compiling playlistComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/WaveformDisplay_c81a80a6.o: ../../Source/WaveformDisplay.cpp

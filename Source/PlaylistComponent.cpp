@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "PlaylistComponent.h"
 
 PlaylistComponent::PlaylistComponent()

@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "musicAnalyzer.h"
 
 MusicAnalyzer::MusicAnalyzer(): Thread("Music Analyzer Thread")

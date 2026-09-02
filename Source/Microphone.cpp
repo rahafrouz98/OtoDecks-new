@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "Microphone.h"
 
 Microphone::Microphone(juce::AudioDeviceManager& _deviceManager): deviceManager(_deviceManager)

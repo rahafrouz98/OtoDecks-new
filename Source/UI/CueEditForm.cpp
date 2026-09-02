@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "CueEditForm.h"
 
 CueEditForm::CueEditForm(juce::Colour preSelectedColour, juce::String preSelectedName ): 

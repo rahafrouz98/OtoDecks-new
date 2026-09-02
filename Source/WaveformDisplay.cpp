@@ -1,6 +1,4 @@
-#include <JuceHeader.h>
 #include "WaveformDisplay.h"
-
 
 WaveformDisplay::WaveformDisplay(AudioFormatManager& formatManagerToUse, 
                                  AudioThumbnailCache& cacheToUse):

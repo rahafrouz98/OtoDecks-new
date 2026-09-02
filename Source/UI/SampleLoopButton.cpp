@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include "SampleLoopButton.h"
 
 SampleLoopButton::SampleLoopButton()
@@ -36,17 +35,20 @@ void SampleLoopButton::resized()
 {
     auto area = getLocalBounds();
     
-    auto playStopArea = area.removeFromLeft(getWidth() / 7.0f);
+    auto playStopArea = area.removeFromLeft(static_cast<int>(getWidth() / 7.0f));
 
-    playStopButton.setBounds(playStopArea.withSizeKeepingCentre(playStopArea.getHeight() * 0.4f, 
-                                                                playStopArea.getHeight() * 0.4f));
+    playStopButton.setBounds(playStopArea.
+        withSizeKeepingCentre(static_cast<int>(playStopArea.getHeight() * 0.4f), 
+                              static_cast<int>(playStopArea.getHeight() * 0.4f)));
 
     auto textEditArea = area.removeFromLeft(getWidth() * 5 / 7.0f);
-    textEditor.setBounds(textEditArea.withSizeKeepingCentre(textEditArea.getWidth() ,
-                                                             textEditArea.getHeight() * 0.6f ));
+    textEditor.setBounds(textEditArea.
+        withSizeKeepingCentre(textEditArea.getWidth() ,
+                              static_cast<int>(textEditArea.getHeight() * 0.6f )));
 
-    addRemoveButton.setBounds(area.withSizeKeepingCentre( area.getHeight()*0.4, 
-                                                          area.getHeight()*0.4));
+    addRemoveButton.setBounds(
+        area.withSizeKeepingCentre( static_cast<int>(area.getHeight()*0.4f), 
+                                    static_cast<int>(area.getHeight()*0.4f)));
 }
 
 juce::URL SampleLoopButton::getURL()
@@ -54,7 +56,7 @@ juce::URL SampleLoopButton::getURL()
     return url;
 }
 
-void SampleLoopButton::buttonClicked(Button* button)
+void SampleLoopButton::buttonClicked(Button*)
 {
 
 }

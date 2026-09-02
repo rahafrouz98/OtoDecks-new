@@ -1,5 +1,3 @@
-
-#include <JuceHeader.h>
 #include "OnOffButton.h"
 
 OnOffButton::OnOffButton(const void* onImageData, 
@@ -34,8 +32,7 @@ OnOffButton::~OnOffButton()
 }
 
 void OnOffButton::paint (juce::Graphics& g)
-{
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));  
+{ 
 }
 
 void OnOffButton::resized()

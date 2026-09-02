@@ -1,7 +1,6 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include <cmath>
 
 class MusicAnalyzer  : public juce::Component, public juce::Thread, public Timer
 {
