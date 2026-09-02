@@ -1,5 +1,3 @@
-
-
 #include <JuceHeader.h>
 #include "WaveformDisplay.h"
 
@@ -17,10 +15,7 @@ WaveformDisplay::~WaveformDisplay()
 }
 
 void WaveformDisplay::paint (juce::Graphics& g)
-{
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   
-
+{ 
     g.fillAll(juce::Colours::black);
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   

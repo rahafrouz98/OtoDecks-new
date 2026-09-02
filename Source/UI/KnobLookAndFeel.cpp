@@ -1,4 +1,3 @@
-
 #include <JuceHeader.h>
 #include "KnobLookAndFeel.h"
 

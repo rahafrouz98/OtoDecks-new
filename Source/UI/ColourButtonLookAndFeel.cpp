@@ -21,7 +21,8 @@ void ColourButtonLookAndFeel::drawButtonBackground(juce::Graphics& g,
 
     juce::Colour colour = button.findColour(juce::TextButton::ColourIds::buttonColourId, false);
 
-    juce::Colour tunedColour = isMouseOver ? colour.darker() : (isButtonDown ? colour.darker().darker() : colour);
+    juce::Colour tunedColour = isMouseOver ? colour.darker() : 
+                                             (isButtonDown ? colour.darker().darker() : colour);
 
     g.setColour(tunedColour.withMultipliedAlpha(alpha));
 

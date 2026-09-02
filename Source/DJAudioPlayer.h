@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    DJAudioPlayer.h
-    Created: 17 Jul 2026 7:44:36am
-    Author:  hraha
-
-  ==============================================================================
-*/
-
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 
@@ -15,7 +5,6 @@ class DJAudioPlayer: public AudioSource {
     public:
         DJAudioPlayer(AudioFormatManager& formatManager);
         ~DJAudioPlayer();
-        //=========================================================================
 
         /**implement the AudioSource*/
         void prepareToPlay(int samplesPerBlockExpected, double sampleRate) override;

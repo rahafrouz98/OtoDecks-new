@@ -1,6 +1,4 @@
-
 #include "Utilities.h"
-
 
 juce::var Utilities::loadJsonData(juce::String fileName)
 {

@@ -78,7 +78,6 @@ void MainComponent::releaseResources()
 
 void MainComponent::paint (Graphics& g)
 {
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 }
 void MainComponent::paintOverChildren(Graphics& g)
 {

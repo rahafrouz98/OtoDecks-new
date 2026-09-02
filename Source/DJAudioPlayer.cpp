@@ -1,4 +1,3 @@
-
 #include "DJAudioPlayer.h"
 
 DJAudioPlayer::DJAudioPlayer(AudioFormatManager& _formatManager) :

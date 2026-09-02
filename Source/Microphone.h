@@ -1,11 +1,9 @@
 #pragma once
 
-
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "UI/KnobButton.h"
 #include "UI/OnOffButton.h"
 #include <random>
-
 
 class Microphone: public juce::Component, 
                   public AudioSource, 

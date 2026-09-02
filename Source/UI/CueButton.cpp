@@ -103,7 +103,6 @@ CueButton::~CueButton()
 
 void CueButton::paint (juce::Graphics& g)
 {
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId)); 
 }
 
 void CueButton::resized()

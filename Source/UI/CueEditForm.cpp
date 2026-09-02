@@ -1,5 +1,3 @@
-
-
 #include <JuceHeader.h>
 #include "CueEditForm.h"
 
@@ -82,9 +80,7 @@ CueEditForm::~CueEditForm()
 }
 
 void CueEditForm::paint (juce::Graphics& g)
-{
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   
+{ 
 }
 
 void CueEditForm::resized()

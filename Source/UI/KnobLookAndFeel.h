@@ -1,7 +1,7 @@
-
 #pragma once
 
 #include <JuceHeader.h>
+
 /**Customize the juce::Slider to draw a rotary slider in the shape of a knob*/
 class KnobLookAndFeel  :  public juce::LookAndFeel_V4
 {

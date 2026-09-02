@@ -79,7 +79,6 @@ LoopSampler::~LoopSampler()
 
 void LoopSampler::paint (juce::Graphics& g)
 {  
-
 }
 
 void LoopSampler::resized()

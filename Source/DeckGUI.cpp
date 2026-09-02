@@ -1,4 +1,3 @@
-
 #include <JuceHeader.h>
 #include "DeckGUI.h"
 
@@ -129,12 +128,8 @@ DeckGUI::~DeckGUI()
 
 void DeckGUI::paint(juce::Graphics& g)
 {
-
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));   
-
     g.setColour(juce::Colours::grey);
     g.drawRect(getLocalBounds(), 1);  
-
 }
 
 void DeckGUI::resized()

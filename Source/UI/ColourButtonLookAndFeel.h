@@ -1,3 +1,6 @@
+#pragma once
+
+#include <JuceHeader.h>
 
 class ColourButtonLookAndFeel  : public juce::LookAndFeel_V4
 {
