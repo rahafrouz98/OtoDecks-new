@@ -199,7 +199,7 @@ void DeckGUI::resized()
  
         //row two
         cueArea = rowTwoArea.removeFromRight( width * 2 / 3 );
-        loopButtonArea = rowTwoArea.removeFromRight( getWidth() / 3 );
+        loopButtonArea = rowTwoArea.removeFromRight( getWidth() / 3);
 
         //row three
         loadAndLibButtonArea = rowThreeArea;
