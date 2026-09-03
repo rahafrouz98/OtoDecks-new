@@ -458,6 +458,7 @@ void LoopSampler::buttonClicked(Button* button)
                 {
                     /**if player is playing an audio linked to the the sampler button which is being
                     removed, stop it and umload the audio and return the mode status of button to mode one*/
+                    //stopActiveLoopSampleButton(sampleButton.getID());
                     if (playingSampleLoopButtonIndex == sampleButton.getID())
                     {
                         stopActiveLoopSampleButton();
