@@ -37,6 +37,11 @@ void DJAudioPlayer::releaseResources()
 
 bool DJAudioPlayer::loadURL(URL audioURL)
 {
+    /**to prevent not valid extentions from entering the process of creating input stream
+    first find the extention of file and find its corresponding AudioFormat pointer inf the
+    AudioManager. If the pointer is not nullptr it means file has a valid audio 
+    extension
+    */
     juce::File file = (audioURL.getLocalFile());
     juce::AudioFormat* extention = formatManager.findFormatForFileExtension(file.getFileExtension());
     
@@ -44,18 +49,21 @@ bool DJAudioPlayer::loadURL(URL audioURL)
     {
         return false;
     }
-    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(true));
-    if (reader != nullptr) // good file!
-    {
-        std::unique_ptr<AudioFormatReaderSource> newSource(new AudioFormatReaderSource(reader,
-            true));
-        transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
-        readerSource.reset(newSource.release());
-		readerSource->setLooping(isLooping);
 
-        return true;
+    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(true));
+
+    if (reader = nullptr)
+    {
+        return false;
     }
-    return false;
+
+    std::unique_ptr<AudioFormatReaderSource> newSource(new AudioFormatReaderSource(reader,
+        true));
+    transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
+    readerSource.reset(newSource.release());
+	readerSource->setLooping(isLooping);
+
+    return true;
 }
 
 void DJAudioPlayer::setGain(double gain)
