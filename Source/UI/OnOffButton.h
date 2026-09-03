@@ -25,6 +25,9 @@ public:
     /**sets button enabled or disabled of the button*/
     void setButtonEnabled(bool enabled);
 
+    /**sets button mode */
+    void setStatus(bool modeStatus);
+
     /**returns a const pointer to the button*/
     const juce::Button* getButtonPointer()const;
 

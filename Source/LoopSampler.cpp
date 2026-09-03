@@ -347,6 +347,12 @@ void LoopSampler::buttonClicked(Button* button)
     else if (static_cast<const juce::Button*>(button) == 
                                     startStopRecordImageButton.getButtonPointer())
     {
+        //If player is playing from any SampleLoopButton instance stop it and change the 
+        //playing mode of SampleLoopButton to first mode
+        if (playingSampleLoopButtonIndex != -1)
+        {
+            stopActiveLoopSampleButton();
+        }
         //start recording
         if (startStopRecordImageButton.getStatus())
         {
@@ -354,6 +360,7 @@ void LoopSampler::buttonClicked(Button* button)
             waveformDisplay.setIsRecording(true);
             startRecording();
             deleteImageButton.setButtonEnabled(false);
+
         }
         //stop recording
         else
@@ -376,14 +383,30 @@ void LoopSampler::buttonClicked(Button* button)
     else if (static_cast<const juce::Button*>(button) == 
                                      playSampleImageButton.getButtonPointer())
     {
+        //If player is playing from any SampleLoopButton instance stop it and change the 
+        //playing mode of SampleLoopButton to first mode
+        if (playingSampleLoopButtonIndex != -1)
+        {
+            stopActiveLoopSampleButton();
+        }
+
         if (player->isPlaying())
         {
-            player->stop();
+            if (sampledURL != juce::URL{})
+            {
+                 player->stop();
+            }
 
         }
         else
         {
-            player->start();
+            if (sampledURL != juce::URL{})
+            {
+                playingSampleLoopButtonIndex = -1;
+                player->loadURL(sampledURL);
+                player->start();
+                waveformDisplay.loadURL(sampledURL);
+            }
         }
     }
     //check the buttons of each sampleButtons
@@ -398,10 +421,16 @@ void LoopSampler::buttonClicked(Button* button)
                 //play sample
                 if (sampleButton.getPlayStopButtonStatus())
                 {
+
+                    stopActiveLoopSampleButton();
+                    
                     player->loadURL(sampleButton.getURL());
                     player->start();
                     waveformDisplay.loadURL(sampleButton.getURL());
 
+
+                    //update the button that has just clicked to play
+                    playingSampleLoopButtonIndex = sampleButton.getID();
                 }
                 //stop sample
                 else
@@ -427,6 +456,13 @@ void LoopSampler::buttonClicked(Button* button)
                 //remove sample
                 else
                 {
+                    /**if player is playing an audio linked to the the sampler button which is being
+                    removed, stop it and umload the audio and return the mode status of button to mode one*/
+                    //stopActiveLoopSampleButton(sampleButton.getID());
+                    if (playingSampleLoopButtonIndex == sampleButton.getID())
+                    {
+                        stopActiveLoopSampleButton();
+                    }
                     deleteLocalFile(sampleButton.getURL());
                     samplesRecord[sampleButton.getID()].name = "";
                     samplesRecord[sampleButton.getID()].url = juce::URL{};
@@ -439,5 +475,21 @@ void LoopSampler::buttonClicked(Button* button)
                 }
             }
         }
+    }
+}
+
+void LoopSampler::stopActiveLoopSampleButton( )
+{
+    //if player is playing from any of SampleLoopButtons stop it and reset that button
+    if (playingSampleLoopButtonIndex >=0 && playingSampleLoopButtonIndex < sampleButtons.size())
+    {
+        //reset the button that has been already running
+        sampleButtons[playingSampleLoopButtonIndex].setPlayingMode(true);
+
+        //reset this variable to -1 as there is no buttin in the 
+        playingSampleLoopButtonIndex = -1;
+
+        player->stop();
+        player->unloadFile();
     }
 }

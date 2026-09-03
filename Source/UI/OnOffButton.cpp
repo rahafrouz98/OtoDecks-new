@@ -91,3 +91,9 @@ void OnOffButton::updateImages()
             offImage, 1.0f, juce::Colours::transparentBlack);
     }
 }
+
+void OnOffButton::setStatus(bool modeStatus)
+{
+    status = modeStatus;
+    updateImages();
+}

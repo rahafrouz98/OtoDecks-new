@@ -35,11 +35,15 @@ public:
     /**set addButton enable status*/
     void setAddRemoveButtonEnabled(bool status);
 
+    /**sets the mode of the playStopButton from outside, without clicking on button*/
+    void setPlayingMode(bool modeState);
+
     /**get playStopStatus */
     bool getPlayStopButtonStatus()const;
 
     /**get addRemoveStatus */
     bool getAddRemoveButtonStatus()const;
+
 
     /**returns a const pointer to the playStop button*/
     const juce::Button* getPlayStopButtonPointer()const;

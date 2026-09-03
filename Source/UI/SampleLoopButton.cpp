@@ -133,3 +133,8 @@ void SampleLoopButton::setID(int id)
 {
     buttonID = id;
 }
+
+void SampleLoopButton::setPlayingMode(bool modeStatus)
+{
+    playStopButton.setStatus(modeStatus);
+}

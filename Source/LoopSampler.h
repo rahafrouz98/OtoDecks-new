@@ -89,6 +89,11 @@ private:
 
     juce::AudioBuffer<float> samplerBuffer;
 
+    /**it is used to keep the track of tha sampleLoopButton which is playing.
+    to change the status of previous button which has been playing to the first mode
+    if another sampleLoopButton is clicked to play*/
+    int playingSampleLoopButtonIndex = -1;
+
     /** Select a destination to save the loop sample in WAV format  in a 
     directory called samples in the same directory as app gets created*/
     juce::File selectSampleAudioFile();
@@ -121,6 +126,10 @@ private:
     /**loads loop samples data in JSON format from a directory called samples located 
     in the same directory as EXE file is located and save it in the samplesRecord array*/
     void loadLoopSamplesData();
+
+    /**It stops the player when it is playing from a LoopSamplerButton instance and changes 
+    the mode of the playStop button of the LoopSamplerButton to first mode*/
+    void stopActiveLoopSampleButton();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LoopSampler)
 };
