@@ -37,7 +37,14 @@ void DJAudioPlayer::releaseResources()
 
 bool DJAudioPlayer::loadURL(URL audioURL)
 {
-    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(false));
+    juce::File file = (audioURL.getLocalFile());
+    juce::AudioFormat* extention = formatManager.findFormatForFileExtension(file.getFileExtension());
+    
+    if (extention == nullptr)
+    {
+        return false;
+    }
+    auto* reader = formatManager.createReaderFor(audioURL.createInputStream(true));
     if (reader != nullptr) // good file!
     {
         std::unique_ptr<AudioFormatReaderSource> newSource(new AudioFormatReaderSource(reader,
@@ -50,6 +57,7 @@ bool DJAudioPlayer::loadURL(URL audioURL)
     }
     return false;
 }
+
 void DJAudioPlayer::setGain(double gain)
 {
     if (gain >= 0.0 && gain <= 2.0)

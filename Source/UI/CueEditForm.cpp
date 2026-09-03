@@ -78,7 +78,7 @@ CueEditForm::~CueEditForm()
     stopTimer();
 }
 
-void CueEditForm::paint (juce::Graphics& g)
+void CueEditForm::paint (juce::Graphics&)
 { 
 }
 

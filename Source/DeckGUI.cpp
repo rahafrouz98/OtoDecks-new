@@ -305,7 +305,6 @@ void DeckGUI::loadAudioFile(File chosenFile)
     bool isFileLoaded = player->loadURL(fileURL);
     if (isFileLoaded)
     {
-
         //update the loadedFile metadata
         loadedFile.url = fileURL;
         loadedFile.name = chosenFile.getFileName();
@@ -313,7 +312,6 @@ void DeckGUI::loadAudioFile(File chosenFile)
 
         stageNewLoadedFile(chosenFile);
     }
-
 }
 
 void DeckGUI::stageNewLoadedFile(juce::File chosenFile)
@@ -378,6 +376,7 @@ String DeckGUI::currentTime2String() const
     String time = String(currentTime) + " / " + String(loadedFile.duration);
     return time;
 }
+
 void DeckGUI::selectFile()
 {
     fChooser= std::make_unique<FileChooser>("Please select the file you want to load...");
@@ -390,7 +389,6 @@ void DeckGUI::selectFile()
             {
                  loadAudioFile(chosenFile);
             }
-           
         });
 }
 

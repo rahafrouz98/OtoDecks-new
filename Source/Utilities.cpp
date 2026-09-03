@@ -4,7 +4,6 @@ juce::var Utilities::loadJsonData(juce::String fileName)
 {
 
     juce::File file = desChildDirectory.getChildFile( fileName + ".json" );
-    DBG("File Path: " << file.getFullPathName());
     juce::FileInputStream stream{ file };
     if (stream.openedOk())
     {

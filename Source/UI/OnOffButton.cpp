@@ -31,7 +31,7 @@ OnOffButton::~OnOffButton()
 {
 }
 
-void OnOffButton::paint (juce::Graphics& g)
+void OnOffButton::paint (juce::Graphics&)
 { 
 }
 
@@ -47,7 +47,6 @@ void OnOffButton::addListener(juce::Button::Listener* listener)
 
 void OnOffButton::setButtonEnabled(bool enabled)
 {
-    DBG("f");
     button.setEnabled(enabled);
 }
 

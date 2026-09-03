@@ -100,7 +100,7 @@ CueButton::~CueButton()
 {
 }
 
-void CueButton::paint (juce::Graphics& g)
+void CueButton::paint (juce::Graphics&)
 {
 }
 

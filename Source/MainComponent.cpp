@@ -99,7 +99,8 @@ void MainComponent::resized()
     deckGuiRight.setBounds(decksArea);
 
                                          
-    auto loopSamplerArea = loopsamplerMicArea.removeFromTop(loopsamplerMicArea.getHeight() * 5.0f / 6.0f);
+    auto loopSamplerArea = loopsamplerMicArea.removeFromTop(
+                                    static_cast<int>(loopsamplerMicArea.getHeight() * 5.0f / 6.0f));
     
     looperAndMicrophonWrapper = loopsamplerMicArea;
     

@@ -76,7 +76,7 @@ LoopSampler::~LoopSampler()
     stopTimer();
 }
 
-void LoopSampler::paint (juce::Graphics& g)
+void LoopSampler::paint (juce::Graphics&)
 {  
 }
 
@@ -84,8 +84,8 @@ void LoopSampler::resized()
 {
     auto area = getLocalBounds();
 
-    auto loopSamplesArea = area.removeFromTop(getHeight() * .80f).
-                                         withTrimmedTop(getWidth() * 0.2);
+    auto loopSamplesArea = area.removeFromTop(static_cast<int>( getHeight() * .80f)).
+                                withTrimmedTop(static_cast<int>(getWidth() * 0.2));
 
     // it is a column of 8 loopSample buttons
     int cueButtonHeight = static_cast<int>( loopSamplesArea.getHeight() / 8.0f );
@@ -99,10 +99,11 @@ void LoopSampler::resized()
                                                    buttonRowArea.getHeight() * 0.9f ));
         
     }
-    auto waveArea = area.removeFromTop( getHeight() * 0.1f );
+    auto waveArea = area.removeFromTop( static_cast<int>(getHeight() * 0.1f));
 
-    waveformDisplay.setBounds(waveArea.withSizeKeepingCentre( waveArea.getWidth() * 0.8f,
-                                                              waveArea.getHeight() * 0.9f ));
+    waveformDisplay.setBounds( waveArea.
+                               withSizeKeepingCentre(static_cast<int>(waveArea.getWidth() * 0.8f),
+                                                      static_cast<int>(waveArea.getHeight() * 0.9f )));
 
     auto buttonArea = area.withTrimmedLeft(static_cast<int>(getWidth() / 6.0f)).
                                            withTrimmedRight(static_cast<int>(getWidth() / 6.0f));
