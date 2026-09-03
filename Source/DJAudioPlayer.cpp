@@ -52,13 +52,14 @@ bool DJAudioPlayer::loadURL(URL audioURL)
 
     auto* reader = formatManager.createReaderFor(audioURL.createInputStream(true));
 
-    if (reader = nullptr)
+    if (reader == nullptr)
     {
         return false;
     }
 
     std::unique_ptr<AudioFormatReaderSource> newSource(new AudioFormatReaderSource(reader,
-        true));
+                                                        true));
+
     transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
     readerSource.reset(newSource.release());
 	readerSource->setLooping(isLooping);
