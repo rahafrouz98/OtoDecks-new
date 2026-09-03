@@ -12,7 +12,7 @@ LoopSampler::LoopSampler( DJAudioPlayer* _player,
                                             player(_player), 
                                             waveformDisplay(_formatManagerToUse, _cacheToUse)
 {
-    //////////////////////////////////// Load sample data /////////////////////////////////////
+    //////////////////////////////////// Loas sample data /////////////////////////////////////
     loadLoopSamplesData();
 
     //////////////////////////////////// loop sample buttons //////////////////////////////////
@@ -88,16 +88,15 @@ void LoopSampler::resized()
                                 withTrimmedTop(static_cast<int>(getWidth() * 0.2));
 
     // it is a column of 8 loopSample buttons
-    int cueButtonHeight = loopSamplesArea.getHeight() / 8;
+    int cueButtonHeight = static_cast<int>( loopSamplesArea.getHeight() / 8.0f );
 
     for (int row = 0; row < 8; ++row)
     {
         auto buttonRowArea = loopSamplesArea.removeFromTop( cueButtonHeight);
                                         
         sampleButtons[row].setBounds( buttonRowArea
-                           .withSizeKeepingCentre( 
-                                       static_cast<int>(buttonRowArea.getWidth() * 0.8f),
-                                       static_cast<int>(buttonRowArea.getHeight() * 0.9f )));
+                           .withSizeKeepingCentre( buttonRowArea.getWidth() * 0.8f,
+                                                   buttonRowArea.getHeight() * 0.9f ));
         
     }
     auto waveArea = area.removeFromTop( static_cast<int>(getHeight() * 0.1f));
@@ -106,29 +105,29 @@ void LoopSampler::resized()
                                withSizeKeepingCentre(static_cast<int>(waveArea.getWidth() * 0.8f),
                                                       static_cast<int>(waveArea.getHeight() * 0.9f )));
 
-    auto buttonArea = area.withTrimmedLeft(getWidth() / 6 ).withTrimmedRight(getWidth() / 6);
+    auto buttonArea = area.withTrimmedLeft(static_cast<int>(getWidth() / 6.0f)).
+                                           withTrimmedRight(static_cast<int>(getWidth() / 6.0f));
     
-    auto leftDeckButtonArea = buttonArea.removeFromLeft(buttonArea.getWidth() / 5.).
-                                         reduced(getHeight() / 70);
+    auto leftDeckButtonArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 5.0f)).
+                                         reduced(static_cast<int>(getHeight() / 70.0f));
    
     leftDeckImageButton.setBounds(leftDeckButtonArea);
 
-    auto starStoptRecordArea = buttonArea.removeFromLeft(buttonArea.getWidth() / 4).
-                                          reduced(getHeight() / 70);
-
+    auto starStoptRecordArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 4.0f)).
+                                          reduced(static_cast<int>(getHeight() / 70.0f));
     startStopRecordImageButton.setBounds(starStoptRecordArea);
 
-    auto deleteArea = buttonArea.removeFromLeft(buttonArea.getWidth() / 3).
-                                 reduced(getHeight() / 70);
+    auto deleteArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 3.0f)).
+                                 reduced(static_cast<int>(getHeight() / 70.0f));
 
     deleteImageButton.setBounds(deleteArea);
 
-    auto playSampleArea = buttonArea.removeFromLeft(buttonArea.getWidth() / 2).
-                                     reduced(getHeight() / 70);
+    auto playSampleArea = buttonArea.removeFromLeft(static_cast<int>(buttonArea.getWidth() / 2.0f)).
+                                     reduced(static_cast<int>(getHeight() / 70.0f));
 
     playSampleImageButton.setBounds(playSampleArea);
 
-    auto rightDeckButtonArea = buttonArea.reduced(getHeight() / 70);
+    auto rightDeckButtonArea = buttonArea.reduced(static_cast<int>(getHeight() / 70.0f));
 
     rightDeckImageButton.setBounds(rightDeckButtonArea);
 }

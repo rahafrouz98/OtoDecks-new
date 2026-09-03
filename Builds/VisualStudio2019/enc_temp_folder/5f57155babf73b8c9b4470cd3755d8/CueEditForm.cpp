@@ -88,15 +88,15 @@ void CueEditForm::resized()
     auto area = getLocalBounds();
 
     /////////////////////////////////////////////////text editor /////////////////////////////////////
-    auto textEditArea = area.removeFromTop(getHeight() / 5);
-    textEditor.setBounds(textEditArea.withSizeKeepingCentre(textEditArea.getWidth(), 
+    auto textEditArea = area.removeFromTop(static_cast<int>(getHeight() / 5));
+    textEditor.setBounds(textEditArea.withSizeKeepingCentre(static_cast<int>(textEditArea.getWidth() ), 
                                                             static_cast<int>(textEditArea.getHeight() * 0.9f)));
 
     /////////////////////////////////////////////// colour buttons ////////////////////////////////////
     // it is a two row table of colour buttons
-    auto coloursArea = area.removeFromTop(getHeight() * 2 / 3);
-    int cueButtonHeight = coloursArea.getHeight() / 2;
-    int cueButtonWidth = coloursArea.getWidth() / 4;
+    auto coloursArea = area.removeFromTop(getHeight() *2 / 3);
+    int cueButtonHeight = static_cast<int>(coloursArea.getHeight() / 2);
+    int cueButtonWidth = static_cast<int>(coloursArea.getWidth() / 4);
 
     for (int row = 0; row < 2; ++row)
     {
@@ -120,13 +120,13 @@ void CueEditForm::resized()
 
     //////////////////////////////////////////////// Save Button ////////////////////////////////////////
     auto saveArea = area.removeFromLeft(getWidth() / 2);
-    saveButton.setBounds(saveArea.withSizeKeepingCentre(saveArea.getWidth(),
+    saveButton.setBounds(saveArea.withSizeKeepingCentre(static_cast<int>(saveArea.getWidth()),
                                                         static_cast<int>(saveArea.getHeight() * 0.9f)));
 
     saveButton.onClick = [this]() {saveButtonCallback(selectedColour, selectedCueName); };
 
     ////////////////////////////////////////////// cancel button //////////////////////////////////////////
-    cancelButton.setBounds(area.withSizeKeepingCentre(area.getWidth(),
+    cancelButton.setBounds(area.withSizeKeepingCentre(static_cast<int>(area.getWidth()),
                                                       static_cast<int>(area.getHeight() * 0.9f)));  
 }
 

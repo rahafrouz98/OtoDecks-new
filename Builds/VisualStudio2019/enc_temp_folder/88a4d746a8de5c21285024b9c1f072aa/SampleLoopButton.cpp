@@ -35,14 +35,13 @@ void SampleLoopButton::resized()
 {
     auto area = getLocalBounds();
     
-    auto playStopArea = area.removeFromLeft(getWidth() / 7);
+    auto playStopArea = area.removeFromLeft(static_cast<int>(getWidth() / 7.0f));
 
     playStopButton.setBounds(playStopArea.
         withSizeKeepingCentre(static_cast<int>(playStopArea.getHeight() * 0.4f), 
                               static_cast<int>(playStopArea.getHeight() * 0.4f)));
 
-    auto textEditArea = area.removeFromLeft(getWidth() * 5 / 7);
-
+    auto textEditArea = area.removeFromLeft(getWidth() * 5 / 7.0f);
     textEditor.setBounds(textEditArea.
         withSizeKeepingCentre(textEditArea.getWidth() ,
                               static_cast<int>(textEditArea.getHeight() * 0.6f )));

@@ -164,42 +164,42 @@ void DeckGUI::resized()
 
     if (isleft)
     {
-        nameLabelArea = labelArea.removeFromLeft( width / 3 );
-        timerlabelArea = labelArea.removeFromLeft (width / 3 );
+        nameLabelArea = labelArea.removeFromLeft(static_cast<int>(width / 3.0f));
+        timerlabelArea = labelArea.removeFromLeft (static_cast<int>(width / 3.0f));
         BPMLAbelArea = labelArea;
 
         //row one
-        knobsArea = rowOneArea.removeFromLeft( getWidth() * 2 / 3 );
-        playStopArea = rowOneArea.removeFromLeft( getWidth() / 3 );
+        knobsArea = rowOneArea.removeFromLeft(static_cast<int>(getWidth() * 2.0 / 3.0f));
+        playStopArea = rowOneArea.removeFromLeft(static_cast<int>(getWidth() / 3.0f));
 
-        tempoArea = knobsArea.removeFromLeft( knobsArea.getWidth() / 3 );
-        volArea = knobsArea.removeFromLeft( knobsArea.getWidth() / 2);
+        tempoArea = knobsArea.removeFromLeft(static_cast<int>(knobsArea.getWidth() / 3.0f));
+        volArea = knobsArea.removeFromLeft(static_cast<int>(knobsArea.getWidth() / 2.0f));
         posArea = knobsArea;
         
         //row two
-        cueArea = rowTwoArea.removeFromLeft( width * 2 / 3 );
-        loopButtonArea = rowTwoArea.removeFromLeft( getWidth() / 3 );
+        cueArea = rowTwoArea.removeFromLeft(static_cast<int>(width * 2 / 3.0f));
+        loopButtonArea = rowTwoArea.removeFromLeft(static_cast<int>(getWidth() / 3.0f));
 
         //row three
         loadAndLibButtonArea = rowThreeArea;
     }
     else
     {
-        BPMLAbelArea = labelArea.removeFromLeft( width / 3 );
-        timerlabelArea = labelArea.removeFromLeft( width / 3 );
+        BPMLAbelArea = labelArea.removeFromLeft(static_cast<int>(width / 3.0f));
+        timerlabelArea = labelArea.removeFromLeft(static_cast<int>(width / 3.0f));
         nameLabelArea = labelArea;
 
         //row one
-        knobsArea = rowOneArea.removeFromRight( getWidth() * 2 / 3 );       
-        playStopArea = rowOneArea.removeFromRight( getWidth() / 3 );
+        knobsArea = rowOneArea.removeFromRight(static_cast<int>(getWidth() *2 / 3.0f));       
+        playStopArea = rowOneArea.removeFromRight(static_cast<int>(getWidth() / 3.0f));
         
-        tempoArea = knobsArea.removeFromRight( knobsArea.getWidth() / 3 );
-        volArea = knobsArea.removeFromRight( knobsArea.getWidth() / 2 );
+        tempoArea = knobsArea.removeFromRight(static_cast<int>(knobsArea.getWidth() / 3.0f));
+        volArea = knobsArea.removeFromRight(static_cast<int>(knobsArea.getWidth() / 2.0f));
         posArea = knobsArea;
  
         //row two
-        cueArea = rowTwoArea.removeFromRight( width * 2 / 3 );
-        loopButtonArea = rowTwoArea.removeFromRight( getWidth() / 3 );
+        cueArea = rowTwoArea.removeFromRight(static_cast<int>(width * 2/ 3.0f));
+        loopButtonArea = rowTwoArea.removeFromRight(static_cast<int>(getWidth() / 3.0f));
 
         //row three
         loadAndLibButtonArea = rowThreeArea;

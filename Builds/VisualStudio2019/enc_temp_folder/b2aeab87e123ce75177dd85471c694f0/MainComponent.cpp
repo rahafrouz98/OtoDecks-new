@@ -89,18 +89,18 @@ void MainComponent::resized()
 {
     auto area = getLocalBounds();
 
-    auto decksArea = area.removeFromTop( getHeight() * 2 / 3 );
+    auto decksArea = area.removeFromTop(static_cast<int>(getHeight() * 2.0f / 3.0f));
 
-    auto deckLeftArea = decksArea.removeFromLeft( getWidth() * 3 / 8 );
+    auto deckLeftArea = decksArea.removeFromLeft(static_cast<int>(getWidth() *3 / 8.0f));
     deckGuiLeft.setBounds(deckLeftArea);
 
-    auto loopsamplerMicArea = decksArea.removeFromLeft( getWidth() * 2 / 8 );
+    auto loopsamplerMicArea = decksArea.removeFromLeft(static_cast<int>(getWidth() * 2 / 8.0f));
 
     deckGuiRight.setBounds(decksArea);
 
                                          
     auto loopSamplerArea = loopsamplerMicArea.removeFromTop(
-                                    loopsamplerMicArea.getHeight() * 5 / 6 );
+                                    static_cast<int>(loopsamplerMicArea.getHeight() * 5.0f / 6.0f));
     
     looperAndMicrophonWrapper = loopsamplerMicArea;
     

@@ -29,6 +29,6 @@ void ColourButtonLookAndFeel::drawButtonBackground(juce::Graphics& g,
     if (button.getProperties()["isSelected"] == "true")
     {
         g.setColour(juce::Colours::white);
-        g.drawRect(area, area.getWidth() / 20);
+        g.drawRect(area, static_cast<int>(area.getWidth()/20));
     }
 }

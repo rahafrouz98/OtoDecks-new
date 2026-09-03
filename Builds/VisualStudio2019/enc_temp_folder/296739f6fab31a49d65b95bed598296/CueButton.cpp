@@ -106,17 +106,16 @@ void CueButton::paint (juce::Graphics&)
 
 void CueButton::resized()
 {
+
+
     int gridSize = getWidth() / 6;
     int padding = gridSize / 4;
 
-    editButton.setBounds( getWidth() - gridSize- padding, padding, gridSize, gridSize );
+    editButton.setBounds(getWidth() - gridSize- padding, padding, gridSize, gridSize);
 
-    removeButton.setBounds( getWidth() - gridSize * 2 - padding * 2, padding, gridSize, gridSize );
+    removeButton.setBounds(getWidth() - gridSize * 2 - padding * 2, padding, gridSize, gridSize);
 
-    nameLabel.setBounds( padding * 2, 
-                         getHeight() / 2, 
-                         static_cast<int>(getWidth() * 0.8f), 
-                         getHeight()/3 );
+    nameLabel.setBounds(padding * 2, getHeight()/2, getWidth() * 0.8f, getHeight()/3 );
 
     auto area = getLocalBounds();
 
@@ -125,6 +124,7 @@ void CueButton::resized()
         addButton.setBounds(area.withSizeKeepingCentre(gridSize*2, gridSize*2));
     }
 
+    
     mainButton.setBounds(area);
     mainButton.toBack();
 }

@@ -49,7 +49,7 @@ void MusicAnalyzer::paint(juce::Graphics& g)
          liveFrameIndex < fourBandSpectrogram.size() - 1  &&
          !isThreadRunning())
     {
-        int spectrogramSize = fourBandSpectrogram.size();
+        int spectrogramSize = static_cast<int>(fourBandSpectrogram.size());
         
         auto area = getLocalBounds();
         auto barGraphArea = area.removeFromTop(getHeight() * 5 / 6);
@@ -73,7 +73,7 @@ void MusicAnalyzer::paint(juce::Graphics& g)
                 g.setColour(juce::Colours::white);
             }
 
-            int barWidth = getWidth() / bandsNumber;
+            int barWidth = static_cast<int>( getWidth() / bandsNumber );
             int barHeight = static_cast<int>(energy / 2.0f);
             g.fillRect(barGraphArea.removeFromLeft(barWidth).removeFromBottom(barHeight));
             

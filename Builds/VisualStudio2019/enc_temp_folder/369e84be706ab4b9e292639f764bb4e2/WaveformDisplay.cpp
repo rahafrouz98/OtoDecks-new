@@ -26,7 +26,7 @@ void WaveformDisplay::paint (juce::Graphics& g)
 
         //draw a position marker
         g.setColour(juce::Colour(183, 109, 255));
-        g.drawLine(playHeadPosition, 0.0f, playHeadPosition, (getHeight()), 2.0f);
+        g.drawLine(playHeadPosition, 0.0f, playHeadPosition, static_cast<float>(getHeight()), 2.0f);
 
         Path topArrow;
         topArrow.startNewSubPath(playHeadPosition, getHeight() / 15.0f);
