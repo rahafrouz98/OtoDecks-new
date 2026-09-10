@@ -30,20 +30,29 @@ public:
 
 private:
 
-    static constexpr int fftOrder = 10;
-    static constexpr int fftSize = 1 << fftOrder;
+    static constexpr int firstFFTOrder = 10;
+    static constexpr int firstFFTSize = 1 << firstFFTOrder;
+    static constexpr int secondFFTOrder = 9;
+    static constexpr int secondFFTSize = 1 << secondFFTOrder;
 	static constexpr int bandsNumber = 4;
 
     juce::CriticalSection lock;
 
-    std::array<float, fftSize*2> fftResult{ 0.0f };
+    /**it is used to extract the frequency spectrum of audio samples*/
+    dsp::FFT firstFFT{ firstFFTOrder };
 
-    dsp::FFT fft{fftOrder};
+    /**It is used to extract the energy-frequency spectrum from a time slice(window) of specrogram*/
+    dsp::FFT secondFFT{ secondFFTOrder };
 
     AudioFormatManager formatManager;
     std::unique_ptr<AudioFormatReader> reader;
    
+    /**frameDuration is equal to firstFFTSize / sampleRate*/
     float frameDuration = 0;
+
+    /**windowDuration is equal to frameDuration * secondFFTSize */
+    float windowDuration = 0;
+
     float liveTime=0.0f;
     
     //atomic double used to share the variables between two thread 
@@ -62,36 +71,33 @@ private:
     Label specProgLabel;
     Label BPMProgLabel;
 
-	/**It is an array of a map for each frame. The first item of map is band category
+	/**An array of a map for each frame. The first item of map is band category
     and the second is the total energy*/
-	std::vector<std::map< std::string, float>> fourBandSpectrogram;
+	std::vector<std::map< std::string, float>> fourBandEnergySpectrogram;
 
-    /**The first element is representing timeframe and second one is the BPM*/
-    std::map <int, int> timeBPM;
+    /**Each item represents the BPM of the corresponding window index*/
+    std::vector<double> BPMVector;
 
-    /**Extract spectrogram and frameDuration */
+    /**Extracts spectrogram and frameDuration */
 	void setFourBandEnergySpectrogram();
 
+    /**Itterates through the energy spectrogram, passes each window of frames to tempoSpectrum()
+    to extract the BPM for that window, and stores the result in the BPMVector*/
+    void setBPMVector();
 
-    /**calculates booleanBeatSpectrogram vector from the fourBandSpectrogram.*/
-    std::vector<bool> extractBooleanBeatSpectrogram();
-
-    /**calculates timeBPM from the booleanBeatSpectrogram*/
-    void setTimeBPM();
-
-    /**Generate 6 band energy spectrum by grouping the energy of 1024 frequenct bins 
+    /**Generate 4 band energy spectrum by grouping the energy of 1024 (firstFFTSize) frequenct bins 
     of the input spectrum. It  returns a map. the first element of map is band category 
     and the second is the total energy for that band*/
-    std::map< std::string, float> generateFourbandEnergySpectrum( const std::array<float, 
-                                                                  fftSize*2>& spectrum);
-
-    /**returns true if beat is detected for the next frame. It takes an std::queue as the
-    first argument representing the spectrums of the frames of the last 1 second. The second
-    argument is the energy og next fram*/
-    bool detectBeatOnFrame(std::queue< float> FIFOWindoAllSpectrum,float nextFrameEnergy);
+    std::map< std::string, float> generateFourbandEnergySpectrum(const std::array<float, firstFFTSize * 2>& spectrum);
 
     /**takes a frequrncy and returns a string representing the band sub category*/
     std::string bandCategorizer(float frequency) const;
+
+    /**Takes an array of energy of sequencial frames, applies fft to generate a spectrum for that window, finds a 
+    frequency bin with the heigest energy between 1hz to 4 hz (60 BPM to 240BPM),
+    and returns the corresponding BPM of that frequency bin. */
+    double tempoSpectrum(std::array<float, secondFFTSize * 2 > fftResult);
+
 
     struct BandFrequncy
     {
